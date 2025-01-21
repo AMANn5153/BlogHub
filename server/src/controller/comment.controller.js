@@ -110,15 +110,92 @@ const getComments = asyncHandler(async(req, res) => {
         throw new ApiError("blog not found", 404, "getComments");
     }
 
-    const comments = await Comments.find({
-        blogId,
-        parentId : null,
-    }).populate("author").limit(10).skip(page*10).sort({createdAt : -1});
+
+
+    const commentsThread = await Comments.aggregate([
+        {
+            $match : {
+                blogId : new mongoose.Types.ObjectId(`${blogId}`),
+                parentId : null
+            },
+        },
+        {
+
+            $lookup : {
+                from : "comments",
+                localField : "_id",
+                foreignField : "parentId",
+                as : "replies"
+            },
+        },
+        {
+            $lookup : {
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author"
+            },
+        },
+        {
+            $unwind: "$author"
+        },
+        {
+            $lookup : {
+                from : "users",
+                localField : "replies.author",
+                foreignField : "_id",
+                as : "replyAuthors"
+            }
+        },
+        {
+            $addFields : {
+                replies :{ // array of replies
+                    $map : {
+                        input : "$replies",
+                        as : "reply",   
+                        in : {
+                            $mergeObjects : ["$$reply", {
+                                author : {
+                                    $arrayElemAt : [ {
+                                        $filter : {
+                                            input : "$replyAuthors",
+                                            as : "replyAuthor",
+                                            cond : {
+                                                $eq : ["$$replyAuthor._id", "$$reply.author"]
+                                            }
+                                        }
+                                    }, 0]
+                                }
+                            }]
+                        }
+                    }
+                }
+            }
+        },{
+            "$project" : {
+                "author.password": 0,
+                "author.refreshToken": 0,
+                "author.username": 0,
+                "author.createdAt": 0,
+                "author.updatedAt": 0,
+                "parentId": 0,
+                "replies.parentId": 0,
+                "replies.blogId": 0,
+                "replies.author.password": 0,
+                "replies.author.refreshToken": 0,
+                "replies.author.username": 0,
+                "replies.author.createdAt": 0,
+                "replies.author.updatedAt": 0,
+                replyAuthors : 0,
+            }
+        }
+    ])
+
     
     res.status(200).json({
         success : true,
         message : "comments fetched successfully",
-        data : comments
+        data : commentsThread
     })
 });
 

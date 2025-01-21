@@ -1,3 +1,4 @@
+import {useRef} from "react";
 import { TbHeartPlus } from "react-icons/tb";
 import { FaRegComment } from "react-icons/fa6";
 import { FiBookmark } from "react-icons/fi";
@@ -10,14 +11,15 @@ import useGetComment from "../../hooks/Comment/useGetComment";
 import CommentCard from "../../components/Card/CommentCard";
 import "../../components/textEditor/TextEditor.css";
 import { EditorContextProvider } from "../../components/textEditor/EditorContext/EditorContext";
-
+import useAuthContext from "../../context/authContext/useAuthContext";
+import LoginModal from "../../components/Modal/LoginModal";
 
 const Blogs = () => {
-
+  const commentRef = useRef();
   const { id } = useParams(); 
   const {blog} = useGetBlog(id);
   const {comments, commentLoading} = useGetComment(id);
-  console.log(commentLoading, comments);
+  const {auth} = useAuthContext();
 
   if(!blog){
     return <div className="flex w-full h-full items-center justify-center">
@@ -29,7 +31,15 @@ const Blogs = () => {
 
   const {duration, time, dateString} = timeDuration(createdAt);
 
-   
+
+  const handleCommentView = () =>{
+    commentRef.current.scrollIntoView({behavior: "smooth"});
+  }
+  
+
+  const handleLikeView = () =>{
+
+  }
 
   return (
     <>
@@ -38,16 +48,16 @@ const Blogs = () => {
           <div className="h-full rounded-2xl flex flex-col justify-center p-5 items-center">
             <div className="flex flex-col justify-around h-1/2 w-full items-center">
               <div className="text-3xl font-bold hover:cursor-pointer flex flex-col justify-center">
-                <TbHeartPlus />
+                <button className="hover:text-red-500" onClick={auth ? handleLikeView : ()=>{document.getElementById("my_modal_3").showModal()}}><TbHeartPlus/></button>
                 <div className="text-lg text-center">1</div>
               </div>
-              <div className="text-3xl font-bold hover:cursor-pointer">
-                <FaRegComment />
-                <div className="text-lg text-center">1</div>
+              <div className="text-3xl font-bold hover:cursor-pointer tooltip" data-tip="Comments">
+                <button type="button" className="hover:text-amber-300" onClick={handleCommentView} ><FaRegComment /></button>
+                <div className="text-lg text-center">{comments.length}</div>
               </div>
               <div className="text-3xl font-bold hover:cursor-pointer">
-                <FiBookmark />
-                <div className="text-lg text-center">1</div>
+                <button className="hover:text-cyan-600" onClick={auth ? handleCommentView : ()=>{document.getElementById("my_modal_3").showModal()}}><FiBookmark /></button> 
+              <div className="text-lg text-center">1</div>
               </div>
             </div>
           </div>
@@ -85,12 +95,12 @@ const Blogs = () => {
           <div className=" tiptap m-6 max-w-screen flex flex-col flex-wrap justify-center items-start">
             {parse(content)}
           </div>
-        <hr/>
+        <hr ref={commentRef}/>
           <div>
             <h1 className="text-2xl font-bold m-6 text-white">Top Comments</h1>
           </div>
           <br/>
-          <div className="flex flex-col gap-4 w-full">
+          <div  className="flex flex-col gap-4 w-full">
 
           <EditorContextProvider purpose="comment">
             <Comment blogId={blog._id}/>
@@ -99,12 +109,25 @@ const Blogs = () => {
             {
               commentLoading?<span className="loading loading-infinity loading-lg"></span>:
               comments.length > 0 ?comments.map((comment, index)=>{
-                return <CommentCard key={index} comment={comment}/>
+                return (<>
+                <div className="flex flex-col">
+                <CommentCard key={index} comment={comment}/>
+                {comment.replies.length > 0 ? comment.replies.map((reply, index)=>{
+                  return (
+                    <div className="m-10">
+                      <CommentCard key={index} comment={reply}/>
+                    </div>
+                )
+                }) : ""}
+                </div>
+                </>
+              )
               }) :""
             }
           </div>
         </div>
       </div>
+      <LoginModal/>
     </>
   );
 };
