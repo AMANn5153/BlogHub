@@ -15,7 +15,7 @@ const CommentThread = () => {
                 <span className="loading loading-infinity loading-lg"></span>
             </div>:
             <>
-            <CommentCard comment = {comments[0]}/>
+                <CommentCard comment = {comments[0]}/>
             {comments[0]?.replies.map((comment, index)=>{
                 return (
                     <>

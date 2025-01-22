@@ -4,9 +4,6 @@ import useEditorContext from "../textEditor/EditorContext/EditorContext";
 import usePostComment from "../../hooks/Comment/usePostComment";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { useState, useEffect } from "react";
-import useLogin from "../../hooks/Login/useLogin";
-import { ToastContainer } from "react-toastify";
-import { NavLink } from "react-router-dom";
 import LoginModal from "../Modal/LoginModal";
 
 const Comments = ({blogId}) => {
@@ -63,6 +60,8 @@ const Comments = ({blogId}) => {
                   : () => document.getElementById("my_modal_3").showModal()
               }
               data-tip={`${auth ? "Comment" : "Login to comment"}`}
+
+              
             >
               Comment
             </button>

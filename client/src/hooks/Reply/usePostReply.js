@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 const usePostReply = () => {
     const [replyPostLoading, replyPostSetLoading] = useState(false);
 
-    const postReply = async (reply, commentId)=>{
+    const postReply = async ({reply, commentId})=>{
         try{
             if(!commentId || !reply){
                 return;

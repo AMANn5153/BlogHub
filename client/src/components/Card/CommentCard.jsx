@@ -9,8 +9,7 @@ import { EditorContent } from "@tiptap/react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import LoginModal from "../Modal/LoginModal";
 import usePostReply from "../../hooks/Reply/usePostReply";
-import { Link } from "react-router-dom";
-
+import {Link, useNavigate} from "react-router-dom";
 const CommentCard = ({comment}) => {
   const [reply, setReply] = useState(false);
 
@@ -73,6 +72,7 @@ const Reply = ({removeReply, commentId})=>{
   const { editor } = useEditorContext();
   const [reply, setReply] = useState();
   const {auth} = useAuthContext();
+  const navigate = useNavigate();
 
   useEffect(()=>{
     setReply(editor.getHTML());
@@ -80,9 +80,10 @@ const Reply = ({removeReply, commentId})=>{
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postReply(reply, commentId);
+    await postReply({reply, commentId});
     setReply("");
     editor.commands.clearContent();
+    navigate(`/comment/${commentId}`);
   }
   
   return(
@@ -99,7 +100,7 @@ const Reply = ({removeReply, commentId})=>{
           <div className="flex gap-4 flex-row">
             <button
               type="submit"
-              className="btn  btn-primary"
+              className="btn btn-primary"
               onClick={
                 auth
                   ? handleSubmit

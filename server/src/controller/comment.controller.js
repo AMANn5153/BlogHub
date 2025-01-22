@@ -224,7 +224,7 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
                 "replies.author.updatedAt": 0,
                 replyAuthors : 0,
             }
-        }
+        },
     ]);
 
 
