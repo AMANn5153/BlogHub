@@ -72,7 +72,7 @@ const CreateBlog = () => {
 
   return (
     <>
-      <div className = "flex flex-col h-screen overflow-hidden">
+      <div className = "flex flex-col h-screen ">
         <div role="tablist" className="tabs m-5 tabs-bordered">
           <input
             type="radio"
@@ -84,7 +84,7 @@ const CreateBlog = () => {
           />
           <div
             role="tabpanel"
-            className="tab-content bg-base-100 h-svh rounded-box p-6"
+            className="tab-content bg-base-100 h-svh flex-grow rounded-box p-6"
           >
             <TextEditor
               setConvertedContent={setConvertedContent}

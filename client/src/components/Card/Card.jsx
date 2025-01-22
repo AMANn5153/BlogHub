@@ -18,11 +18,7 @@ const Card = ({
 
   return (
     <>
-    <Link 
-      to={{pathname:`/blog/${blogId}`}}
-      
-
-    >
+    <Link to={{pathname:`/blog/${blogId}`}}>
       <div className = "flex flex-col border border-1 border-white m-5 p-12 rounded-md shadow-xl hover:border-2 cursor-pointer border-cyan-400 hover: shadow-lg active: shadow-sm transition-transform duration-150 ease-in-out">
         <div className="flex flex-row gap-2 items-start">
           <div className="avatar">

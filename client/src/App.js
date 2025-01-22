@@ -14,6 +14,7 @@ import PrivateRoute from './privateRoute/privateRoute';
 import Blogs from './pages/Blogs/Blogs.jsx';
 import {EditorContextProvider} from './components/textEditor/EditorContext/EditorContext.js';
 import {SocketProvider} from './context/socket/useSocket';
+import CommentThread from './pages/Comment/CommentThread';
 
 
 function App() {
@@ -37,9 +38,8 @@ function App() {
       </Route>
       <Route path='/' element={<Layout/>}>
         <Route index element={<Home/>}></Route>
-      <Route path="/blog/:id" element={
-        <Blogs/>
-      }></Route>
+        <Route path="/blog/:id" element={<Blogs/>}></Route>
+        <Route path="/comment/:id" element={<CommentThread/>}></Route>
       </Route>
     </Routes>
   </BrowserRouter> 

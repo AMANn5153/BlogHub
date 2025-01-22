@@ -7,19 +7,24 @@ import parse from "html-react-parser";
 import timeDuration from "../../utils/time";
 import useGetBlog from "../../hooks/Blog/useGetBlog";
 import Comment from "../../components/Comment/Comment";
-import useGetComment from "../../hooks/Comment/useGetComment";
+import useGetAllComment from "../../hooks/Comment/useGetAllComment";
 import CommentCard from "../../components/Card/CommentCard";
 import "../../components/textEditor/TextEditor.css";
 import { EditorContextProvider } from "../../components/textEditor/EditorContext/EditorContext";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import LoginModal from "../../components/Modal/LoginModal";
+import useCommentStore from "../../store/useCommentStore";
 
 const Blogs = () => {
   const commentRef = useRef();
   const { id } = useParams(); 
   const {blog} = useGetBlog(id);
-  const {comments, commentLoading} = useGetComment(id);
+  const { commentLoading} = useGetAllComment(id);
+  const {comments} = useCommentStore();
   const {auth} = useAuthContext();
+
+  
+
 
   if(!blog){
     return <div className="flex w-full h-full items-center justify-center">
@@ -33,7 +38,7 @@ const Blogs = () => {
 
 
   const handleCommentView = () =>{
-    commentRef.current.scrollIntoView({behavior: "smooth"});
+    commentRef.current.scrollIntoView({behavior: "smooth", block: "start"});
   }
   
 
@@ -105,25 +110,16 @@ const Blogs = () => {
           <EditorContextProvider purpose="comment">
             <Comment blogId={blog._id}/>
           </EditorContextProvider>
-
-            {
-              commentLoading?<span className="loading loading-infinity loading-lg"></span>:
-              comments.length > 0 ?comments.map((comment, index)=>{
-                return (<>
-                <div className="flex flex-col">
-                <CommentCard key={index} comment={comment}/>
-                {comment.replies.length > 0 ? comment.replies.map((reply, index)=>{
-                  return (
-                    <div className="m-10">
-                      <CommentCard key={index} comment={reply}/>
-                    </div>
-                )
-                }) : ""}
+          {
+            commentLoading?<span className="loading loading-infinity loading-lg"></span>:
+            comments.length > 0 ?comments.map((comment, index)=>{
+              return (<>
+                <div className="hover:cursor-pointer">
+                  <CommentCard key={index} comment={comment}/>
                 </div>
-                </>
-              )
-              }) :""
-            }
+              </>)
+            }): "No comments yet"
+          }
           </div>
         </div>
       </div>

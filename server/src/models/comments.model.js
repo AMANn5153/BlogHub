@@ -5,11 +5,13 @@ const commentSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Blog",
         required:true,
+        index:true,
     },
     author:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true,
+        index:true,
     },
     comment:{
         type:String,
@@ -18,7 +20,8 @@ const commentSchema = new mongoose.Schema({
     parentId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Comment",
-        default:null
+        default:null,
+        index:true,
     }
 }, {timestamps:true});
 

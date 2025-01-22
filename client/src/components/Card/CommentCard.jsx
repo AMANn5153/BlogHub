@@ -9,10 +9,10 @@ import { EditorContent } from "@tiptap/react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import LoginModal from "../Modal/LoginModal";
 import usePostReply from "../../hooks/Reply/usePostReply";
+import { Link } from "react-router-dom";
 
 const CommentCard = ({comment}) => {
   const [reply, setReply] = useState(false);
-  const {author} = comment;
 
 
   const changeReply = () => {
@@ -26,17 +26,19 @@ const CommentCard = ({comment}) => {
         <div className="grid-cols-1">
           <div className="avatar">
             <div className="w-12 rounded-full">
-              <img src={author?.profilePic}/>
+              <img src={comment?.author?.profilePic}/>
             </div>
           </div>
         </div>
-        <div className="tiptap grid-col-2 grid-rows-[12fr_1fr]">
-          <div className="border border-1 rounded-xl border-white">
+        <div className=" grid-col-2 grid-rows-[12fr_1fr]">
+          <Link to={{pathname:`/comment/${comment._id}`}}>
+          <div className="tiptap border border-1 rounded-xl border-white">
             <div className="m-5 text-lg font-semibold"> 
-              {author?.name}
+              {comment?.author?.name}
             </div>
-            {parse(comment?.comment)}
+              {parse(comment?.comment)}
           </div>
+          </Link>
           <div className=" card-footer flex flex-row gap-4 items-start w-full">
             {
               reply 

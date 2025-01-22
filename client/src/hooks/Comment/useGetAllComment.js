@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import useCommentStore from "../../store/useCommentStore";
 import {toast} from "react-toastify";
 
-const useGetComment = (blogId) =>{
-    const {comments, setComment} = useCommentStore();
+const useGetAllComment = (blogId) =>{
+    const  {setComment} = useCommentStore();
     const [commentLoading, setCommentLoading] = useState(false);
     
     useEffect(()=>{
@@ -19,7 +19,6 @@ const useGetComment = (blogId) =>{
                 if(!response.ok){
                     throw new Error(responseData.message || "Failed to fetch the comments");
                 }
-
                 setComment(responseData.data);
             }
             catch(error){
@@ -42,7 +41,7 @@ const useGetComment = (blogId) =>{
     }
     ,[blogId]);
     
-    return {comments, commentLoading};
+    return { commentLoading};
 }
 
-export default useGetComment;
+export default useGetAllComment;

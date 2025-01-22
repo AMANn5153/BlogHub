@@ -6,8 +6,6 @@ const {io} = require("../socket/socket");
 const ApiError = require("../utils/ApiErrors");
 
 
-
-
 const newComment = asyncHandler(async(req, res, next) => {
    
     const {comment} = req.body;
@@ -54,8 +52,6 @@ const newComment = asyncHandler(async(req, res, next) => {
 
 });
 
-
-
 const newReply = asyncHandler(async(req, res, next)=>{
     const {reply} = req.body;
     const {commentId} = req.query;
@@ -93,10 +89,6 @@ const newReply = asyncHandler(async(req, res, next)=>{
 
 });
 
-
-
-
-
 const getComments = asyncHandler(async(req, res) => {
     const {blogId, page} = req.query;
 
@@ -110,23 +102,67 @@ const getComments = asyncHandler(async(req, res) => {
         throw new ApiError("blog not found", 404, "getComments");
     }
 
+    const comments = await Comments.find({
+        blogId : new mongoose.Types.ObjectId(`${blogId}`), 
+        parentId : null
+    }).sort({createdAt : -1}).populate("author");
+
+    
+    res.status(200).json({
+        success : true,
+        message : "comments fetched successfully",
+        data : comments
+    })
+});
+
+const getReply = asyncHandler(async(req, res, next) => {
+    const {commentId, page} = req.query;
 
 
-    const commentsThread = await Comments.aggregate([
+    if(!commentId){
+        throw new ApiError("commentId is missing", 401, "getReply");
+    }
+
+    const commentExists = await Comments.findOne({
+        _id : new mongoose.Types.ObjectId(`${commentId}`)
+    });
+
+    if(!commentExists){
+        throw new ApiError("Comment not found", 401, "getReply");
+    }
+
+    const replies = await Comments.find({
+        parentId : commentId,
+    }).limit(10).skip(page*10);
+
+    res.status(200).json({
+        status : "success",
+        message : "Comment added successfully",
+        data : replies
+    })
+
+})
+
+const getCommentThread = asyncHandler(async(req, res, next) => {
+    const {commentId} = req.query;    
+
+    if(!commentId){ 
+        throw new ApiError("commentId is required", 400, "getCommentThread");
+    }
+
+    const comment = await Comments.aggregate([
         {
             $match : {
-                blogId : new mongoose.Types.ObjectId(`${blogId}`),
-                parentId : null
-            },
+                _id : new mongoose.Types.ObjectId(`${commentId}`),
+            }
         },
         {
-
             $lookup : {
                 from : "comments",
                 localField : "_id",
                 foreignField : "parentId",
                 as : "replies"
-            },
+            }
         },
         {
             $lookup : {
@@ -189,50 +225,22 @@ const getComments = asyncHandler(async(req, res) => {
                 replyAuthors : 0,
             }
         }
-    ])
-
-    
-    res.status(200).json({
-        success : true,
-        message : "comments fetched successfully",
-        data : commentsThread
-    })
-});
+    ]);
 
 
-const getReply = asyncHandler(async(req, res, next) => {
-    const {commentId, page} = req.query;
-
-
-    if(!commentId){
-        throw new ApiError("commentId is missing", 401, "getReply");
-    }
-
-    const commentExists = await Comments.findOne({
-        _id : new mongoose.Types.ObjectId(`${commentId}`)
-    });
-
-    if(!commentExists){
-        throw new ApiError("Comment not found", 401, "getReply");
-    }
-
-    const replies = await Comments.find({
-        parentId : commentId,
-    }).limit(10).skip(page*10);
 
     res.status(200).json({
         status : "success",
-        message : "Comment added successfully",
-        data : replies
-    })
-
-})
-
+        message : "Comments retrieved successfully",
+        comments : comment
+    });
+});
 
 
 module.exports = {
     newComment,
     newReply,
     getComments,
-    getReply
+    getReply,
+    getCommentThread
 }
