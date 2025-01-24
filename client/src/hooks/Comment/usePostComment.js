@@ -4,19 +4,17 @@ import useCommentStore from '../../store/useCommentStore';
 
 const usePostComment = () => {
     const [commentPostLoading, commentPostSetLoading] = useState(false);
-    const { setNewComment, comments } = useCommentStore();
+    const { setComment, comments } = useCommentStore();
 
     const postComment = async ({ comment, blogId }) => {
         try {
-
- 
             if(comment === "<p></p>"){
                 throw new Error("empty comment is not allowed");
             }
 
             commentPostSetLoading(true);
 
-            const response = await fetch(`http://localhost:3001/api/v1/comment/newComment?blogId=${blogId}`, {
+            const response = await fetch(`http://localhost:3001/api/v1/comment/newComment?id=${blogId}`, {
                 method: "POST", 
                 credentials: "include",
                 headers: {
@@ -32,7 +30,7 @@ const usePostComment = () => {
             }
 
             // Functional update to avoid stale state issues
-            setNewComment([ responseData.data]);
+            setComment([responseData.data]);
 
         } catch (err) {
             console.log(err.message);

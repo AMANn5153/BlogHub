@@ -1,8 +1,10 @@
 import { useState } from "react";
+import useCommentStore from "../../store/useCommentStore";
 import { toast } from "react-toastify";
 
 const usePostReply = () => {
     const [replyPostLoading, replyPostSetLoading] = useState(false);
+    const { setReply } = useCommentStore();
 
     const postReply = async ({reply, commentId})=>{
         try{
@@ -11,7 +13,7 @@ const usePostReply = () => {
             }        
             replyPostSetLoading(true);
             
-            const response = await fetch(`http://localhost:3001/api/v1/comment/newReply?commentId=${commentId}`, {
+            const response = await fetch(`http://localhost:3001/api/v1/comment/newReply?id=${commentId}`, {
                 method : "POST",
                 credentials : "include",
                 headers : {
@@ -26,6 +28,7 @@ const usePostReply = () => {
                 throw new Error(responseData.message);
             }
             
+            setReply(responseData.data);
         
         }
         catch(err){

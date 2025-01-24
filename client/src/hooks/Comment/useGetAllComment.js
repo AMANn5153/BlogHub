@@ -19,6 +19,8 @@ const useGetAllComment = (blogId) =>{
                 if(!response.ok){
                     throw new Error(responseData.message || "Failed to fetch the comments");
                 }
+                console.log(responseData);
+
                 setComment(responseData.data);
             }
             catch(error){

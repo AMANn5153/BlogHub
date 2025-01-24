@@ -3,6 +3,7 @@ import { TbHeartPlus } from "react-icons/tb";
 import { FaRegComment } from "react-icons/fa6";
 import { FiBookmark } from "react-icons/fi";
 import { useParams } from "react-router-dom";
+import { FcLike } from "react-icons/fc";
 import parse from "html-react-parser";
 import timeDuration from "../../utils/time";
 import useGetBlog from "../../hooks/Blog/useGetBlog";
@@ -14,6 +15,8 @@ import { EditorContextProvider } from "../../components/textEditor/EditorContext
 import useAuthContext from "../../context/authContext/useAuthContext";
 import LoginModal from "../../components/Modal/LoginModal";
 import useCommentStore from "../../store/useCommentStore";
+import useLikePost from "../../hooks/Likes/useLikePost";
+import useLikeStore from "../../store/useLikeStore";
 
 const Blogs = () => {
   const commentRef = useRef();
@@ -22,9 +25,11 @@ const Blogs = () => {
   const { commentLoading} = useGetAllComment(id);
   const {comments} = useCommentStore();
   const {auth} = useAuthContext();
+  const {likePost} = useLikePost();
+  const {likes} = useLikeStore();
 
-  
-
+  console.log(likes)
+  const likedByUser = likes.length > 0 ? likes?.some((like)=>like.userId === auth._id && like.blogId === id ) : false;
 
   if(!blog){
     return <div className="flex w-full h-full items-center justify-center">
@@ -38,11 +43,15 @@ const Blogs = () => {
 
 
   const handleCommentView = () =>{
-    commentRef.current.scrollIntoView({behavior: "smooth", block: "start"});
+    commentRef.current.scrollIntoView({behavior: "smooth", block: "center"});
   }
   
 
-  const handleLikeView = () =>{
+  const handleLike = async () =>{
+    await likePost(id);
+  }
+
+  const handleSave = () => {
 
   }
 
@@ -53,7 +62,10 @@ const Blogs = () => {
           <div className="h-full rounded-2xl flex flex-col justify-center p-5 items-center">
             <div className="flex flex-col justify-around h-1/2 w-full items-center">
               <div className="text-3xl font-bold hover:cursor-pointer flex flex-col justify-center">
-                <button className="hover:text-red-500" onClick={auth ? handleLikeView : ()=>{document.getElementById("my_modal_3").showModal()}}><TbHeartPlus/></button>
+                <div className="flex items-center justify-center rounded-full w-12 h-12">
+                  <button className=  "hover:text-red-500" onClick={auth ? handleLike : ()=>{document.getElementById("my_modal_3").showModal()}}>{likedByUser ?<TbHeartPlus/> : <FcLike />
+                  }</button>
+                </div>
                 <div className="text-lg text-center">1</div>
               </div>
               <div className="text-3xl font-bold hover:cursor-pointer tooltip" data-tip="Comments">
@@ -61,7 +73,7 @@ const Blogs = () => {
                 <div className="text-lg text-center">{comments.length}</div>
               </div>
               <div className="text-3xl font-bold hover:cursor-pointer">
-                <button className="hover:text-cyan-600" onClick={auth ? handleCommentView : ()=>{document.getElementById("my_modal_3").showModal()}}><FiBookmark /></button> 
+                <button className="hover:text-cyan-600" onClick={auth ? handleSave : ()=>{document.getElementById("my_modal_3").showModal()}}><FiBookmark /></button> 
               <div className="text-lg text-center">1</div>
               </div>
             </div>
@@ -100,12 +112,12 @@ const Blogs = () => {
           <div className=" tiptap m-6 max-w-screen flex flex-col flex-wrap justify-center items-start">
             {parse(content)}
           </div>
-        <hr ref={commentRef}/>
+        <hr/>
           <div>
             <h1 className="text-2xl font-bold m-6 text-white">Top Comments</h1>
           </div>
           <br/>
-          <div  className="flex flex-col gap-4 w-full">
+          <div ref = {commentRef} className="flex flex-col gap-4 w-full">
 
           <EditorContextProvider purpose="comment">
             <Comment blogId={blog._id}/>

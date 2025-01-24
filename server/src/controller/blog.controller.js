@@ -52,6 +52,8 @@ const getBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError("blog not found", 404, "getBlog");
     }
 
+    const likeOnBlog = await Likes.countDocuments({blogId : new mongoose.Types.ObjectId(`${id}`)});
+
     const blog = await Blogs.aggregate([
         {
             $match :{
@@ -82,7 +84,8 @@ const getBlog = asyncHandler(async (req, res, next) => {
         success : true,
         status : 200,
         message : "blog fetched successfully",
-        data : blog[0],
+        likes : likeOnBlog,
+        data : blog[0] 
     })
 })
 

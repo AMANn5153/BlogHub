@@ -10,6 +10,8 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 import LoginModal from "../Modal/LoginModal";
 import usePostReply from "../../hooks/Reply/usePostReply";
 import {Link, useNavigate} from "react-router-dom";
+
+
 const CommentCard = ({comment}) => {
   const [reply, setReply] = useState(false);
 

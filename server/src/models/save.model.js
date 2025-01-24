@@ -9,14 +9,10 @@ const saveSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : "Blog"    
     },
-    CommentId : {
-        type : mongoose.Schema.Types.ObjectId,
-        ref : "Comment"
-    }
 })
 
 
-const Saves = mongooose.model("Saves", saveSchema);
+const Saves = mongoose.model("Saves", saveSchema);
 
 
 module.exports = Saves;

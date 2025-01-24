@@ -8,11 +8,13 @@ const likeSchema = new mongoose.Schema({
     },
     blogId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "Blog"
+        ref : "Blog",
+        default : null
     },
     commentId :{
         type : mongoose.Schema.Types.ObjectId,
-        ref : "Comment"
+        ref : "Comment",
+        default : null
     }
 });
 

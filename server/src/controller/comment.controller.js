@@ -9,19 +9,20 @@ const ApiError = require("../utils/ApiErrors");
 const newComment = asyncHandler(async(req, res, next) => {
    
     const {comment} = req.body;
-    const {blogId} = req.query;
+    console.log(req.query);
+    const {id} = req.query;
 
     if(!comment || comment === ""){
         throw new ApiError("empty comment is not allowed", 401, "newComment");
     }
 
-    if(!blogId){
+    if(!id){
         throw new ApiError("blogId is missing", 401, "newComment");
     }
 
 
     const blogExists = await Blogs.findOne({
-        _id :  new mongoose.Types.ObjectId(`${blogId}`),
+        _id :  new mongoose.Types.ObjectId(`${id}`),
     });
 
     if(!blogExists){
@@ -30,7 +31,7 @@ const newComment = asyncHandler(async(req, res, next) => {
 
 
     const createdComment = await Comments.create({
-        blogId : new mongoose.Types.ObjectId(`${blogId}`),
+        blogId : new mongoose.Types.ObjectId(`${id}`),
         author : req.user._id,
         comment
     })
@@ -40,7 +41,7 @@ const newComment = asyncHandler(async(req, res, next) => {
         throw new ApiError("comment not created", 401, "newComment");
     }
 
-    io.to(blogId).emit("newComment", createdComment);
+    io.to(id).emit("newComment", createdComment);
 
     const populatedComment = await Comments.findOne({_id : createdComment._id}).populate("author").sort({createdAt : -1});
 
@@ -53,21 +54,22 @@ const newComment = asyncHandler(async(req, res, next) => {
 });
 
 const newReply = asyncHandler(async(req, res, next)=>{
+
     const {reply} = req.body;
-    const {commentId} = req.query;
+    const {id} = req.query;
 
 
     if(!reply){
         throw new ApiError("empty reply is not allowed", 401, "newReply");
     }
 
-    if(!commentId){
+    if(!id){
         throw new ApiError("commentId id missing", 401, "newReply");
     }
 
 
     const commentExists = await Comments.findOne({
-        _id : new mongoose.Types.ObjectId(`${commentId}`),
+        _id : new mongoose.Types.ObjectId(`${id}`),
     });
 
     if(!commentExists){
@@ -81,16 +83,19 @@ const newReply = asyncHandler(async(req, res, next)=>{
         parentId : commentExists._id
     });
 
+    const populatedReply = await Comments.findOne({_id : createdReply._id}).populate("author").select("-password");
+
     res.status(201).json({
         success : true,
         message : "comment created successfully",
-        data : createdReply
+        data : populatedReply
     });
 
 });
 
 const getComments = asyncHandler(async(req, res) => {
     const {blogId, page} = req.query;
+
 
     if(!blogId){
         throw new ApiError("blogId is missing", 401, "getComments");

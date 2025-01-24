@@ -7,6 +7,7 @@ const CommentThread = () => {
     const {id} = useParams();
     const {commentThreadLoading} = useGetCommentThread({id});
     const {comments} = useCommentStore();
+    console.log(comments);
 
     return (
         <>

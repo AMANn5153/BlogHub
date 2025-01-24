@@ -13,6 +13,7 @@ const authRouter = require('./routes/auth.routes');
 const blogRouter = require('./routes/blog.router');
 const commentRouter = require('./routes/comment.routes');
 const testRouter = require('./routes/test.routes');
+const likeRouter = require('./routes/like.routes');
 
 const corsOptions = {
     origin: "http://localhost:3000", 
@@ -52,6 +53,7 @@ app.use('/api/v1/auth', authRouter);
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/comment", commentRouter);
 app.use("/api/v1/test", testRouter);
+app.use("/api/v1/like", likeRouter);
 
 app.use(errorHandler);
 

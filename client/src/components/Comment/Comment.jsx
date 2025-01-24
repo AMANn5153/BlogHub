@@ -17,7 +17,6 @@ const Comments = ({blogId}) => {
     setComment(editor.getHTML());
   }, [editor?.getHTML(), setComment]);
 
-  console.log(blogId);
 
 
   const handleSubmit = async (e) => {
