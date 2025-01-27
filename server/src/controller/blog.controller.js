@@ -4,6 +4,8 @@ const asyncHandler = require("../utils/asyncHandler");
 const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
+const Likes = require("../models/like.model");
+const Saves = require("../models/save.model");
 
 
 
@@ -52,7 +54,19 @@ const getBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError("blog not found", 404, "getBlog");
     }
 
-    const likeOnBlog = await Likes.countDocuments({blogId : new mongoose.Types.ObjectId(`${id}`)});
+    const increaseViews = await Views.findOneAndUpdate({userId : req.user._id}, {$inc : {views : 1}});
+
+    if(!increaseViews){
+        throw new ApiError("something is wrong", 404, "getBlog");
+    }
+
+    const likeOnBlog = await Likes.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
+    
+    if(!likeOnBlog){
+        throw new ApiError("Like not found", 404, "getBlog");
+    }
+
+    const savesOnBlog = await Saves.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
 
     const blog = await Blogs.aggregate([
         {
@@ -85,6 +99,7 @@ const getBlog = asyncHandler(async (req, res, next) => {
         status : 200,
         message : "blog fetched successfully",
         likes : likeOnBlog,
+        saves : savesOnBlog,
         data : blog[0] 
     })
 })

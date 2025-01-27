@@ -1,9 +1,56 @@
-const Saves = require("../models/save.models.js");
+const Saves = require("../models/save.model.js");
 const asyncHandler = require("../utils/asyncHandler.js");
 const mongoose = require("mongoose");
 const ApiError = require("../utils/ApiErrors.js");
+const Blogs = require("../models/Blog.model.js");
 
 
-const saveBlog = asyncHandler(async (req, res, next) => {
+const toggleSaveBlog = asyncHandler(async (req, res, next) => {
+    const {blogId} = req.query;
     
+    if(!blogId){
+        throw new ApiError("blogId is required", 400, "saveBlog");
+    }
+
+    const blogExists = await Blogs.findOne({_id : new mongoose.Types.ObjectId(`${blogId}`)});
+
+    if(!blogExists){
+        throw new ApiError("blog not found", 404, "saveBlog");
+    }
+
+    const save = await Saves.findOne({
+        userId : new mongoose.Types.ObjectId(`${req.user._id}`),
+        blogId : new mongoose.Types.ObjectId(`${blogId}`)
+    });
+
+    if(!save){
+        const saveBlog = await Saves.create({
+            userId : new mongoose.Types.ObjectId(`${req.user._id}`),
+            blogId : new mongoose.Types.ObjectId(`${blogId}`),
+        });
+        return res.status(200).json({
+            success : "true",
+            message : "blog saved successfully",
+            data : saveBlog
+        });
+    }
+    else{
+        const unsaveBlog = await Saves.deleteOne({
+            userId : new mongoose.Types.ObjectId(`${req.user._id}`),
+            blogId : new mongoose.Types.ObjectId(`${blogId}`)
+        });
+
+        return res.status(200).json({
+            success : "true",
+            message : "blog unsaved successfully",
+            data : []
+        });
+    }
+
+
 });
+
+
+module.exports = {
+    toggleSaveBlog
+}

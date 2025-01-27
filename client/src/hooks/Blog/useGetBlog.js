@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import useLikeStore from "../../store/useLikeStore";
+import useSaveStore from "../../store/useSaveStore";
 import { toast } from "react-toastify";
 
 const useGetBlog = (id) => {
 
     const [loading, setLoading] = useState(false);
+    const {initialBlogLikes} = useLikeStore();
+    const {initialSaveBlog} = useSaveStore();
     const [blog, setBlog] = useState();
 
     useEffect(() => {
@@ -18,6 +22,8 @@ const useGetBlog = (id) => {
                     throw new Error(responseData.message || "Failed to fetch the blog.");
                 }
                 setBlog(responseData.data);
+                initialBlogLikes(responseData.likes);
+                initialSaveBlog(responseData.saves);
 
             } catch (error) {
                 console.log(error);
@@ -39,7 +45,7 @@ const useGetBlog = (id) => {
 
     }, [id, setBlog]); 
 
-    return { blog, loading };
+    return {blog, loading };
 
 };
 

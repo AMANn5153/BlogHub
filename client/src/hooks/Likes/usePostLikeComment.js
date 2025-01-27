@@ -3,16 +3,17 @@ import useLikeStore from "../../store/useLikeStore";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 
-const useLikePost = () => {
+const useLikePostComment = () => {
     const [likePostLoading, setLikePostLoading] = useState(false);
-    const {setLike, unSetLike} = useLikeStore();
+    const {setCommentLike, unSetCommentLike} = useLikeStore();
     const {auth} = useAuthContext();
 
 
-    const likePost = async (blogId)=>{
+    const likePostComment = async (commentId)=>{
+        console.log(commentId)
         try{
             setLikePostLoading(true);
-            const response = await fetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}`, {
+            const response = await fetch(`http://localhost:3001/api/v1/like/toggleCommentLike?commentId=${commentId}`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -28,9 +29,9 @@ const useLikePost = () => {
 
 
             if(responseData.data.length === 0){
-               unSetLike({blogId, userId : auth._id});
+               unSetCommentLike({commentId, userId : auth._id});
             }else{
-             setLike([responseData.data]);
+             setCommentLike([responseData.data]);
             }
             
         }
@@ -42,8 +43,8 @@ const useLikePost = () => {
         }
     }
 
-    return {likePost, likePostLoading};
+    return {likePostComment, likePostLoading};
 }
 
 
-export default useLikePost;
+export default useLikePostComment;

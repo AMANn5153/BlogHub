@@ -10,10 +10,12 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const authRouter = require('./routes/auth.routes');
-const blogRouter = require('./routes/blog.router');
+const blogRouter = require('./routes/blog.routes.js');
 const commentRouter = require('./routes/comment.routes');
 const testRouter = require('./routes/test.routes');
 const likeRouter = require('./routes/like.routes');
+const saveRouter = require('./routes/save.routes');
+const followerRouter = require('./routes/Follower.routes.js');
 
 const corsOptions = {
     origin: "http://localhost:3000", 
@@ -54,6 +56,8 @@ app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/comment", commentRouter);
 app.use("/api/v1/test", testRouter);
 app.use("/api/v1/like", likeRouter);
+app.use("/api/v1/save", saveRouter);
+app.use("/api/v1/addFollower", followerRouter);
 
 app.use(errorHandler);
 

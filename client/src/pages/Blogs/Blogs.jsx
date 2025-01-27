@@ -4,6 +4,7 @@ import { FaRegComment } from "react-icons/fa6";
 import { FiBookmark } from "react-icons/fi";
 import { useParams } from "react-router-dom";
 import { FcLike } from "react-icons/fc";
+import { FcBookmark } from "react-icons/fc";
 import parse from "html-react-parser";
 import timeDuration from "../../utils/time";
 import useGetBlog from "../../hooks/Blog/useGetBlog";
@@ -17,6 +18,8 @@ import LoginModal from "../../components/Modal/LoginModal";
 import useCommentStore from "../../store/useCommentStore";
 import useLikePost from "../../hooks/Likes/useLikePost";
 import useLikeStore from "../../store/useLikeStore";
+import useSaveStore from "../../store/useSaveStore";
+import useSave from "../../hooks/Saves/useSave";
 
 const Blogs = () => {
   const commentRef = useRef();
@@ -27,9 +30,12 @@ const Blogs = () => {
   const {auth} = useAuthContext();
   const {likePost} = useLikePost();
   const {likes} = useLikeStore();
+  const {saveBlog} = useSaveStore();
+  const {postSaveBlog} = useSave();
 
-  console.log(likes)
+
   const likedByUser = likes.length > 0 ? likes?.some((like)=>like.userId === auth._id && like.blogId === id ) : false;
+  const savedByUser = saveBlog.length > 0 ? saveBlog?.some((save)=>save.userId === auth._id && save.blogId === id ) : false;
 
   if(!blog){
     return <div className="flex w-full h-full items-center justify-center">
@@ -51,30 +57,42 @@ const Blogs = () => {
     await likePost(id);
   }
 
-  const handleSave = () => {
-
+  const handleSave = async () => {
+    await postSaveBlog(id);
   }
 
   return (
     <>
       <div className=" grid w-full grid-cols-[1fr_12fr] gap-4 ">
-        <div className="grid-cols-1 h-screen border bg-black rounded-2xl sticky top-0 border-white">
+        <div className="grid-cols-1 h-screen border border-black-400 rounded-2xl sticky top-0 border-white">
           <div className="h-full rounded-2xl flex flex-col justify-center p-5 items-center">
             <div className="flex flex-col justify-around h-1/2 w-full items-center">
               <div className="text-3xl font-bold hover:cursor-pointer flex flex-col justify-center">
                 <div className="flex items-center justify-center rounded-full w-12 h-12">
-                  <button className=  "hover:text-red-500" onClick={auth ? handleLike : ()=>{document.getElementById("my_modal_3").showModal()}}>{likedByUser ?<TbHeartPlus/> : <FcLike />
+                  <button className=  "hover:text-red-500" 
+                  onClick={
+                    auth ? 
+                    handleLike : 
+                    ()=>{document.getElementById("my_modal_3").showModal()}}>
+                    {likedByUser ?<FcLike/> : <TbHeartPlus/>
                   }</button>
                 </div>
-                <div className="text-lg text-center">1</div>
+                <div className="text-lg text-center">{likes.length}</div>
               </div>
               <div className="text-3xl font-bold hover:cursor-pointer tooltip" data-tip="Comments">
                 <button type="button" className="hover:text-amber-300" onClick={handleCommentView} ><FaRegComment /></button>
                 <div className="text-lg text-center">{comments.length}</div>
               </div>
               <div className="text-3xl font-bold hover:cursor-pointer">
-                <button className="hover:text-cyan-600" onClick={auth ? handleSave : ()=>{document.getElementById("my_modal_3").showModal()}}><FiBookmark /></button> 
-              <div className="text-lg text-center">1</div>
+                <button className="hover:text-cyan-600" onClick={
+                  auth ? 
+                  handleSave : 
+                  ()=>{document.getElementById("my_modal_3").showModal()}}>
+                  {savedByUser?<FcBookmark />
+                  :<FiBookmark />
+                  }
+                </button> 
+              <div className="text-lg text-center">{saveBlog.length}</div>
               </div>
             </div>
           </div>

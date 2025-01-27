@@ -9,16 +9,30 @@ import { EditorContent } from "@tiptap/react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import LoginModal from "../Modal/LoginModal";
 import usePostReply from "../../hooks/Reply/usePostReply";
+import useLikePostComment from "../../hooks/Likes/usePostLikeComment";
+import useLikeStore from "../../store/useLikeStore";
 import {Link, useNavigate} from "react-router-dom";
+import { FcLike } from "react-icons/fc";
 
 
 const CommentCard = ({comment}) => {
   const [reply, setReply] = useState(false);
+  const {likePostComment} = useLikePostComment();
+  const {CommentLike} = useLikeStore();
+  const {auth} = useAuthContext();
+
+ 
+  const changeLike = async () =>{
+    await likePostComment(comment._id);
+  }
 
 
   const changeReply = () => {
     setReply(true);
   }
+
+
+  const likedByUser = CommentLike.length > 0 ? CommentLike?.some((like)=>like.userId === auth._id && like.commentId === comment._id ) : false;
 
 
   return (
@@ -51,8 +65,13 @@ const CommentCard = ({comment}) => {
               </>
               :
               <>
-              <button className="btn btn-ghost text-2xl tooltip tooltip-bottom hover:cursor-pointer" data-tip="like">
+              <button className="btn btn-ghost text-2xl tooltip tooltip-bottom hover:cursor-pointer hover:bg-red-600"
+              onClick={changeLike}
+              data-tip="like">
+              {
+              likedByUser?<FcLike/>:
               <IoIosHeartEmpty />
+              } 
               </button>
               <button className="btn btn-ghost text-2xl tooltip tooltip-bottom hover:cursor-pointer"
                 onClick={changeReply}

@@ -22,7 +22,9 @@ const Navbar = () => {
     <>
     <div className=' h-full w-3/4 flex align-center justify-center  border border-cyan-300  rounded-2xl  glass-effect'><div className="navbar">
   <div className="flex-1">
-    <a className="btn btn-ghost text-xl">Blog</a>
+  <NavLink to="/">
+  <button className="btn btn-ghost text-xl">Blog</button>
+  </NavLink>
   </div>
   <div className="flex-none w-1/2 gap-2">
 
@@ -59,10 +61,10 @@ const Navbar = () => {
         tabIndex={0}
         className=" menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
         <li>
-          <a className="justify-between">
-            Profile
-            <span className="badge">New</span>
-          </a>
+          <NavLink to = "/dashboard" className="justify-between">
+          DashBoard
+          </NavLink>
+            
         </li>
         <li><button>Settings</button></li>
         <li><button onClick={handleLogout}>Logout</button></li>

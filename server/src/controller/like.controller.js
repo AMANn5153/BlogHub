@@ -1,6 +1,7 @@
 const asyncHandler = require("../utils/asyncHandler.js");
 const Likes = require("../models/like.model.js");
 const mongoose = require("mongoose");
+const Comments = require("../models/comments.model.js");
 
 const toggleBlogLike = asyncHandler(async (req, res) => { 
     const {blogId} = req.query;
@@ -43,10 +44,17 @@ const toggleBlogLike = asyncHandler(async (req, res) => {
 
 const toggleCommentLike = asyncHandler(async (req, res, next)=>{
     const {commentId} = req.query;
-
     if(!commentId){
         throw new ApiError("commentId is required", 400, "toggleCommentLike");
     }
+
+    const comment = await Comments.findOne({_id : new mongoose.Types.ObjectId(`${commentId}`)});
+
+    if(!comment){
+        throw new ApiError("comment not found", 404, "toggleCommentLike");
+    }
+
+
 
     const like = await Likes.findOne({
         userId : new mongoose.Types.ObjectId(`${req.user._id}`),
@@ -57,6 +65,7 @@ const toggleCommentLike = asyncHandler(async (req, res, next)=>{
         const toggleLike = await Likes.create(
             {
             userId : new mongoose.Types.ObjectId(`${req.user._id}`),
+            blogId : comment.blogId,
             commentId : new mongoose.Types.ObjectId(`${commentId}`),
         }
         )  
@@ -78,4 +87,7 @@ const toggleCommentLike = asyncHandler(async (req, res, next)=>{
     }   
 })
 
-module.exports = {toggleBlogLike};
+module.exports = {
+    toggleBlogLike,
+    toggleCommentLike
+};

@@ -4,7 +4,8 @@ import useCommentStore from '../../store/useCommentStore';
 
 const usePostComment = () => {
     const [commentPostLoading, commentPostSetLoading] = useState(false);
-    const { setComment, comments } = useCommentStore();
+    const { setNewComment, comments } = useCommentStore();
+    const {initialCommentLikes} = useCommentStore();
 
     const postComment = async ({ comment, blogId }) => {
         try {
@@ -30,7 +31,8 @@ const usePostComment = () => {
             }
 
             // Functional update to avoid stale state issues
-            setComment([responseData.data]);
+            setNewComment([responseData.data]);
+            initialCommentLikes(responseData.likes);
 
         } catch (err) {
             console.log(err.message);

@@ -4,12 +4,12 @@ const asyncHandler = require("../utils/asyncHandler");
 const { default: mongoose } = require("mongoose");
 const {io} = require("../socket/socket");
 const ApiError = require("../utils/ApiErrors");
+const Likes = require("../models/like.model");
 
 
 const newComment = asyncHandler(async(req, res, next) => {
    
     const {comment} = req.body;
-    console.log(req.query);
     const {id} = req.query;
 
     if(!comment || comment === ""){
@@ -106,6 +106,7 @@ const getComments = asyncHandler(async(req, res) => {
     if(!Blog){
         throw new ApiError("blog not found", 404, "getComments");
     }
+
 
     const comments = await Comments.find({
         blogId : new mongoose.Types.ObjectId(`${blogId}`), 
