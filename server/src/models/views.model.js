@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const viewsSchema = new mongoose.Schema({
-    userId : {
+    blogId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "User"
+        ref : "Blogs"
     },
     views : {
         type : Number,

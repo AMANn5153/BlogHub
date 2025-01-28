@@ -6,6 +6,7 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const Likes = require("../models/like.model");
 const Saves = require("../models/save.model");
+const Views = require("../models/views.model");
 
 
 
@@ -54,10 +55,19 @@ const getBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError("blog not found", 404, "getBlog");
     }
 
-    const increaseViews = await Views.findOneAndUpdate({userId : req.user._id}, {$inc : {views : 1}});
-
+    const increaseViews = await Views.findOne(
+        {BlogId : new mongoose.Types.ObjectId(`${id}`)}, 
+    );
     if(!increaseViews){
-        throw new ApiError("something is wrong", 404, "getBlog");
+        await Views.create({
+            BlogId : new mongoose.Types.ObjectId(`${id}`),
+            views : 1
+        });
+    }else{
+        await Views.findOneAndUpdate(
+            {BlogId : new mongoose.Types.ObjectId(`${id}`)},
+            {$inc : {views : 1}}
+        );
     }
 
     const likeOnBlog = await Likes.find({blogId : new mongoose.Types.ObjectId(`${id}`)});

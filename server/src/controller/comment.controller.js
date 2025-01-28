@@ -121,33 +121,7 @@ const getComments = asyncHandler(async(req, res) => {
     })
 });
 
-const getReply = asyncHandler(async(req, res, next) => {
-    const {commentId, page} = req.query;
 
-
-    if(!commentId){
-        throw new ApiError("commentId is missing", 401, "getReply");
-    }
-
-    const commentExists = await Comments.findOne({
-        _id : new mongoose.Types.ObjectId(`${commentId}`)
-    });
-
-    if(!commentExists){
-        throw new ApiError("Comment not found", 401, "getReply");
-    }
-
-    const replies = await Comments.find({
-        parentId : commentId,
-    }).limit(10).skip(page*10);
-
-    res.status(200).json({
-        status : "success",
-        message : "Comment added successfully",
-        data : replies
-    })
-
-})
 
 const getCommentThread = asyncHandler(async(req, res, next) => {
     const {commentId} = req.query;    
@@ -167,68 +141,35 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
                 from : "comments",
                 localField : "_id",
                 foreignField : "parentId",
-                as : "replies"
-            }
-        },
-        {
-            $lookup : {
-                from : "users",
-                localField : "author",
-                foreignField : "_id",
-                as : "author"
-            },
-        },
-        {
-            $unwind: "$author"
-        },
-        {
-            $lookup : {
-                from : "users",
-                localField : "replies.author",
-                foreignField : "_id",
-                as : "replyAuthors"
-            }
-        },
-        {
-            $addFields : {
-                replies :{ // array of replies
-                    $map : {
-                        input : "$replies",
-                        as : "reply",   
-                        in : {
-                            $mergeObjects : ["$$reply", {
-                                author : {
-                                    $arrayElemAt : [ {
-                                        $filter : {
-                                            input : "$replyAuthors",
-                                            as : "replyAuthor",
-                                            cond : {
-                                                $eq : ["$$replyAuthor._id", "$$reply.author"]
-                                            }
-                                        }
-                                    }, 0]
+                as : "replies",
+                pipeline:[
+                    {
+                        $lookup : 
+                        {
+                            from : "users",
+                            localField : "author",
+                            foreignField : "_id",
+                            as : "author",
+                            pipeline:
+                            [
+                                {
+                                    $project : {
+                                        "name" : 1,
+                                        "profilePic" : 1,
+                                    }
                                 }
-                            }]
+                            ]
+                        },  
+                    },
+                    {
+                        $addFields : 
+                        {
+                            author :{
+                                $first : "$author"
+                            }
                         }
                     }
-                }
-            }
-        },{
-            "$project" : {
-                "author.password": 0,
-                "author.refreshToken": 0,
-                "author.username": 0,
-                "author.createdAt": 0,
-                "author.updatedAt": 0,
-                "parentId": 0,
-                "replies.parentId": 0,
-                "replies.blogId": 0,
-                "replies.author.password": 0,
-                "replies.author.refreshToken": 0,
-                "replies.author.username": 0,
-                "replies.author.createdAt": 0,
-                "replies.author.updatedAt": 0,
-                replyAuthors : 0,
+                ]
             }
         },
     ]);
@@ -247,6 +188,5 @@ module.exports = {
     newComment,
     newReply,
     getComments,
-    getReply,
     getCommentThread
 }
