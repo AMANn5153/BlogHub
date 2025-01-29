@@ -1,24 +1,15 @@
-import { FaComment, FaEye, FaHeart } from "react-icons/fa";
 import useAuthContext from "../../context/authContext/useAuthContext"
-import React from "react";
-import {
-  Tabs,
-  TabsHeader,
-  TabsBody,
-  Tab,
-  TabPanel,
-} from "@material-tailwind/react";
-import {
-  Square3Stack3DIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/solid";
+import { Tabs } from "flowbite-react";
+import { BsFilePost,  } from "react-icons/bs";
+import { BiStats } from "react-icons/bi";
+import { SlUserFollow } from "react-icons/sl";
+
 
 const Dashboard = () => {
     const {auth} = useAuthContext();
 
   return (
-    <div className = "grid  grid-rows-[2fr_2fr_4fr]">
+    <div className = "grid  grid-rows-[2fr_2fr_4fr] gap-4">
         <div className="grid-rows-1 flex flex-row justify-start">
             <h1 className="text-6xl font-bold">Hello {auth.name}</h1>
         </div>
@@ -36,16 +27,8 @@ const Dashboard = () => {
                 <h1 className="text-2xl font-bold">Total Views</h1>
             </div>
         </div>
-        <div className=" flex flex-row border border-white gap-4">
-            <div className="border border-red-400">
-                <li>followers</li>
-                <li></li>
-                <li></li>
-            </div>
-            <div className=" ">
-                <h1>Posts</h1>
-                <Menu/>
-            </div>
+        <div className="flex flex-row p-4 gap-4">
+            <Menu/>
         </div>
     </div>
   )
@@ -53,56 +36,27 @@ const Dashboard = () => {
 }
 
 
-const Menu = () => {
-
-    const data = [
-        {
-          label: "Dashboard",
-          value: "dashboard",
-          icon: Square3Stack3DIcon,
-          desc: `It really matters and then like it really doesn't matter.
-          What matters is the people who are sparked by it. And the people
-          who are like offended by it, it doesn't matter.`,
-        },
-        {
-          label: "Profile",
-          value: "profile",
-          icon: UserCircleIcon,
-          desc: `Because it's about motivating the doers. Because I'm here
-          to follow my dreams and inspire other people to follow their dreams, too.`,
-        },
-        {
-          label: "Settings",
-          value: "settings",
-          icon: Cog6ToothIcon,
-          desc: `We're not always in the position that we want to be at.
-          We're constantly growing. We're constantly making mistakes. We're
-          constantly trying to express ourselves and actualize our dreams.`,
-        },
-      ];
+const Menu = () =>{
     return (
-        <>
-    <Tabs value="dashboard">
-      <TabsHeader>
-        {data.map(({ label, value, icon }) => (
-          <Tab key={value} value={value}>
-            <div className="flex items-center gap-2">
-              {React.createElement(icon, { className: "w-5 h-5" })}
-              {label}
-            </div>
-          </Tab>
-        ))}
-      </TabsHeader>
-      <TabsBody>
-        {data.map(({ value, desc }) => (
-          <TabPanel key={value} value={value}>
-            {desc}
-          </TabPanel>
-        ))}
-      </TabsBody>
-    </Tabs>
-        </>
-    );
+        <Tabs aria-label="Default tabs"  variant="default">
+          <Tabs.Item active title="Posts" icon={BsFilePost}>
+            This is <span className="font-medium text-gray-800 dark:text-white">Profile tab's associated content</span>.
+            Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
+            control the content visibility and styling.
+          </Tabs.Item>
+          <Tabs.Item title="Stats" icon={BiStats}>
+            This is <span className="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</span>.
+            Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
+            control the content visibility and styling.
+          </Tabs.Item>
+          <Tabs.Item title="Followers" icon={SlUserFollow}>
+            This is <span className="font-medium text-gray-800 dark:text-white">Settings tab's associated content</span>.
+            Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
+            control the content visibility and styling.
+          </Tabs.Item>
+        </Tabs>
+      );
 }
+
 
 export default Dashboard

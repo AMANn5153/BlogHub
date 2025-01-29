@@ -16,12 +16,10 @@ import {EditorContextProvider} from './components/textEditor/EditorContext/Edito
 import {SocketProvider} from './context/socket/useSocket';
 import CommentThread from './pages/Comment/CommentThread';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
-import {ThemeProvider} from '@material-tailwind/react';
 
 function App() {
   return (
     <>
-    <ThemeProvider>
     <AuthProvider>
     <SocketProvider>
     <BrowserRouter>
@@ -50,7 +48,6 @@ function App() {
   />
   </SocketProvider>
   </AuthProvider>
-  </ThemeProvider>
   </>
   )
 }

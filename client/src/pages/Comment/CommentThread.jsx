@@ -16,6 +16,10 @@ const CommentThread = () => {
                 <span className="loading loading-infinity loading-lg"></span>
             </div>:
             <>
+            <div className= "text-6xl text-cyan-400 m-10">
+                <h1>Comment Threads ({comments[0]?.replies.length})</h1>
+                <hr className=" m-10"/>
+            </div>
                 <CommentCard comment = {comments[0]}/>
             {comments[0]?.replies.map((comment, index)=>{
                 return (

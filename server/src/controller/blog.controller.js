@@ -55,21 +55,6 @@ const getBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError("blog not found", 404, "getBlog");
     }
 
-    const increaseViews = await Views.findOne(
-        {BlogId : new mongoose.Types.ObjectId(`${id}`)}, 
-    );
-    if(!increaseViews){
-        await Views.create({
-            BlogId : new mongoose.Types.ObjectId(`${id}`),
-            views : 1
-        });
-    }else{
-        await Views.findOneAndUpdate(
-            {BlogId : new mongoose.Types.ObjectId(`${id}`)},
-            {$inc : {views : 1}}
-        );
-    }
-
     const likeOnBlog = await Likes.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
     
     if(!likeOnBlog){

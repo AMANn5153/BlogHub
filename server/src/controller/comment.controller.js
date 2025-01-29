@@ -137,6 +137,22 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
             }
         },
         {
+            $lookup:{
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author",
+                pipeline : [
+                    {
+                        $project : {
+                            "name" : 1,
+                            "profilePic" : 1,
+                        }
+                    }
+                ]
+            }
+        },
+        {
             $lookup : {
                 from : "comments",
                 localField : "_id",
@@ -172,6 +188,13 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
                 ]
             }
         },
+        {
+            $addFields:{
+                author :{
+                    $first : "$author"
+                }
+            }
+        }
     ]);
 
 

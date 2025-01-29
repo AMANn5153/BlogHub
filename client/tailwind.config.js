@@ -1,17 +1,18 @@
 import daisyui from 'daisyui';
 import scrollbarHide from 'tailwind-scrollbar-hide'
-import withMT from '@material-tailwind/react/utils/withMT'
+const flowbite = require("flowbite-react/tailwind");
 
 
 
 /** @type {import('tailwindcss').Config} */
 
-module.exports = withMT({
+module.exports = {
   content: [  
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "path-to-your-node_modules/@material-tailwind/react/components/**/*.{js,ts,jsx,tsx}",
-    "path-to-your-node_modules/@material-tailwind/react/theme/components/**/*.{js,ts,jsx,tsx}",
+    flowbite.content(),
+
+  
   ],
   theme: {
     extend: {},
@@ -19,5 +20,7 @@ module.exports = withMT({
   plugins: [    
     daisyui,
     scrollbarHide,
+    flowbite.plugin(),
+
   ],
-})
+}

@@ -5,11 +5,11 @@ const viewsSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : "Blogs"
     },
-    views : {
-        type : Number,
-        default : 0
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User"
     }
-});
+}, {timestamps:true});
 
 const Views = mongoose.model("Views", viewsSchema);
 
