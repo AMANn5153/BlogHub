@@ -20,12 +20,13 @@ import useLikePost from "../../hooks/Likes/useLikePost";
 import useLikeStore from "../../store/useLikeStore";
 import useSaveStore from "../../store/useSaveStore";
 import useSave from "../../hooks/Saves/useSave";
-import useViewsBlogs from "../../hooks/Blog/useviewsBlogs";
+import useViewsBlogs from "../../hooks/Blog/useViewsBlogs";
+import useBlogStore from "../../store/useBlogStore";
 
 const Blogs = () => {
   const commentRef = useRef();
   const { id } = useParams(); 
-  const {blog} = useGetBlog(id);
+  const {loading} = useGetBlog(id);
   const { commentLoading} = useGetAllComment(id);
   const {comments} = useCommentStore();
   const {auth} = useAuthContext();
@@ -34,9 +35,12 @@ const Blogs = () => {
   const {saveBlog} = useSaveStore();
   const {postSaveBlog} = useSave();
   const {views} = useViewsBlogs();
-
+  const {blog} = useBlogStore();
 
   useEffect(()=>{
+
+    if(!blog)return;
+
     const getViewCount = sessionStorage.getItem(`viewCount_${id}`);
 
     if(!getViewCount){
@@ -47,31 +51,25 @@ const Blogs = () => {
       increaseViews();
       sessionStorage.setItem(`viewCount_${id}`, true);
     }
-  }, [id, blog?.author?._id]);
+  }, [id, blog?.author]);
 
 
   const likedByUser = likes.length > 0 ? likes?.some((like)=>like.userId === auth?._id && like.blogId === id ) : false;
   const savedByUser = saveBlog.length > 0 ? saveBlog?.some((save)=>save.userId === auth?._id && save.blogId === id ) : false;
 
   if(!blog){
-    return <div className="flex w-full h-full items-center justify-center">
-      <span className="loading loading-infinity loading-lg"></span>
-    </div>
+    return (<div className="flex w-full h-full items-center justify-center">
+    <span className="loading loading-infinity loading-lg"></span>
+  </div>)
   }
 
-  const {heading, author, createdAt, content, coverImage} = blog ;
 
-
-
+  const {heading, author, createdAt, content, coverImage} = blog;
 
   const {duration, time, dateString} = timeDuration(createdAt);
 
-  
-  
-
-
   const handleCommentView = () =>{
-    commentRef.current.scrollIntoView({behavior: "smooth", block: "center"});
+    commentRef.current.scrollIntoView({behavior: "smooth", block: "start"});
   }
   
 
@@ -85,6 +83,7 @@ const Blogs = () => {
 
   return (
     <>
+      
       <div className=" grid w-full grid-cols-[1fr_12fr] gap-4 ">
         <div className="grid-cols-1 h-screen  border-black-400 rounded-2xl sticky top-0 ">
           <div className="h-full rounded-2xl flex flex-col justify-center p-5 items-center">
@@ -154,13 +153,13 @@ const Blogs = () => {
           </div>
         <hr/>
           <div>
-            <h1 className="text-2xl font-bold m-6 text-white">Top Comments {comments.length}</h1>
+            <h1 ref = {commentRef}  className="text-2xl font-bold m-6 text-white">Top Comments {comments.length}</h1>
           </div>
           <br/>
           <div ref = {commentRef} className="flex flex-col gap-4 w-full">
 
           <EditorContextProvider purpose="comment">
-            <Comment blogId={blog._id}/>
+            <Comment blogId={blog._id} authorId={blog?.author?._id}/>
           </EditorContextProvider>
           {
             commentLoading?<span className="loading loading-infinity loading-lg"></span>:
@@ -176,8 +175,8 @@ const Blogs = () => {
         </div>
       </div>
       <LoginModal/>
-    </>
-  );
+      </>
+    );
 };
 
 export default Blogs;

@@ -21,6 +21,7 @@ const CommentThread = () => {
                 <hr className=" m-10"/>
             </div>
                 <CommentCard comment = {comments[0]}/>
+
             {comments[0]?.replies.map((comment, index)=>{
                 return (
                     <>

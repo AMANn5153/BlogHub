@@ -10,14 +10,18 @@ const Likes = require("../models/like.model");
 const newComment = asyncHandler(async(req, res, next) => {
    
     const {comment} = req.body;
-    const {id} = req.query;
+    const {id, authorId} = req.query;
 
     if(!comment || comment === ""){
         throw new ApiError("empty comment is not allowed", 401, "newComment");
     }
 
-    if(!id){
+    if(!id ){
         throw new ApiError("blogId is missing", 401, "newComment");
+    }
+
+    if(!authorId){
+        throw new ApiError("authorId is missing", 401, "newComment");
     }
 
 
@@ -31,6 +35,7 @@ const newComment = asyncHandler(async(req, res, next) => {
 
 
     const createdComment = await Comments.create({
+        blogAuthor: authorId,
         blogId : new mongoose.Types.ObjectId(`${id}`),
         author : req.user._id,
         comment
@@ -77,6 +82,7 @@ const newReply = asyncHandler(async(req, res, next)=>{
     }
 
     const createdReply = await Comments.create({
+        blogAuthor: commentExists.author,
         blogId : commentExists.blogId,
         author : req.user._id,
         comment : reply,
@@ -120,8 +126,6 @@ const getComments = asyncHandler(async(req, res) => {
         data : comments
     })
 });
-
-
 
 const getCommentThread = asyncHandler(async(req, res, next) => {
     const {commentId} = req.query;    

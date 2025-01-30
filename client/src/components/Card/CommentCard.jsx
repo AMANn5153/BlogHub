@@ -20,7 +20,6 @@ const CommentCard = ({comment}) => {
   const {likePostComment} = useLikePostComment();
   const {CommentLike} = useLikeStore();
   const {auth} = useAuthContext();
-  console.log(comment);
  
   const changeLike = async () =>{
     await likePostComment(comment._id);
@@ -37,7 +36,7 @@ const CommentCard = ({comment}) => {
 
   return (
     <>
-      <div className="grid ml-6 w-2/3 grid-cols-[1fr_12fr] ">
+      <div className="grid ml-6 p-4 w-2/3 grid-cols-[1fr_12fr] ">
         <div className="grid-cols-1">
           <div className="avatar">
             <div className="w-12 rounded-full">

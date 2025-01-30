@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { toast } from "react-toastify";
 import useCommentStore from '../../store/useCommentStore';
+import useLikeStore from '../../store/useLikeStore';
 
 const usePostComment = () => {
     const [commentPostLoading, commentPostSetLoading] = useState(false);
     const { setNewComment, comments } = useCommentStore();
-    const {initialCommentLikes} = useCommentStore();
+    const {initialCommentLikes} = useLikeStore();
 
-    const postComment = async ({ comment, blogId }) => {
+    const postComment = async ({ comment, blogId, authorId }) => {
         try {
             if(comment === "<p></p>"){
                 throw new Error("empty comment is not allowed");
@@ -15,7 +16,7 @@ const usePostComment = () => {
 
             commentPostSetLoading(true);
 
-            const response = await fetch(`http://localhost:3001/api/v1/comment/newComment?id=${blogId}`, {
+            const response = await fetch(`http://localhost:3001/api/v1/comment/newComment?id=${blogId}&authorId=${authorId}`, {
                 method: "POST", 
                 credentials: "include",
                 headers: {
@@ -32,7 +33,7 @@ const usePostComment = () => {
 
             // Functional update to avoid stale state issues
             setNewComment([responseData.data]);
-            initialCommentLikes(responseData.likes);
+            initialCommentLikes(responseData.likes || []);
 
         } catch (err) {
             console.log(err.message);

@@ -4,6 +4,12 @@ import useGetAllBlog from "../../hooks/Blog/useGetAllBlog";
 const Home = () => {
   const { blogs, loading } = useGetAllBlog();
 
+  if(!blogs || loading){
+    return (<div className="flex w-full h-full items-center justify-center">
+    <span className="loading loading-infinity loading-lg"></span>
+  </div>)
+  }
+
 
   return (
     <>
@@ -23,7 +29,7 @@ const Home = () => {
                 <span className="loading loading-infinity loading-lg"></span>
               </div>
             ) : (
-              blogs.map((blog, index) => {
+              blogs?.map((blog, index) => {
                 return (
                   <Card
                     key={index}

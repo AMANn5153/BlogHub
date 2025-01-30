@@ -1,9 +1,19 @@
+import { TbNumber0Small } from "react-icons/tb";
 import { create } from "zustand";
 
 const useBlogStore = create((set) => ({
     blogs : [],
+    blog : null,
+
+    setSingleBlog : (blog)=>{
+        set((state)=>({
+             blog 
+        }))
+    },
     setBlog:(blogs)=>{
-        set({blogs})
+        set((state)=>({
+            blogs : blogs
+        }))
     },
     setLikes : (likes)=>{
         set({likes})

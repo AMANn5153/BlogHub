@@ -5,7 +5,7 @@ const COOKIE_OPTIONS = {
     sameSite: "Lax",        // Lax allows cookies to be sent with top-level navigations and some cross-site requests.
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),  // Cookie expires in 1 day.
 };
-
+7
 
 const generateTokenAndSetCookie = (userExists, res)=>{
     const accessToken =  userExists.generateAccessToken();

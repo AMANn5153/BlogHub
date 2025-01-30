@@ -83,7 +83,6 @@ const getBlog = asyncHandler(async (req, res, next) => {
         {
             $project:{
               "author.password" : 0,
-              "author._id" : 0,
               "author.updatedAt" : 0,
             }
         }

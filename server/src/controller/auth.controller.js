@@ -55,7 +55,7 @@ const createUser = async (req, res, next) => {
 
        data.profilePic = `http://localhost:3001/${pathOfImage}`;       
 
-       generateTokenAndSetCookie(user, res);
+       5.52(user, res);
 
        return res.status(201).json({
            success : true,
