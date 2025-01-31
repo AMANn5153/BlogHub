@@ -10,13 +10,13 @@ const useLikePostComment = () => {
 
 
     const likePostComment = async (commentId)=>{
-        console.log(commentId)
         try{
             setLikePostLoading(true);
             const response = await fetch(`http://localhost:3001/api/v1/like/toggleCommentLike?commentId=${commentId}`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
+                    'Authorization' : `Bearer ${auth}`,
                     "Content-Type": "application/json",
                 },
             });

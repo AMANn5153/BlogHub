@@ -27,7 +27,6 @@ const useLogout = ()=>{
                 throw new Error("Failed to logout");
             }
 
-            localStorage.removeItem("user");
             setAuth(null);
             navigate("/");
 

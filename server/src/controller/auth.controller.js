@@ -3,6 +3,7 @@ const User = require("../models/user.model");
 const {userSignupSchema} = require("../validator/validator.Schema.js");
 const path = require("path");
 const generateTokenAndSetCookie = require("../utils/generateTokenAndSetCookie");
+const asyncHandler = require("../utils/asyncHandler.js");
 
 const COOKIE_OPTIONS = {
     httpOnly: true,
@@ -55,12 +56,13 @@ const createUser = async (req, res, next) => {
 
        data.profilePic = `http://localhost:3001/${pathOfImage}`;       
 
-       5.52(user, res);
+       const {accessToken} = generateTokenAndSetCookie(user, res);
 
        return res.status(201).json({
            success : true,
            message : "user created",
-           data :data
+           data :data,
+           accessToken
        });
 
  } catch (err){
@@ -109,13 +111,14 @@ const loginUser = async(req, res, next) => {
 
         user.profilePic = `${pathOfImage}`;    
         
-        generateTokenAndSetCookie(userExists, res);
+        const {accessToken} = generateTokenAndSetCookie(userExists, res);
         
         return res.status(200).json(
                 {
                     success : true,
                     message : "Logged in",
-                    data:user
+                    data:user,
+                    accessToken 
                 }
             );
 
@@ -125,6 +128,30 @@ const loginUser = async(req, res, next) => {
     }
 
 }
+
+const refreshToken = asyncHandler(async (req, res, next)=>{
+    const refreshToken = req.cookies?.refreshToken;
+
+    if(!refreshToken){
+        return res.status(401).json({
+            status :  401,
+            message : "refresh token not found",
+            data : null
+        })
+    }
+
+    const decoded = jwt.verfiy(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    const user = await User.findOne({_id : decoded._id});
+
+    const accessToken = user.generateAccessToken();
+
+    res.status(200).json({
+        success : true,
+        message : "genreated access token",
+        accessToken
+    });
+});
 
 
 const logout = async (req, res) =>{
@@ -150,6 +177,7 @@ const logout = async (req, res) =>{
 module.exports = {
     createUser,
     loginUser,
-    logout
+    logout,
+    refreshToken
 };
 

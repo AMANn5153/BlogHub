@@ -13,8 +13,8 @@ const useSave = () => {
             setSaveLoading(true);
             const response = await fetch(`http://localhost:3001/api/v1/save/toggleSaveBlog?blogId=${blogId}`, {
                 method: "POST",
-                credentials: "include",
                 headers: {
+                    "Authorization" : `Bearer ${auth}`,
                     "Content-Type": "application/json",
                 },
             });

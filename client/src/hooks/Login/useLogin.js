@@ -1,12 +1,10 @@
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import {toast} from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
-const useLogin = (purpose) => {
+const useLogin = () => {
     const[loading, setLoading] = useState(false);
     const {setAuth} = useAuthContext();
-    const navigate = useNavigate();
 
 
     const Login = async({usernameOrEmail, password}) =>{
@@ -35,12 +33,9 @@ const useLogin = (purpose) => {
 
                 throw new Error(res.message);
             }
-            localStorage.setItem("user", JSON.stringify(res.data));
-            setAuth(res.data);
-            if(purpose !== "comment"){
-                navigate("/");
-            }
+            setAuth(res.accessToken);
             return true;
+
         }catch(error){
             console.log("Error in login", error.message);
             toast.error(error.message,{

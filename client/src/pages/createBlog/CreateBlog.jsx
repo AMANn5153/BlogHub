@@ -3,10 +3,13 @@ import TextEditor from "../../components/textEditor/TextEditor";
 import parse from "html-react-parser";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import useCreateBlog from "../../hooks/Blog/useCreateBlog";
+import useEditorContext from "../../components/textEditor/EditorContext/EditorContext";
+
 
 const CreateBlog = () => {
   const {auth} = useAuthContext();
   const {createBlog, loading} = useCreateBlog();
+  const {editor} = useEditorContext();
 
 
   // blog already exists in the local storage
@@ -57,6 +60,7 @@ const CreateBlog = () => {
       setHeading("");
       setConvertedContent("");  
       setCoverImage("");
+      editor.command.clearContent();
     }
 
     const handleSave = async () =>{

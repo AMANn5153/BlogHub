@@ -16,7 +16,9 @@ const useBlogImage = (image) => {
             setLoading(true);
             const response = await fetch(`http://localhost:3001/api/v1/blog/uploadImage?userId=${auth._id}`,{
                 method : "POST",
-                credentials : "include",
+                headers : {
+                    'Authorization' : `Bearer ${auth}`,
+                },
                 body: formData
             });
 

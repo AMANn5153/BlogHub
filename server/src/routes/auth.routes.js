@@ -4,8 +4,7 @@ const {Router} = require('express');
 const authenticate = require("../middleware/authenticate.middleware");
 const {uploadProfilePic} = require("../middleware/multer.middleware");
 // controller
-const {createUser, loginUser, logout} = require("../controller/auth.controller.js");
-const errorHandler = require('../middleware/ErrorHandler.middleware.js');
+const {createUser, loginUser, logout, refreshToken} = require("../controller/auth.controller.js");
 
 
 //router
@@ -21,5 +20,6 @@ authRouter.route("/loginUser").post(loginUser);
 authRouter.route("/logout").delete(authenticate, logout);
 
 
+authRouter.route("/refreshToken").get(refreshToken);
 
 module.exports = authRouter;

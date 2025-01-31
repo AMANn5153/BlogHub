@@ -1,10 +1,12 @@
 import {useState} from "react";
 import { toast } from "react-toastify";
+import useAuthContext from "../../context/authContext/useAuthContext";
 
 
 const useRemoveImage = () =>{
     const [loading, setLoading] = useState(false);
-    
+    const {auth} = useAuthContext();
+
     const removeImage = async(name)=>{
         if(!name){
             return;
@@ -13,7 +15,7 @@ const useRemoveImage = () =>{
             setLoading(true);
             await fetch(`http://localhost:3001/api/v1/blog/deleteImage?name=${name}`,{
                 method : "DELETE",
-                credentials : "include",
+                Authorization : `Bearer ${auth}`,
             });
             
         }

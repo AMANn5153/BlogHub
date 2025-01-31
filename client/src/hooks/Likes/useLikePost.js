@@ -14,8 +14,8 @@ const useLikePost = () => {
             setLikePostLoading(true);
             const response = await fetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}`, {
                 method: "POST",
-                credentials: "include",
                 headers: {
+                    'Authorization' : `Bearer ${auth}`,
                     "Content-Type": "application/json",
                 },
             });

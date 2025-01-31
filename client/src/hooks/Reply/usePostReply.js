@@ -1,10 +1,12 @@
 import { useState } from "react";
 import useCommentStore from "../../store/useCommentStore";
 import { toast } from "react-toastify";
+import useAuthContext from "../../context/authContext/useAuthContext";
 
 const usePostReply = () => {
     const [replyPostLoading, replyPostSetLoading] = useState(false);
     const { setReply } = useCommentStore();
+    const {auth} = useAuthContext();
 
     const postReply = async ({reply, commentId})=>{
         try{
@@ -15,8 +17,8 @@ const usePostReply = () => {
             
             const response = await fetch(`http://localhost:3001/api/v1/comment/newReply?id=${commentId}`, {
                 method : "POST",
-                credentials : "include",
                 headers : {
+                    'Authorization' : `Bearer ${auth}`,
                     "Content-Type" : "application/json"
                 },
                 body : JSON.stringify({reply})

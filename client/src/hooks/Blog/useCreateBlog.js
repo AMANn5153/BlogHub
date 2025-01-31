@@ -1,10 +1,11 @@
 import { useState } from "react";
 import useBlogStore from "../../store/useBlogStore";
 import { toast } from "react-toastify";
+import useAuthContext from "../../context/authContext/useAuthContext";
 
 const useCreateBlog = ()=>{
     const[loading, setLoading] = useState(false);
-    
+    const {auth} = useAuthContext();
     const {setBlog} = useBlogStore();
 
     const createBlog = async({author,coverImage, title, content, status}) =>{
@@ -13,12 +14,11 @@ const useCreateBlog = ()=>{
             setLoading(false);
             return;
         }
-        console.log(JSON.stringify({author, title, content, coverImage, status}));
         try {
             const response = await fetch(`http://localhost:3001/api/v1/blog/newBlog`,{
                 method : "POST",
-                credentials: "include",
                 headers:{
+                    'Authorization' : `Bearer ${auth}`,
                     "Content-Type": "application/json",
                 },
                 body : JSON.stringify({author, title, content, coverImage, status})
