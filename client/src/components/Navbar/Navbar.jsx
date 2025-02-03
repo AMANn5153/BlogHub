@@ -32,17 +32,17 @@ const Navbar = () => {
       
       {auth? 
        <NavLink to="/createBlog">
-       <button className='btn btn-ghost text-white text-xl  hover:cursor-pointer '>Create Blog</button>
+       <button className='btn btn-ghost text-black text-xl  hover:cursor-pointer '>Create Blog</button>
      </NavLink>
       : 
       <NavLink to="/login">
-        <button className='btn btn-ghost text-white text-xl  hover:cursor-pointer hover:bg-green-200 hover:text-black'>Login</button>
+        <button className='btn btn-ghost text-black text-xl  hover:cursor-pointer hover:bg-green-200 hover:text-black'>Login</button>
       </NavLink>
       }
       
       {!auth ? 
       <NavLink to="/signup">
-        <button className='btn btn-ghost text-white text-xl hover:bg-red-200 hover:text-black hover:cursor-pointer'>Signup</button>
+        <button className='btn btn-ghost text-black text-xl hover:bg-red-200 hover:text-black hover:cursor-pointer'>Signup</button>
       </NavLink>
       :""
       }
@@ -59,7 +59,7 @@ const Navbar = () => {
       </div>
       <ul
         tabIndex={0}
-        className=" menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
+        className=" menu menu-sm dropdown-content rounded-box mt-3 w-52 p-2 shadow">
         <li>
           <NavLink to = "/dashboard" className="justify-between">
           DashBoard

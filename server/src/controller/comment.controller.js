@@ -101,7 +101,7 @@ const newReply = asyncHandler(async(req, res, next)=>{
 
 const getComments = asyncHandler(async(req, res) => {
     const {blogId, page} = req.query;
-
+    console.log(blogId);
 
     if(!blogId){
         throw new ApiError("blogId is missing", 401, "getComments");

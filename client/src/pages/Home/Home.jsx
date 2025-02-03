@@ -21,7 +21,7 @@ const Home = () => {
           <input
             type="search"
             placeholder="what are you looking for?"
-            className="input input-bordered w-full max-w-xs"
+            className="input bg-white input-bordered w-full max-w-xs"
           />
           <div className="flex w-full flex-col justify-around align-center flex-wrap ">
             {loading ? (

@@ -15,7 +15,7 @@ const useRemoveImage = () =>{
             setLoading(true);
             await fetch(`http://localhost:3001/api/v1/blog/deleteImage?name=${name}`,{
                 method : "DELETE",
-                Authorization : `Bearer ${auth}`,
+                credentials:"include"
             });
             
         }

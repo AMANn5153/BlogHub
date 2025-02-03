@@ -4,6 +4,10 @@ const {userSignupSchema} = require("../validator/validator.Schema.js");
 const path = require("path");
 const generateTokenAndSetCookie = require("../utils/generateTokenAndSetCookie");
 const asyncHandler = require("../utils/asyncHandler.js");
+const jwt = require("jsonwebtoken");
+const template = require("../views/email_forget_templateEngine");
+const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
+const passport = require('passport');
 
 const COOKIE_OPTIONS = {
     httpOnly: true,
@@ -111,14 +115,13 @@ const loginUser = async(req, res, next) => {
 
         user.profilePic = `${pathOfImage}`;    
         
-        const {accessToken} = generateTokenAndSetCookie(userExists, res);
+        generateTokenAndSetCookie(userExists, res);
         
         return res.status(200).json(
                 {
                     success : true,
                     message : "Logged in",
                     data:user,
-                    accessToken 
                 }
             );
 
@@ -140,17 +143,16 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
         })
     }
 
-    const decoded = jwt.verfiy(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     const user = await User.findOne({_id : decoded._id});
 
-    const accessToken = user.generateAccessToken();
+    generateTokenAndSetCookie(user, res);
 
-    res.status(200).json({
-        success : true,
-        message : "genreated access token",
-        accessToken
-    });
+    return res.status(200).json({
+        status : 200,
+        message : "token refreshed"
+    })
 });
 
 
@@ -169,15 +171,50 @@ const logout = async (req, res) =>{
 }
 
 
-    
+const forgetPassword = async(req, res) =>{
+    const {email} = req.body;
+
+    if(!email){
+       return new ApiError("email is required", 401, "forgetPassword");
+    }
+
+    const userExists = await User.findOne({email});
+
+    if(!userExists){
+        return new ApiError("user does not exist", 404, "user not found");
+    }
+
+    const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn : "10m"});
+
+    const url = `http://localhost:3000/auth/forgetPassword?token=${token}`;
+
+    const emailForgetData = template({name: userExists.name, url});
+
+    const transporter = nodemailer.createTransport({
+
+    })
+
+}
 
 
+const passportGoogle = () =>{
 
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: '/api/auth/google/callback'
+  }, async (accessToken, refreshToken, profile, done) => {
+    console.log(accessToken, refreshToken);
+  }));
+  
+ 
+}
 
 module.exports = {
     createUser,
     loginUser,
     logout,
-    refreshToken
+    refreshToken,
+    passportGoogle
 };
 

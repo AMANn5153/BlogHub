@@ -2,6 +2,7 @@ import { useState } from "react";
 import useLikeStore from "../../store/useLikeStore";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
+import authFetch from "../../utils/authFetch";
 
 const useLikePost = () => {
     const [likePostLoading, setLikePostLoading] = useState(false);
@@ -12,10 +13,10 @@ const useLikePost = () => {
     const likePost = async (blogId)=>{
         try{
             setLikePostLoading(true);
-            const response = await fetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}`, {
+            const response = await authFetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}`, {
                 method: "POST",
+                Credentials: "include",
                 headers: {
-                    'Authorization' : `Bearer ${auth}`,
                     "Content-Type": "application/json",
                 },
             });

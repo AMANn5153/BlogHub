@@ -1,6 +1,7 @@
 import {toast} from "react-toastify";
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
+import authFetch from "../../utils/authFetch";
 
 
 const useRemoveCoverImage = () =>{
@@ -14,11 +15,9 @@ const useRemoveCoverImage = () =>{
                 setLoading(false);
                 return;
             }
-            await fetch(`http://localhost:3001/api/v1/blog/deleteCoverImage?name=${name}`,{
+            await authFetch(`http://localhost:3001/api/v1/blog/deleteCoverImage?name=${name}`,{
                 method : "DELETE",
-                headers: {
-                    'Authorization' : `Bearer ${auth}`,
-                }
+                credentials : "include",
             });
 
         }

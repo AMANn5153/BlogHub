@@ -7,6 +7,7 @@ const COOKIE_OPTIONS = {
 
 
 const generateTokenAndSetCookie = (userExists, res)=>{
+    
     const accessToken =  userExists.generateAccessToken();
     const refreshToken = userExists.generateRefreshToken();
 
@@ -14,9 +15,9 @@ const generateTokenAndSetCookie = (userExists, res)=>{
     res.setHeader("Access-Control-Allow-Credentials", "true");              // Allow credentials (cookies)
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
 
-    res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
+    res.cookie("accessToken", accessToken, COOKIE_OPTIONS)
+    .cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
 
-    return {accessToken};
 }
 
 module.exports = generateTokenAndSetCookie;

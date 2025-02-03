@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { toast } from "react-toastify";
+import authFetch from "../../utils/authFetch";
 
 const useBlogImage = (image) => {
     const[loading, setLoading] = useState(false);
@@ -14,11 +15,9 @@ const useBlogImage = (image) => {
         formData.append("image", image);
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:3001/api/v1/blog/uploadImage?userId=${auth._id}`,{
+            const response = await authFetch(`http://localhost:3001/api/v1/blog/uploadImage?userId=${auth._id}`,{
                 method : "POST",
-                headers : {
-                    'Authorization' : `Bearer ${auth}`,
-                },
+                credentials : "include",
                 body: formData
             });
 

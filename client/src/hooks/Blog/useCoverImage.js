@@ -1,6 +1,7 @@
 import {useState} from "react";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
+import authFetch from "../../utils/authFetch";
 
 const useCoverImage = () =>{
     const [loading, setLoading] = useState(false); 
@@ -8,7 +9,6 @@ const useCoverImage = () =>{
 
     const uploadCoverImage = async(image) =>{
         try{
-            console.log(image);
             setLoading(true);
             if(!image){
                 setLoading(false);
@@ -19,11 +19,9 @@ const useCoverImage = () =>{
 
             fm.append("image", image);
 
-            const response = await fetch("http://localhost:3001/api/v1/blog/uploadCoverImage",{
+            const response = await authFetch("http://localhost:3001/api/v1/blog/uploadCoverImage",{
                 method : "POST",
-                headers:{
-                    'Authorization' : `Bearer ${auth}`,
-                },
+                credentials : "include",
                 body : fm
             });
 

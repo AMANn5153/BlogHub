@@ -19,7 +19,7 @@ const Card = ({
   return (
     <>
     <Link to={{pathname:`/blog/${blogId}`}}>
-      <div className = "flex flex-col  border border-1 border-white m-2 p-12 rounded-s-3xl shadow-xl hover:border-2 cursor-pointer border-cyan-400 hover: shadow-lg active: shadow-sm transition-transform duration-150 ease-in-out">
+      <div className = "flex flex-col  border border-1 bg-white m-2 p-12 rounded-2xl shadow-xl hover:border-2 cursor-pointer border-cyan-400 hover: shadow-lg active: shadow-sm transition-transform duration-150 ease-in-out">
         <div className="flex flex-row gap-2 items-start">
           <div className="avatar">
             <div className="w-12 rounded-full">

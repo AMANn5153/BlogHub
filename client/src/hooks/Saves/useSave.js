@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useSaveStore from "../../store/useSaveStore";
 import useAuthContext from "../../context/authContext/useAuthContext";
+import authFetch from "../../utils/authFetch";
 
 const useSave = () => {
     const [saveLoading, setSaveLoading] = useState(false);
@@ -11,10 +12,10 @@ const useSave = () => {
     const postSaveBlog = async (blogId) => {
         try {
             setSaveLoading(true);
-            const response = await fetch(`http://localhost:3001/api/v1/save/toggleSaveBlog?blogId=${blogId}`, {
+            const response = await authFetch(`http://localhost:3001/api/v1/save/toggleSaveBlog?blogId=${blogId}`, {
                 method: "POST",
+                credentials:"include",
                 headers: {
-                    "Authorization" : `Bearer ${auth}`,
                     "Content-Type": "application/json",
                 },
             });

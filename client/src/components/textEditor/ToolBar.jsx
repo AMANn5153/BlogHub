@@ -80,7 +80,7 @@ const ToolBar = () => {
             onClick={() => (editor?.chain().focus().toggleBold().run())}
             className={`${
               editor.isActive("bold") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2 `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center text-white hover:bg-blue-900 rounded-md p-2 `}
             data-tip="Bold"
           >
             <FaBold size={20} />
@@ -94,7 +94,7 @@ const ToolBar = () => {
             }
             className={`${
               editor.isActive("underline") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Underline"
           >
             <FaUnderline size={20} />
@@ -104,7 +104,7 @@ const ToolBar = () => {
             disabled={!editor.can().chain().focus().toggleCodeBlock().run()}
             className={`${
               editor.isActive("codeBlock") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Code"
           >
             <FaCode size={20} />
@@ -114,7 +114,7 @@ const ToolBar = () => {
             disabled={!editor.can().chain().focus().toggleItalic().run()}
             className={`${
               editor.isActive("italic") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Italic"
           >
             <FaItalic size={20} />
@@ -124,7 +124,7 @@ const ToolBar = () => {
             disabled={!editor.can().chain().focus().toggleStrike().run()}
             className={`${
               editor.isActive("strike") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Strike"
           >
             <FaStrikethrough size={20} />
@@ -136,7 +136,7 @@ const ToolBar = () => {
             }
             className={`${
               editor.isActive("heading", { level: 2 }) ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Heading"
           >
             <FaHeading size={20} />
@@ -146,7 +146,7 @@ const ToolBar = () => {
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             className={`${
               editor.isActive("bulletList") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="List"
           >
             <FaListOl size={20} />
@@ -155,7 +155,7 @@ const ToolBar = () => {
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
             className={`${
               editor.isActive("orderedList") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="List"
           >
             <FaListUl size={20} />
@@ -165,12 +165,12 @@ const ToolBar = () => {
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
             className={`${
               editor.isActive("blockquote") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center text-white items-center hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Quote"
           >
             <FaQuoteLeft size={20} />
           </button>
-          <div className="flex justify-center items-center hover:cursor-pointer h-12 w-12 overflow-hidden  hover:bg-blue-900 rounded-md p-2">
+          <div className="flex justify-center items-center hover:cursor-pointer h-12 w-12 overflow-hidden text-white hover:bg-blue-900 rounded-md p-2">
             <button
               className={` tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center  hover:bg-blue-900 rounded-md p-2  `}
               data-tip="Image"
@@ -188,7 +188,7 @@ const ToolBar = () => {
             onClick={setLink}
             className={`${
               editor.isActive("link") ? "is-active" : ""
-            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } tooltip tooltip-bottom hover:cursor-pointer h-12 w-12 flex justify-center items-center text-white hover:bg-blue-900 rounded-md p-2  `}
             data-tip="Link"
           >
             <FaLink size={20} />
@@ -198,7 +198,7 @@ const ToolBar = () => {
             disabled={!editor.isActive("link")}
             className={`${
               editor.isActive("orderedList") ? "is-active" : ""
-            } hover:cursor-pointer h-12 w-12 flex justify-center items-center hover:bg-blue-900 rounded-md p-2  `}
+            } hover:cursor-pointer h-12 w-12 flex justify-center items-center text-white hover:bg-blue-900 rounded-md p-2  `}
           >
             <FaUnlink size={20} />
           </button>

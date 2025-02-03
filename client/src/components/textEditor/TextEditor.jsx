@@ -84,7 +84,7 @@ const TextEditor = ({
         </div>
       )}
       <textarea
-        placeholder="Heading"
+        placeholder="HEADING"
         value={heading}
         className=" w-full h-48 
               bg-transparent  p-5 scrollbar-hide
@@ -92,9 +92,9 @@ const TextEditor = ({
             resize-none"
         onChange={changeHeading}
       ></textarea>
-      <div className=" bg-transparent text-wrap border-1 ">
+      <div className=" text-wrap border-1 ">
         <ToolBar />
-        <div className="max-w-screen-2xl  w-full p-4 overflow-scroll scrollbar-hide">
+        <div className="max-w-screen-2xl   w-full p-4 overflow-scroll scrollbar-hide">
           <EditorContent editor={editor} className="leading-relaxed" />
         </div>
       </div>

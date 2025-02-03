@@ -38,23 +38,22 @@ const Dashboard = () => {
 
 const Menu = () =>{
     return (
-        <Tabs aria-label="Default tabs"  variant="default">
-          <Tabs.Item active title="Posts" icon={BsFilePost}>
-            This is <span className="font-medium text-gray-800 dark:text-white">Profile tab's associated content</span>.
-            Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
-            control the content visibility and styling.
-          </Tabs.Item>
-          <Tabs.Item title="Stats" icon={BiStats}>
-            This is <span className="font-medium text-gray-800 dark:text-white">Dashboard tab's associated content</span>.
-            Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
-            control the content visibility and styling.
-          </Tabs.Item>
-          <Tabs.Item title="Followers" icon={SlUserFollow}>
-            This is <span className="font-medium text-gray-800 dark:text-white">Settings tab's associated content</span>.
-            Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to
-            control the content visibility and styling.
-          </Tabs.Item>
-        </Tabs>
+      <div role="tablist" className="tabs tabs-bordered">
+  <input type="radio" name="my_tabs_1" role="tab" className="tab text-black" aria-label="POSTS" />
+  <div role="tabpanel" className="tab-content text-black p-10">POSTS</div>
+
+  <input
+    type="radio"
+    name="my_tabs_1"
+    role="tab"
+    className="tab text-black"
+    aria-label="STATS"
+    defaultChecked />
+  <div role="tabpanel" className="tab-content text-black p-10">STATS</div>
+
+  <input type="radio" name="my_tabs_1" role="tab" className="tab text-black" aria-label="SETTINGS" />
+  <div role="tabpanel" className="tab-content text-black p-10">SETTINGS</div>
+</div>
       );
 }
 

@@ -10,8 +10,6 @@ module.exports = {
   content: [  
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    flowbite.content(),
-
   
   ],
   theme: {
@@ -20,7 +18,5 @@ module.exports = {
   plugins: [    
     daisyui,
     scrollbarHide,
-    flowbite.plugin(),
-
   ],
 }

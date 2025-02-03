@@ -28,6 +28,7 @@ const useLogout = ()=>{
             }
 
             setAuth(null);
+            localStorage.removeItem("user");
             navigate("/");
 
         }catch(error){

@@ -153,7 +153,7 @@ const Blogs = () => {
           </div>
         <hr/>
           <div>
-            <h1 ref = {commentRef}  className="text-2xl font-bold m-6 text-white">Top Comments {comments.length}</h1>
+            <h1 ref = {commentRef}  className="text-2xl font-bold m-6 text-black">Top Comments {comments.length}</h1>
           </div>
           <br/>
           <div ref = {commentRef} className="flex flex-col gap-4 w-full">

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import {toast} from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
     const[loading, setLoading] = useState(false);
     const {setAuth} = useAuthContext();
+    const navigate = useNavigate();
 
 
     const Login = async({usernameOrEmail, password}) =>{
@@ -19,7 +21,6 @@ const useLogin = () => {
         try{
             const response = await fetch("http://localhost:3001/api/v1/auth/loginUser",{
                 method:"POST",
-
                 credentials:"include",
                 headers:{
                     "Content-Type":"application/json",                
@@ -33,8 +34,9 @@ const useLogin = () => {
 
                 throw new Error(res.message);
             }
-            setAuth(res.accessToken);
-            return true;
+            setAuth(res.data);
+            localStorage.setItem("user", JSON.stringify(res.data));
+            navigate("/");
 
         }catch(error){
             console.log("Error in login", error.message);
@@ -47,7 +49,6 @@ const useLogin = () => {
                 theme:"dark",
                 style:{zIndex:200000},
             });
-            return false;
         }finally{
             setLoading(false);
         }

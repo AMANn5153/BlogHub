@@ -36,7 +36,7 @@ const CommentCard = ({comment}) => {
 
   return (
     <>
-      <div className="grid ml-6 p-4 w-2/3 grid-cols-[1fr_12fr] ">
+      <div className="bg-white rounded rounded-2xl grid ml-6 p-4 w-2/3 grid-cols-[1fr_12fr] " >
         <div className="grid-cols-1">
           <div className="avatar">
             <div className="w-12 rounded-full">
@@ -46,7 +46,7 @@ const CommentCard = ({comment}) => {
         </div>
         <div className=" grid-col-2 grid-rows-[12fr_1fr]">
           <Link to={{pathname:`/comment/${comment._id}`}}>
-          <div className="tiptap border border-1 rounded-xl border-white">
+          <div className="tiptap  border border-1 rounded-xl border-white">
             <div className="m-5 text-lg font-semibold"> 
               {comment?.author?.name}
             </div>

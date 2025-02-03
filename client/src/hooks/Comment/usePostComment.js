@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import useCommentStore from '../../store/useCommentStore';
 import useLikeStore from '../../store/useLikeStore';
 import useAuthContext from '../../context/authContext/useAuthContext';
+import authFetch from '../../utils/authFetch';
 
 const usePostComment = () => {
     const [commentPostLoading, commentPostSetLoading] = useState(false);
@@ -19,11 +20,10 @@ const usePostComment = () => {
 
             commentPostSetLoading(true);
 
-            const response = await fetch(`http://localhost:3001/api/v1/comment/newComment?id=${blogId}&authorId=${authorId}`, {
+            const response = await authFetch(`http://localhost:3001/api/v1/comment/newComment?id=${blogId}&authorId=${authorId}`, {
                 method: "POST", 
-
+                credentials: "include",
                 headers: {
-                    'Authorization' : `Bearer ${auth}`,
                     "Content-Type": "application/json", 
                 },
                 body: JSON.stringify({ comment }) 

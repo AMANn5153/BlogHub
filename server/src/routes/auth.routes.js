@@ -4,7 +4,7 @@ const {Router} = require('express');
 const authenticate = require("../middleware/authenticate.middleware");
 const {uploadProfilePic} = require("../middleware/multer.middleware");
 // controller
-const {createUser, loginUser, logout, refreshToken} = require("../controller/auth.controller.js");
+const {createUser, loginUser, logout, refreshToken, passportGoogle} = require("../controller/auth.controller.js");
 
 
 //router
@@ -21,5 +21,7 @@ authRouter.route("/logout").delete(authenticate, logout);
 
 
 authRouter.route("/refreshToken").get(refreshToken);
+
+authRouter.route("/google/callback").get(passportGoogle)
 
 module.exports = authRouter;
