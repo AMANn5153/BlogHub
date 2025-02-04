@@ -4,7 +4,7 @@ const {Router} = require('express');
 const authenticate = require("../middleware/authenticate.middleware");
 const {uploadProfilePic} = require("../middleware/multer.middleware");
 // controller
-const {createUser, loginUser, logout, refreshToken, passportGoogle} = require("../controller/auth.controller.js");
+const {createUser, loginUser, logout, refreshToken, forgetPassword, changePassword} = require("../controller/auth.controller.js");
 
 
 //router
@@ -17,11 +17,13 @@ authRouter.route("/createUser").post(uploadProfilePic.single("image"), createUse
 authRouter.route("/loginUser").post(loginUser);
 
 //logout
-authRouter.route("/logout").delete(authenticate, logout);
+authRouter.route("/logout").delete(logout);
 
 
 authRouter.route("/refreshToken").get(refreshToken);
 
-authRouter.route("/google/callback").get(passportGoogle)
+authRouter.route("/forgetPassword").post(forgetPassword);
+
+authRouter.route("/changePassword").put(changePassword);
 
 module.exports = authRouter;

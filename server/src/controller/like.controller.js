@@ -5,6 +5,8 @@ const Comments = require("../models/comments.model.js");
 
 const toggleBlogLike = asyncHandler(async (req, res) => { 
     const {blogId} = req.query;
+
+    console.log(req.user._id);
     
   if(!blogId){
     throw new ApiError("blogId is required", 400, "toggleBlogLike");

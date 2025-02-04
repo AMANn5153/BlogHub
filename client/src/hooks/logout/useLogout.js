@@ -17,9 +17,6 @@ const useLogout = ()=>{
                 {
                     method: "delete",
                     credentials: "include",
-                    headers: {
-                        "content-type": "application/json"
-                    }
                 }
             );
 

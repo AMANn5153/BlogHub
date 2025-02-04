@@ -20,8 +20,8 @@ const Login = () => {
     }
 
     return (
-        <div className = "bg-gray-200 flex flex-col items-center justify-center h-screen">
-            <div className=" bg-white flex flex-col rounded-2xl items-center justify-around h-4/5 w-2/3">
+        <div className = "bg-slate-400 flex flex-col items-center justify-center h-screen">
+            <div className=" bg-slate-100 flex flex-col rounded-2xl items-center justify-around h-4/5 w-2/3">
             <div className="text-6xl text-slate-950 font-bold">
                 <h1>Login</h1>
             </div>
@@ -33,7 +33,7 @@ const Login = () => {
                 </div>
                 <div className="w-1/2">
                     <input className="border-2 bg-white input text-black border-gray-300 rounded-md p-2 outline-none w-4/5" onChange={handleChange} name="password" type="password" placeholder="password" />
-                    <div className="w-4/5 m-3 flex flex-row justify-end text-red-600  "><button >forget password?</button></div> 
+                    <div className="w-4/5 m-3 flex flex-row justify-end text-red-600  "><NavLink to="/forgetPassword" >forget password?</NavLink></div> 
                 </div>
                 <div className="w-1/2 flex flex-row justify-between">
                     <button className="bg-lime-600 text-white p-2 rounded-md w-16" onClick={handleSubmit}>Login</button>

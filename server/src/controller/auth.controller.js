@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const template = require("../views/email_forget_templateEngine");
 const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
 const passport = require('passport');
+const nodemailer = require("nodemailer");
+const bcrypt = require("bcryptjs");
 
 const COOKIE_OPTIONS = {
     httpOnly: true,
@@ -158,8 +160,6 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
 
 const logout = async (req, res) =>{
     
-    await User.findOneAndUpdate({_id: req.user._id }, { $set : { refreshToken : undefined }});
-
     return res.status(200)
     .clearCookie("accessToken", COOKIE_OPTIONS)
     .clearCookie("refreshToken", COOKIE_OPTIONS)
@@ -186,35 +186,111 @@ const forgetPassword = async(req, res) =>{
 
     const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn : "10m"});
 
-    const url = `http://localhost:3000/auth/forgetPassword?token=${token}`;
+    const url = `http://localhost:3000/changePassword/${token}`;
 
     const emailForgetData = template({name: userExists.name, url});
 
     const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: "amannegi.1006@gmail.com",
+          pass: process.env.PASSWORD,
+        },
+    });
 
-    })
 
+    const mailOptions = {
+        from: "amannegi.1006@gmail.com",
+        to: email,
+        subject: "Password Reset",
+        html: emailForgetData,
+    };
+
+    transporter.sendMail(mailOptions, (error, info)=>{
+        if(error){
+            console.log(error);
+            res.status(500).json({
+                success: false,
+                error ,
+            });
+        }
+        else{
+            res.status(200).json({
+                success: true,
+                message: "email sent",
+            });
+        }
+    });
 }
 
+const changePassword = asyncHandler(async(req, res, next)=>{
+    const {token, password, confirmPassword} = req.body;
+    
+    if(!token){
+        throw new ApiError("token is required", 401, "changePassword");
+    }
 
-const passportGoogle = () =>{
+    if(!password){
+        throw new ApiError("password is required", 401, "changePassword");
+    }
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/api/auth/google/callback'
-  }, async (accessToken, refreshToken, profile, done) => {
-    console.log(accessToken, refreshToken);
-  }));
-  
- 
-}
+    const verifyExipry = await jwt.decode(token);
+    
+    const time = verifyExipry.exp*1000;
+
+    if(time < Date.now()){
+        throw new ApiError("token expired", 401, "changePassword");
+    }
+
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if(!decodedToken){
+        return res.status(401).json({
+            status : 401,
+            message : "token is invalid"
+        })
+    }
+
+    const user = await User.findOne({email : decodedToken.email});
+
+    if(!user){
+        throw new ApiError("user does not exist", 404, "changePassword");
+    }   
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const updatePassword = await User.findOneAndUpdate({_id : user._id}, {password : hashedPassword});
+
+    if(!updatePassword){
+        res.status(409).json({
+            status : 409,
+            message : "coundn't update password"
+        })
+    }
+
+    const updatedUser = await User.findOne({_id : user._id}).select("-password");
+    
+    generateTokenAndSetCookie(user, res);
+
+
+    return res.status(200).json({
+        success : true,
+        message : "password updated",
+        data : updatedUser
+    });
+
+});
+
 
 module.exports = {
     createUser,
     loginUser,
     logout,
     refreshToken,
-    passportGoogle
+    forgetPassword,
+    changePassword
 };
 

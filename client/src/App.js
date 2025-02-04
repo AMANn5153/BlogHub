@@ -15,6 +15,8 @@ import {EditorContextProvider} from './components/textEditor/EditorContext/Edito
 import {SocketProvider} from './context/socket/useSocket';
 import CommentThread from './pages/Comment/CommentThread';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
+import ForgetPassword from './pages/Login/ForgetPassword.jsx';
+import ChangePassword from './pages/Login/ChangePassword.jsx';
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
     <BrowserRouter>
     <Routes>
       <Route path='/login' element={<Login/>}></Route>
+      <Route path='/forgetPassword' element={<ForgetPassword/>}></Route>
+      <Route path='/changePassword/:token' element={<ChangePassword/>}></Route>
       <Route path='/signup' element={<><SignupProvider><Signup/></SignupProvider></>}></Route>
       <Route path='/upload' element={<><SignupProvider><UploadImage/></SignupProvider></>}></Route>
       <Route path='/createpassword' element={<><SignupProvider><CreatePassword/></SignupProvider></>}></Route>

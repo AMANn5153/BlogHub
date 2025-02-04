@@ -26,9 +26,10 @@ import useBlogStore from "../../store/useBlogStore";
 const Blogs = () => {
   const commentRef = useRef();
   const { id } = useParams(); 
+  const {commentLoading} = useGetAllComment(id);
   const {loading} = useGetBlog(id);
-  const { commentLoading} = useGetAllComment(id);
   const {comments} = useCommentStore();
+
   const {auth} = useAuthContext();
   const {likePost} = useLikePost();
   const {likes} = useLikeStore();
@@ -53,7 +54,6 @@ const Blogs = () => {
     }
   }, [id, blog?.author]);
 
-
   const likedByUser = likes.length > 0 ? likes?.some((like)=>like.userId === auth?._id && like.blogId === id ) : false;
   const savedByUser = saveBlog.length > 0 ? saveBlog?.some((save)=>save.userId === auth?._id && save.blogId === id ) : false;
 
@@ -71,7 +71,7 @@ const Blogs = () => {
   const handleCommentView = () =>{
     commentRef.current.scrollIntoView({behavior: "smooth", block: "start"});
   }
-  
+
 
   const handleLike = async () =>{
     await likePost(id);
@@ -118,7 +118,7 @@ const Blogs = () => {
             </div>
           </div>
         </div>
-        <div className="overflow-hidden max-w-full rounded-2xl  ">
+        <div className="bg-white overflow-hidden max-w-full rounded-2xl  ">
           <div className=" rounded-lg border overflow-hidden border-10 border-red w-full flex flex-col justify-center items-center">
             <img
               src={coverImage}

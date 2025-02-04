@@ -13,6 +13,7 @@ const authenticate = async (req, res, next) =>{
         })
     }
 
+    
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
 
     if(!decoded){
@@ -21,6 +22,7 @@ const authenticate = async (req, res, next) =>{
             message : "token is invalid"
         })
     }
+
 
     const user = await User.findOne({_id : decoded._id});
 
@@ -31,7 +33,7 @@ const authenticate = async (req, res, next) =>{
         })
     }
 
-    req.user = user;
+
     next();
 }
 
