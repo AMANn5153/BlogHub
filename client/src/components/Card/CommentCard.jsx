@@ -20,7 +20,7 @@ const CommentCard = ({comment}) => {
   const {likePostComment} = useLikePostComment();
   const {CommentLike} = useLikeStore();
   const {auth} = useAuthContext();
- 
+  
   const changeLike = async () =>{
     await likePostComment(comment._id);
   }

@@ -1,11 +1,12 @@
 import {useState} from "react";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 const useCoverImage = () =>{
     const [loading, setLoading] = useState(false); 
-    const {auth} = useAuthContext();   
+    const {auth} = useAuthContext();  
+    const {authFetch} = useAuthFetch();
 
     const uploadCoverImage = async(image) =>{
         try{

@@ -2,13 +2,13 @@ import { useState } from "react";
 import useLikeStore from "../../store/useLikeStore";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 const useLikePostComment = () => {
     const [likePostLoading, setLikePostLoading] = useState(false);
     const {setCommentLike, unSetCommentLike} = useLikeStore();
     const {auth} = useAuthContext();
-
+    const {authFetch} = useAuthFetch();
 
     const likePostComment = async (commentId)=>{
         try{

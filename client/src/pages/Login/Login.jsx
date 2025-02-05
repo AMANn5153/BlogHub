@@ -27,12 +27,12 @@ const Login = () => {
             </div>
             <div className="flex flex-col items-start justify-around h-1/2 w-2/3">
                 <div className="w-1/2">
-                    <input className="border-2 input bg-white text-black border-gray-300 rounded-md p-2 outline-none w-4/5"
+                    <input className="border-2 input placeholder-black bg-white text-black border-gray-300 rounded-md p-2 outline-none w-4/5"
                     onChange={handleChange} name="usernameOrEmail" 
                     type="text" placeholder="username or email" />
                 </div>
                 <div className="w-1/2">
-                    <input className="border-2 bg-white input text-black border-gray-300 rounded-md p-2 outline-none w-4/5" onChange={handleChange} name="password" type="password" placeholder="password" />
+                    <input className="border-2 bg-white input placeholder-black text-black border-gray-300 rounded-md p-2 outline-none w-4/5" onChange={handleChange} name="password" type="password" placeholder="password" />
                     <div className="w-4/5 m-3 flex flex-row justify-end text-red-600  "><NavLink to="/forgetPassword" >forget password?</NavLink></div> 
                 </div>
                 <div className="w-1/2 flex flex-row justify-between">

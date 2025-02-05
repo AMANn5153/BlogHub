@@ -40,7 +40,11 @@ const createUser = async (req, res, next) => {
            throw new ApiError( "User already exists", 401,"createUser");
        }
    
-       const localPath = req.file?.path;
+       const path = req.file?.path;
+
+       const replaceSlash = path.replace(/\\/g, "/");
+
+       const localPath = `http://localhost:3001/${replaceSlash}`
    
        const user = await User.create({
            name:fullname,
@@ -55,20 +59,14 @@ const createUser = async (req, res, next) => {
            throw new ApiError( 'cannot create user', 401, "createUser");
        }
 
+       const data = await User.findOne({_id : user._id}).select("-password");    
 
-       const data = await User.findOne({_id : user._id}).select("-password");
-
-       const pathOfImage = data.profilePic.replace(/\\/g, "/");
-
-       data.profilePic = `http://localhost:3001/${pathOfImage}`;       
-
-       const {accessToken} = generateTokenAndSetCookie(user, res);
+       generateTokenAndSetCookie(user, res);
 
        return res.status(201).json({
            success : true,
            message : "user created",
            data :data,
-           accessToken
        });
 
  } catch (err){
@@ -76,17 +74,10 @@ const createUser = async (req, res, next) => {
  }
 }
 
-
-// login user controller take username or email and password
-// checks if user exists in the database
-
-
-const loginUser = async(req, res, next) => {
-    try {
+const loginUser = asyncHandler(async(req, res, next) => {
         const {usernameOrEmail, password} = req.body;
-    
         if(!usernameOrEmail || !password){
-           return new ApiError(401, "Invalid credentials or some field is missing", loginUser);
+            throw new ApiError("Invalid credentials or some field is missing", 401, "loginUser");
         }
 
         let userExists = "";
@@ -99,23 +90,21 @@ const loginUser = async(req, res, next) => {
         else{
             userExists = await User.findOne({username : usernameOrEmail});
         }
+
     
         if(!userExists){
-            return new ApiError(403, "User dosen't exists", loginUser);
+            throw new ApiError("User dosen't exists", 401, "loginUser");
         }
 
-        const checkPassword = userExists.isPassword(userExists.password);
-    
+        const checkPassword = await userExists.isPassword(userExists.password);
+        
+        
         if(!checkPassword){
-            return new ApiError(403, "Invalid credentials", loginUser);
+            throw new ApiError("Invalid credentials", 401, "loginUser");
         }
     
     
         const user = await User.findOne({_id : userExists._id}).select(-password);
-
-        const pathOfImage = user.profilePic.replace(/\\/g, "/");
-
-        user.profilePic = `${pathOfImage}`;    
         
         generateTokenAndSetCookie(userExists, res);
         
@@ -127,12 +116,7 @@ const loginUser = async(req, res, next) => {
                 }
             );
 
-
-    } catch (error) {
-        next(error);
-    }
-
-}
+})
 
 const refreshToken = asyncHandler(async (req, res, next)=>{
     const refreshToken = req.cookies?.refreshToken;
@@ -169,7 +153,6 @@ const logout = async (req, res) =>{
     });
 
 }
-
 
 const forgetPassword = async(req, res) =>{
     const {email} = req.body;
@@ -261,8 +244,9 @@ const changePassword = asyncHandler(async(req, res, next)=>{
     }   
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
 
-    const updatePassword = await User.findOneAndUpdate({_id : user._id}, {password : hashedPassword});
+    const updatePassword = await User.findOneAndUpdate({_id : user._id}, {$set :{password : hashedPassword}}, {new : true} );
 
     if(!updatePassword){
         res.status(409).json({

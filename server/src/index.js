@@ -17,6 +17,7 @@ const likeRouter = require('./routes/like.routes');
 const saveRouter = require('./routes/save.routes');
 const followerRouter = require('./routes/Follower.routes.js');
 const viewsRouter = require('./routes/views.routes.js');
+const analyticsRouter = require('./routes/analytics.routes.js');
 
 const corsOptions = {
     origin: "http://localhost:3000", 
@@ -60,6 +61,7 @@ app.use("/api/v1/like", likeRouter);
 app.use("/api/v1/save", saveRouter);
 app.use("/api/v1/addFollower", followerRouter);
 app.use("/api/v1/views", viewsRouter);
+app.use("/api/v1/analytics", analyticsRouter);
 
 app.use(errorHandler);
 

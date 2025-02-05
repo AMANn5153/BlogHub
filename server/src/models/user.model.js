@@ -64,8 +64,8 @@ userSchema.pre("save", async function(next){
     
 });
 
-userSchema.methods.isPassword = function(password){
-    return bcrypt.compare(password, this.password);
+userSchema.methods.isPassword =async function(password){
+    return await bcrypt.compare(password, this.password);
 }
 
 userSchema.methods.generateAccessToken = function(){

@@ -2,12 +2,13 @@ import { useState } from "react";
 import useCommentStore from "../../store/useCommentStore";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 const usePostReply = () => {
     const [replyPostLoading, replyPostSetLoading] = useState(false);
     const { setReply } = useCommentStore();
     const {auth} = useAuthContext();
+    const {authFetch} = useAuthFetch();
 
     const postReply = async ({reply, commentId})=>{
         try{

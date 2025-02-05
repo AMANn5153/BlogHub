@@ -54,7 +54,7 @@ const ChangePassword = () => {
             value={password}
             placeholder="Password"
             type={showPassword ? "text" : "password"}
-            className=" w-full  rounded-xl p-2 h-10 border border-black bg-gray-100 text-black"
+            className=" w-full placeholder-black  rounded-xl p-2 h-10 border border-black bg-gray-100 text-black"
           />
              {showPassword ? (
             <FaRegEye
@@ -76,7 +76,7 @@ const ChangePassword = () => {
             value={confirmPassword}
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm Password"
-            className="border border-black w-full rounded-xl p-2 h-10 bg-gray-100 text-black"
+            className="border placeholder-black border-black w-full rounded-xl p-2 h-10 bg-gray-100 text-black"
           />
           {showConfirmPassword ? (
             <FaRegEye

@@ -4,6 +4,7 @@ import useCommentStore from '../../store/useCommentStore';
 import useLikeStore from '../../store/useLikeStore';
 import useAuthContext from '../../context/authContext/useAuthContext';
 import authFetch from '../../utils/authFetch';
+import useAuthFetch from '../../utils/authFetch';
 
 const usePostComment = () => {
     const [commentPostLoading, commentPostSetLoading] = useState(false);
@@ -11,6 +12,7 @@ const usePostComment = () => {
     const {initialCommentLikes} = useLikeStore();
 
     const {auth} = useAuthContext();
+    const {authFetch} = useAuthFetch();
 
     const postComment = async ({ comment, blogId, authorId }) => {
         try {

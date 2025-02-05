@@ -25,29 +25,29 @@ export const Signin = () => {
     }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-screen">
-        <div className="flex flex-col items-start justify-around w-4/5 h-4/5">
+    <div className="bg-slate-400 flex flex-col items-center justify-center w-full h-screen">
+        <div className="bg-slate-100 rounded-md flex flex-col items-center justify-around w-4/5 h-4/5">
             <div className="flex flex-col items-start justify-around">
-                <h1 className="text-2xl font-bold">Sign up</h1>
+                <h1 className="text-6xl font-bold">Sign up</h1>
             </div>
             <div className="flex flex-col items-start w-1/2 h-4/5 justify-around">
 
                 <div className="w-full">
-                    <input className="w-1/2 outline-none rounded-md p-2 h-10" 
+                    <input className="w-1/2 placeholder-black bg-slate-50 text-black  rounded-md p-5 h-12" 
                     onChange={handleChange}
                     name="username"
                     value={registerUser.username}
                     type="text" placeholder="username" />
                 </div>
                 <div className="w-full" >
-                    <input className="w-1/2 outline-none rounded-md p-2 h-10" 
+                    <input className="w-1/2 bg-slate-50 placeholder-black text-black rounded-md p-5 h-12" 
                     onChange={handleChange}
                     name="email"
                     value={registerUser.email}
                     type="text" placeholder="email" />
                 </div>
                 <div className="w-full">
-                    <input className="w-1/2 outline-none rounded-md p-2 h-10" 
+                    <input className="w-1/2 bg-slate-50 placeholder-black text-black rounded-md p-5 h-12" 
                     onChange={handleChange}
                     name="fullname"
                     value={registerUser.fullname}
@@ -56,7 +56,7 @@ export const Signin = () => {
                 <div className="w-full flex flex-row items-start justify-between">
                     <NavLink to="/upload"> <button className={
                         `bg-red-500 w-20  text-white rounded-md text-center p-2 h-10 
-                        ${checkButtonDisable() ? "cursor-not-allowed  " : "cursor-pointer"}`
+                        ${checkButtonDisable() ? " cursor-not-allowed   " : "cursor-pointer"}`
                         }
                         disabled={checkButtonDisable()}
                     >

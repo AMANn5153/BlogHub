@@ -1,7 +1,7 @@
 
 
 const errorHandler = (err, req, res, next)=>{
-    console.log(err);
+    console.log("err : ",err);
     if(err.statusCode >=400 && err.statusCode < 500){
         return res.status(err.statusCode).json({
             success: false,

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { toast } from "react-toastify";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 const useBlogImage = (image) => {
     const[loading, setLoading] = useState(false);
     const {auth} = useAuthContext();
+    const {authFetch} = useAuthFetch(); 
 
     const uploadImage = async (image) =>{
         if(!image || !auth){

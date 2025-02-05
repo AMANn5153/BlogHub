@@ -2,12 +2,13 @@ import { useState } from "react";
 import useBlogStore from "../../store/useBlogStore";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 const useCreateBlog = ()=>{
     const[loading, setLoading] = useState(false);
     const {auth} = useAuthContext();
     const {setBlog} = useBlogStore();
+    const {authFetch} = useAuthFetch();
 
     const createBlog = async({author,coverImage, title, content, status}) =>{
         setLoading(true);

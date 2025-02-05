@@ -1,12 +1,13 @@
 import {toast} from "react-toastify";
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 
 const useRemoveCoverImage = () =>{
     const [loading, setLoading] = useState(false);
     const {auth} = useAuthContext();
+    const {authFetch} = useAuthFetch();
 
     const removeCoverImage = async(name) =>{   
         try{

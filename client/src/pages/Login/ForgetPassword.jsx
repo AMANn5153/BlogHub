@@ -29,7 +29,7 @@ const ForgetPassword = () => {
           value={email}
           type="text"
           placeholder="email"
-          className="border w-2/5 rounded-xl p-5 bg-white text-black"
+          className="border placeholder-black w-2/5 rounded-xl p-5 bg-white text-black"
         />
         <button className="btn primary w-2/5" onClick={handleSubmit}>
           {isLoading ? (

@@ -2,12 +2,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useSaveStore from "../../store/useSaveStore";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import authFetch from "../../utils/authFetch";
+import useAuthFetch from "../../utils/authFetch";
 
 const useSave = () => {
     const [saveLoading, setSaveLoading] = useState(false);
     const {setSaveBlog, unSetSaveBlog} = useSaveStore();
     const {auth} = useAuthContext();
+    const {authFetch} = useAuthFetch();
 
     const postSaveBlog = async (blogId) => {
         try {
