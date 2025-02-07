@@ -229,6 +229,20 @@ const deleteImage = async (req, res, next) =>{
     }
 }
 
+
+const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
+    const allBlogsOfUser = await Blogs.find({
+        author : new mongoose.Types.ObjectId(`${req.user._id}`)
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "all Blog of user fetched successfully",
+        data : allBlogsOfUser
+    })
+    
+})
+
 module.exports = {
     getBlog,
     getAllBlog,
@@ -236,5 +250,6 @@ module.exports = {
     uploadImages,
     deleteImage,
     coverImage,
-    removeCoverImage
+    removeCoverImage,
+    getAllBlogOfUser
 }

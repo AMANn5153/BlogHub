@@ -96,7 +96,7 @@ const loginUser = asyncHandler(async(req, res, next) => {
             throw new ApiError("User dosen't exists", 401, "loginUser");
         }
 
-        const checkPassword = await userExists.isPassword(userExists.password);
+        const checkPassword = await bcrypt.compare(password, userExists.password);
         
         
         if(!checkPassword){
@@ -116,7 +116,7 @@ const loginUser = asyncHandler(async(req, res, next) => {
                 }
             );
 
-})
+});
 
 const refreshToken = asyncHandler(async (req, res, next)=>{
     const refreshToken = req.cookies?.refreshToken;

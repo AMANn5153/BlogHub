@@ -1,22 +1,23 @@
 const Views = require("../models/views.model");
 const asyncHandler = require("../utils/asyncHandler");
 const Like = require("../models/like.model");
-const Saves = require("../models/save.model");
 const mongoose = require("mongoose");
-
+const Comments = require("../models/comments.model");
 
 
 const analytics = asyncHandler(async (req, res, next) => {
-    
-    const totalLikes = await Like.findOne({
-        userId : new mongoose.Types.ObjectId(`${req.user._id}`)
-    });
 
-    const totalSaves = await Saves.findOne({
+    
+    const totalLikes = await   Like.countDocuments({
         userId : new mongoose.Types.ObjectId(`${req.user._id}`)
     })
 
-    const totalViews = await Views.findOne({
+
+    const totalComments = await Comments.countDocuments({
+        blogAuthor : new mongoose.Types.ObjectId(`${req.user._id}`)
+    })
+
+    const totalViews = await Views.countDocuments({
         userId : new mongoose.Types.ObjectId(`${req.user._id}`)
     })
 
@@ -25,7 +26,7 @@ const analytics = asyncHandler(async (req, res, next) => {
             sucess: true,
             message : "stats likes, views and saves",
             totalLikes,
-            totalSaves, 
+            totalComments, 
             totalViews
         }
     )

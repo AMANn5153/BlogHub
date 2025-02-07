@@ -17,6 +17,7 @@ import CommentThread from './pages/Comment/CommentThread';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import ForgetPassword from './pages/Login/ForgetPassword.jsx';
 import ChangePassword from './pages/Login/ChangePassword.jsx';
+import Settings from './pages/Settings/Settings'; 
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/blog/:id" element={<Blogs/>}></Route>
         <Route path="/comment/:id" element={<CommentThread/>}></Route>
         <Route path='/dashboard' element={<PrivateRoute><Dashboard/></PrivateRoute>}></Route>
+        <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>}></Route>
       </Route>
     </Routes>
   </BrowserRouter> 

@@ -66,7 +66,7 @@ const Navbar = () => {
           </NavLink>
             
         </li>
-        <li><button>Settings</button></li>
+        <li><NavLink to = "/settings">Settings</NavLink></li>
         <li><button onClick={handleLogout}>Logout</button></li>
       </ul>
     </div>:""}

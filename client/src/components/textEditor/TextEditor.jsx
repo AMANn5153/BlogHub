@@ -28,24 +28,15 @@ const TextEditor = ({
     setConvertedContent(editor.getHTML());
   }, [editor?.getHTML()]);
 
-  // heading and cover image handlers
   const coverImageName = coverImage ? coverImage.split("/") : "";
 
-  /**
-   * Handles the cover image upload event
-   * @param {Event} e event object
-   * @returns {Promise<void>}
-   */
   const handleCoverImage = async (e) => {
     const image = e.target.files[0];
     const { url, name } = await uploadCoverImage(image);
     setCoverImage(`${url}`);
   };
 
-  /**
-   * Handles the cover image remove event
-   * @returns {Promise<void>}
-   */
+  
   const handleRemoveCoverImage = async () => {
     await removeCoverImage(coverImageName[coverImageName.length - 1]);
     setCoverImage("");
