@@ -43,6 +43,7 @@ const useAuthFetch = () => {
 
         let response = await fetch (apiUrl, options);
 
+        
 
         if(response.status === 401){
             await refreshToken();

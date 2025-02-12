@@ -129,7 +129,17 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
         })
     }
 
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err, decoded)=>{
+        if(err)return null;
+        else return decoded;
+    });
+
+    if(!decoded){
+        res.clearCookie("refreshToken").clearCookie("accessToken");        return res.status(401).json({
+            status :  401,
+            message : "token is invalid",
+        })
+    }
 
     const user = await User.findOne({_id : decoded._id});
 

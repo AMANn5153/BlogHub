@@ -9,7 +9,6 @@ const Saves = require("../models/save.model");
 const Views = require("../models/views.model");
 
 
-
 const getAllBlog = asyncHandler(async (req, res, next)=>{
     const blog = await Blogs.aggregate([
         {
@@ -40,7 +39,6 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
         data : blog,
     })
 });
-
 
 const getBlog = asyncHandler(async (req, res, next) => {
     const {id} = req.query;
@@ -135,8 +133,6 @@ const newBlog = async (req, res, next) =>{
     }
 }
 
-
-
 const coverImage = asyncHandler(async (req, res, next)=>{
     const path = req.file?.filename;
 
@@ -152,8 +148,6 @@ const coverImage = asyncHandler(async (req, res, next)=>{
         name : path,
     })
 });
-
-
 
 const removeCoverImage = asyncHandler(async (req, res, next)=>{
     const {name} = req.query;
@@ -171,9 +165,6 @@ const removeCoverImage = asyncHandler(async (req, res, next)=>{
         message: "image deleted"
     });
 });
-
-
-
 
 const uploadImages = async (req, res, next) =>{
     try{

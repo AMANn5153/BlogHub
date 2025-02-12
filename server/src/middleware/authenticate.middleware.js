@@ -14,10 +14,13 @@ const authenticate = async (req, res, next) =>{
     }
 
     
-    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
+        if(err)return null;
+        else return decoded;
+    });
 
     if(!decoded){
-        res.status(401).json({
+        return res.status(401).json({
             status : 401,
             message : "token is invalid"
         })

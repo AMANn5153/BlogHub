@@ -16,7 +16,7 @@ const likeSchema = new mongoose.Schema({
         ref : "Comment",
         default : null
     }
-});
+}, {timestamps : true});
 
 
 const Likes = mongoose.model("Likes", likeSchema);

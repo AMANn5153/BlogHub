@@ -17,6 +17,12 @@ const useBlogStore = create((set) => ({
     },
     setLikes : (likes)=>{
         set({likes})
+    },
+
+    setAllBlogs : (blogs)=>{
+        set((state)=>{
+            return {blogs : [...blogs]}
+        })
     }
 }));
 
