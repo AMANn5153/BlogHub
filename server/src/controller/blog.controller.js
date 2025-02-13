@@ -222,9 +222,50 @@ const deleteImage = async (req, res, next) =>{
 
 
 const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
-    const allBlogsOfUser = await Blogs.find({
-        author : new mongoose.Types.ObjectId(`${req.user._id}`)
-    });
+    const allBlogsOfUser = await Blogs.aggregate([
+        {
+            $match : {author : req.user._id}
+        },
+        {
+            $lookup: {
+              from: "comments",
+              localField: "_id",
+              foreignField: "blogId",
+              as: "comments",
+        
+            }
+        },
+        {
+            $lookup: {
+              from: "views",
+              localField: "_id",
+              foreignField: "blogId",
+              as: "views"
+            }
+        },
+        {
+            $lookup:{
+                from : "likes",
+                localField : "_id",
+                foreignField : "blogId",
+                as : "likes",
+            }
+        },
+        {
+            $addFields: {
+                commentsCount : {$size : "$comments"},
+                viewsCount : {$size : "$views"},
+                likesCount : {$size : "$likes"}
+            }
+        },{
+            $project : {
+                comments : 0,
+                views : 0,
+                likes : 0
+            }
+        }
+    ]
+    ); 
 
     res.status(200).json({
         success: true,
@@ -234,6 +275,28 @@ const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
     
 })
 
+
+const deleteBlog = asyncHandler(async (req, res, next)=>{
+    const {blogId} = req.query;
+
+    if(!blogId){
+        return new ApiError("blogId is missing", 401, "deleteBlog");
+    }
+
+    const blog=  new Blogs({
+        blogId :  new mongoose.Types.ObjectId(`${blogId}`)
+    })
+
+    if(!blog){
+        return new ApiError("blog not found", 401, "deleteBlog");
+    }
+    
+    const deleteBlog = await Blogs.deleteOne({_id : blog._id});
+
+    return getAllBlogOfUser(req, res, next);
+
+});
+
 module.exports = {
     getBlog,
     getAllBlog,
@@ -242,5 +305,6 @@ module.exports = {
     deleteImage,
     coverImage,
     removeCoverImage,
-    getAllBlogOfUser
+    getAllBlogOfUser,
+    deleteBlog
 }

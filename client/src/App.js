@@ -18,6 +18,7 @@ import Dashboard from './pages/dashboard/Dashboard.jsx';
 import ForgetPassword from './pages/Login/ForgetPassword.jsx';
 import ChangePassword from './pages/Login/ChangePassword.jsx';
 import Settings from './pages/Settings/Settings'; 
+import Profile from "./pages/profile/Profile";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/forgetPassword' element={<ForgetPassword/>}></Route>
       <Route path='/changePassword/:token' element={<ChangePassword/>}></Route>
+      <Route path='/profile/:id' element={<Profile/>}></Route>
       <Route path='/signup' element={<><SignupProvider><Signup/></SignupProvider></>}></Route>
       <Route path='/upload' element={<><SignupProvider><UploadImage/></SignupProvider></>}></Route>
       <Route path='/createpassword' element={<><SignupProvider><CreatePassword/></SignupProvider></>}></Route>

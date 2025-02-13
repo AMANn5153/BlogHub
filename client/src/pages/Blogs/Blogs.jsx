@@ -22,6 +22,7 @@ import useSaveStore from "../../store/useSaveStore";
 import useSave from "../../hooks/Saves/useSave";
 import useViewsBlogs from "../../hooks/Blog/useViewsBlogs";
 import useBlogStore from "../../store/useBlogStore";
+import { Link } from "react-router-dom";
 
 const Blogs = () => {
   const commentRef = useRef();
@@ -126,20 +127,22 @@ const Blogs = () => {
               className="border border-cyan-400 fit w-full h-auto"
             />
           </div>
+          <Link to={{pathname:`/profile/${author._id}`}}>
           <div className="m-6  flex flex-row justify-start items-center">
             <div className="avatar">
               <div className="w-20 rounded-full">
-                <img src={author.profilePic} alt="" />
+              <img src={author.profilePic} alt="" />
               </div>
             </div>
             <div className="m-1 flex flex-col">
-              <h1 className="text-xl font-bold">{author.name}</h1>
+              <h1 className="text-xl hover:text-cyan-800 font-bold">{author.name}</h1>
               <h1>
                 {dateString} &nbsp; {time > 0 ? time : duration}{" "}
                 {time > 0 ? "hours" : duration > 1 ? "days" : "day"} ago
               </h1>
             </div>
           </div>
+          </Link>
           <div className="m-6 w-full flex flex-col justify-center items-start">
             <h1 className="text-7xl font-bold">{heading}</h1>
           </div>
@@ -152,8 +155,9 @@ const Blogs = () => {
             {parse(content)}
           </div>
         <hr/>
-          <div>
+          <div className="flex flex-row justify-around ">
             <h1 ref = {commentRef}  className="text-2xl font-bold m-6 text-black">Top Comments {comments.length}</h1>
+            <button className="btn btn-success">Subscribe</button>
           </div>
           <br/>
           <div ref = {commentRef} className="flex flex-col gap-4 w-full">

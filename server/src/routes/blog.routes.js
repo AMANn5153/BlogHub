@@ -6,7 +6,8 @@ const { newBlog,
     removeCoverImage, 
     getAllBlog,
     getBlog,
-    getAllBlogOfUser
+    getAllBlogOfUser,
+    deleteBlog
 } = require("../controller/blog.controller.js");
 const  authenticate  = require("../middleware/authenticate.middleware.js");
 const {uploadBlogImage, uploadCoverImage} = require("../middleware/multer.middleware.js");
@@ -29,5 +30,7 @@ blogRouter.route("/uploadCoverImage").post(authenticate, uploadCoverImage.single
 blogRouter.route("/deleteCoverImage").delete(authenticate, removeCoverImage);
 
 blogRouter.route("/blogOfUser").get(authenticate, getAllBlogOfUser);
+
+blogRouter.route("/deleteBlog").delete(authenticate, deleteBlog);
 
 module.exports = blogRouter;

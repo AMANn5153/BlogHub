@@ -59,7 +59,7 @@ app.use("/api/v1/comment", commentRouter);
 app.use("/api/v1/test", testRouter);
 app.use("/api/v1/like", likeRouter);
 app.use("/api/v1/save", saveRouter);
-app.use("/api/v1/addFollower", followerRouter);
+app.use("/api/v1/subscribe", followerRouter);
 app.use("/api/v1/views", viewsRouter);
 app.use("/api/v1/analytics", analyticsRouter);
 

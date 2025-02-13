@@ -15,9 +15,12 @@ import {
   Tooltip,
 } from "recharts";
 import { SlOptions } from "react-icons/sl";
-
+import { CiHeart } from "react-icons/ci";
+import { HiOutlineEye } from "react-icons/hi";
+import { FaRegComment } from "react-icons/fa";
 import useBlogStore from "../../store/useBlogStore";
 import useGetAllBlogsOfUser from "../../hooks/analytics/useGetAllBlogsOfUser";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const { auth } = useAuthContext();
@@ -27,26 +30,30 @@ const Dashboard = () => {
   const {isLoading : blogsLoading} = useGetAllBlogsOfUser();
   const {blogs} = useBlogStore();
 
+  console.log(blogs);
+
   return (
-    <div className="grid  grid-rows-[2fr_2fr_4fr] gap-4">
+    <div className="grid grid-rows-[2fr_2fr] gap-4">
       <div className=" grid-rows-1 flex flex-row justify-start">
         <h1 className="text-6xl font-bold">Hello {auth.name}</h1>
       </div>
-      {!isLoading ? (
-        <UsersBlogs totalAnalytics={totalAnalytics} />
-      ) : (
-        <div className="flex w-full h-full items-center justify-center">
-          <span className="loading loading-infinity loading-lg"></span>
-        </div>
-      )}
+      <div className="w-full">
+        {!isLoading ? (
+          <UsersBlogs totalAnalytics={totalAnalytics} />
+        ) : (
+          <div className="flex w-full h-full items-center justify-center">
+            <span className="loading loading-infinity loading-lg"></span>
+          </div>
+        )}
+      </div>
 
-      <div className="flex flex-col  p-4 gap-4">
-        <h1 className="text-4xl font-bold">POSTS</h1>
+      <div className="flex flex-col p-4 gap-4">
+        <h1 className="text-2xl font-bold">POSTS</h1>
         {
           blogsLoading ? <div className="flex w-full h-full items-center justify-center">
           <span className="loading loading-infinity loading-lg"></span>
         </div> : blogs.map((blog)=>{
-          return <Accordion blog={blog}/>
+          return<Accordion blog={blog}/>
         })
         }
       </div>
@@ -56,17 +63,61 @@ const Dashboard = () => {
 
 const Accordion = ({blog}) => {
  
-
+  const publishedAt = new Date(blog.createdAt).toLocaleDateString("en-US",{timeZone : "Asia/Kolkata"});
 
   return (
-    <div className="flex flex-row ">
-      <div>
-        <h1 className="text-black ">{blog.heading}</h1>
+    <div className="grid p-10 grid-cols-[4fr_2fr_2fr] bg-white rounded-lg shadow-md ">
+      <Link to={{ pathname: `/blog/${blog._id}` }} className="w-full">
+        <div className="flex flex-col  ">
+          <h1 className="text-blue-500 text-2xl font-bold ">{blog.heading}</h1>
+          <div className="flex flex-row">
+            <h1 className=" text-lg font-bold">publishedAt:</h1>
+            <p className="text-lg">{`${publishedAt}`}</p>
+          </div>
+        </div>
+      </Link>
+      <div className="flex flex-row gap-4 items-center justify-center">
+        <div
+          className="tooltip tooltip-bottom tooltip-secondary"
+          data-tip={`${blog.likesCount} likes`}
+        >
+          <CiHeart size={25} color="#FF0000" />
+        </div>
+        <div
+          className="tooltip tooltip-bottom tooltip-primary  "
+          data-tip={`${blog.viewsCount} views`}
+        >
+          <HiOutlineEye size={25} color="cyan" />
+        </div>
+        <div
+          className="tooltip tooltip-bottom tooltip-info"
+          data-tip={`${blog.commentsCount} comments`}
+        >
+          <FaRegComment size={25} color="" />
+        </div>
       </div>
-      <div>
-      </div>
-      <div>
-      <SlOptions />
+      <div className="flex flex-row justify-end items-center">
+        <div className="dropdown dropdown-left">
+          <div tabIndex={0} role="button" className="">
+            <button className="btn btn-circle btn-md btn-ghost"><SlOptions /></button>
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu bg-slate-100 rounded-box z-[1] w-52 p-2 shadow"
+          >
+            <li>
+              <button className="btn text-black btn-ghost" >Stats</button>
+            </li>
+            <li>
+              <button className="btn text-black btn-ghost">Edit</button>
+            </li>
+            <li>
+              <button className="btn text-red-500 btn-ghost">
+                DELETE
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -74,9 +125,8 @@ const Accordion = ({blog}) => {
 
 const UsersBlogs = ({ totalAnalytics }) => {
   const { auth } = useAuthContext();
-  console.log(auth);
   return (
-    <div className="stats shadow bg-white text-black">
+    <div className="stats shadow bg-white w-full text-black">
       <div className="stat">
         <div className="stat-figure text-primary">
           <svg
@@ -128,7 +178,6 @@ const UsersBlogs = ({ totalAnalytics }) => {
         </div>
         <div className="stat-title text-black">Comments</div>
         <div className="stat-value text-black">{totalAnalytics.comments}</div>
-        {/* <div className="stat-desc text-secondary">31 tasks remaining</div> */}
       </div>
     </div>
   );
