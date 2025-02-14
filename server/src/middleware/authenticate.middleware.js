@@ -12,7 +12,6 @@ const authenticate = async (req, res, next) =>{
             message : "unauthorized"
         })
     }
-
     
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
         if(err)return null;

@@ -18,6 +18,7 @@ const saveRouter = require('./routes/save.routes');
 const followerRouter = require('./routes/Follower.routes.js');
 const viewsRouter = require('./routes/views.routes.js');
 const analyticsRouter = require('./routes/analytics.routes.js');
+const profileRouter = require('./routes/profile.routes.js');
 
 const corsOptions = {
     origin: "http://localhost:3000", 
@@ -62,6 +63,7 @@ app.use("/api/v1/save", saveRouter);
 app.use("/api/v1/subscribe", followerRouter);
 app.use("/api/v1/views", viewsRouter);
 app.use("/api/v1/analytics", analyticsRouter);
+app.use("/api/v1/profile", profileRouter);
 
 app.use(errorHandler);
 
