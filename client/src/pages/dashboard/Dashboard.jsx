@@ -30,7 +30,6 @@ const Dashboard = () => {
   const {isLoading : blogsLoading} = useGetAllBlogsOfUser();
   const {blogs} = useBlogStore();
 
-  console.log(blogs);
 
   return (
     <div className="grid grid-rows-[2fr_2fr] gap-4">

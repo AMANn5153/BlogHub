@@ -20,6 +20,44 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
             }
         },
         {
+            $lookup: {
+              from: "comments",
+              localField: "_id",
+              foreignField: "blogId",
+              as: "comments",
+        
+            }
+        },
+        {
+            $lookup: {
+              from: "views",
+              localField: "_id",
+              foreignField: "blogId",
+              as: "views"
+            }
+        },
+        {
+            $lookup:{
+                from : "likes",
+                localField : "_id",
+                foreignField : "blogId",
+                as : "likes",
+            }
+        },
+        {
+            $addFields: {
+                commentsCount : {$size : "$comments"},
+                viewsCount : {$size : "$views"},
+                likesCount : {$size : "$likes"}
+            }
+        },{
+            $project : {
+                comments : 0,
+                views : 0,
+                likes : 0
+            }
+        },
+        {
             $unwind : "$author"
         },
         {

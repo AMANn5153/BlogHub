@@ -39,6 +39,7 @@ const Blogs = () => {
   const {views} = useViewsBlogs();
   const {blog} = useBlogStore();
 
+
   useEffect(()=>{
 
     if(!blog)return;

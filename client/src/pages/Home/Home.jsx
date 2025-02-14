@@ -11,6 +11,8 @@ const Home = () => {
   }
 
 
+  console.log(blogs);
+
   return (
     <>
       <div className="flex flex-row m-10 rounded-xl h-full justify-around items-center flex-wrap">
@@ -39,6 +41,9 @@ const Home = () => {
                     content={blog.content}
                     coverImage={blog.coverImage}
                     blogId={blog._id}
+                    likes={blog.likesCount}
+                    views={blog.viewsCount}
+                    comments={blog.commentsCount}
                   />
                 );
               })
