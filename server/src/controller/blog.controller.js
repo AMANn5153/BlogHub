@@ -63,7 +63,6 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
         {
             $project:{
               "author.password" : 0,
-              "author._id" : 0,
               "author.createdAt" : 0,
               "author.updatedAt" : 0,
 
@@ -260,9 +259,24 @@ const deleteImage = async (req, res, next) =>{
 
 
 const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
+    const _id = new mongoose.Types.ObjectId(`${req.query._id}`) || req.user._id;
+    console.log(_id);
+    
+
     const allBlogsOfUser = await Blogs.aggregate([
         {
-            $match : {author : req.user._id}
+            $match : {author : _id }
+        },
+        {
+            $lookup:{
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author"
+            }
+        },
+        {
+            $unwind : "$author"
         },
         {
             $lookup: {

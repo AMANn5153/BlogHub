@@ -35,9 +35,9 @@ const Login = () => {
                     <input className="border-2 bg-white input placeholder-black text-black border-gray-300 rounded-md p-2 outline-none w-4/5" onChange={handleChange} name="password" type="password" placeholder="password" />
                     <div className="w-4/5 m-3 flex flex-row justify-end text-red-600  "><NavLink to="/forgetPassword" >forget password?</NavLink></div> 
                 </div>
-                <div className="w-1/2 flex flex-row justify-between">
-                    <button className="bg-lime-600 text-white p-2 rounded-md w-16" onClick={handleSubmit}>Login</button>
-                    <NavLink to="/signup">Don't have an account? <span className="text-lime-600 hover:text-lime-800">Sign up</span></NavLink>
+                <div className="w-full flex flex-row items-start justify-between">
+                    <button className="bg-lime-600 text-gray-700 p-2 rounded-md w-16" onClick={handleSubmit}>Login</button>
+                    <NavLink to="/signup" className="text-gray-500">Don't have an account? <span className="text-lime-600 hover:text-lime-800">Sign up</span></NavLink>
                 </div>
             </div>
             </div>

@@ -92,10 +92,10 @@ const UploadImage = () => {
 
 
     return (
-        <div className='flex flex-col h-screen w-full  items-center justify-around'>
-            <h1 className='text-2xl font-bold'>Upload Image</h1>
-            <div className="absolute border border-green-300 rounded-full overflow-hidden w-80 h-80">
-                <input type="file" className=" absolute z-0 w-96 h-96 opacity-0 hover:cursor-pointer" onChange={handleChange} />
+        <div className='flex flex-col h-screen w-full  items-center justify-around bg-white'>
+            <div className='w-full flex items-center justify-center'><h1 className='text-2xl text-black font-bold'>Upload Image</h1></div>
+            <div className=" border border-green-300 rounded-full overflow-hidden w-72 h-72">
+                <input type="file" className=" absolute z-0 w-72 h-72 opacity-0 hover:cursor-pointer" onChange={handleChange} />
                 <img src={image?.href ?? `https://api.dicebear.com/9.x/initials/svg?seed=${registerUser.fullname}`} alt="profile" className=' absolutez-50 w-full h-full object-cover' />
             </div>
             <NavLink to="/createpassword" className='bg-red-500 text-white rounded-md p-2 h-10'>{image?.href ? "upload": "next"}</NavLink>

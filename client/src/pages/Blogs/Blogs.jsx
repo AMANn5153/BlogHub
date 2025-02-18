@@ -23,6 +23,7 @@ import useSave from "../../hooks/Saves/useSave";
 import useViewsBlogs from "../../hooks/Blog/useViewsBlogs";
 import useBlogStore from "../../store/useBlogStore";
 import { Link } from "react-router-dom";
+import Dropdown from "../../components/Dropdown/Dropdown";
 
 const Blogs = () => {
   const commentRef = useRef();
@@ -130,11 +131,7 @@ const Blogs = () => {
           </div>
           <Link to={{pathname:`/profile/${author._id}`}}>
           <div className="m-6  flex flex-row justify-start items-center">
-            <div className="avatar">
-              <div className="w-20 rounded-full">
-              <img src={author.profilePic} alt="" />
-              </div>
-            </div>
+            <Dropdown author = {author}/>
             <div className="m-1 flex flex-col">
               <h1 className="text-xl hover:text-cyan-800 font-bold">{author.name}</h1>
               <h1>

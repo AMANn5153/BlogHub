@@ -49,7 +49,7 @@ const Navbar = () => {
     
     </div>
     {auth ? 
-    <div className="dropdown dropdown-end">
+    <div className="dropdown bg-white dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
           <img
@@ -59,7 +59,7 @@ const Navbar = () => {
       </div>
       <ul
         tabIndex={0}
-        className=" menu menu-sm dropdown-content rounded-box mt-3 w-52 p-2 shadow">
+        className=" menu menu-sm bg-white dropdown-content rounded-box mt-3 w-52 p-2 shadow shadow-md">
         <li>
           <NavLink to = "/dashboard" className="justify-between">
           DashBoard

@@ -42,16 +42,19 @@ const createUser = async (req, res, next) => {
    
        const path = req.file?.path;
 
-       const replaceSlash = path.replace(/\\/g, "/");
-
-       const localPath = `http://localhost:3001/${replaceSlash}`
+       let localPath = "";
+       
+       if(path){
+           const replaceSlash = path.replace(/\\/g, "/");
+           localPath = `http://localhost:3001/${replaceSlash}`
+       }
    
        const user = await User.create({
            name:fullname,
            username,
            password,
            email,
-           profilePic : localPath
+           profilePic : localPath || `https://api.dicebear.com/9.x/initials/svg?seed=${fullname}`
        });
        
 
