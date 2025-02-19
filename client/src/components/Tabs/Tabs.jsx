@@ -3,7 +3,7 @@ import { CiFilter } from "react-icons/ci";
 
 const Tabs = ({ blogs }) => {
   return (
-    <div role="tablist" className="tabs tabs-bordered">
+    <div role="tablist" className="tabs ml-3 tabs-bordered">
       <input
         type="radio"
         name="my_tabs_1"

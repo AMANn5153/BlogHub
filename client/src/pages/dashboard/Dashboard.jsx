@@ -25,9 +25,8 @@ import { Link } from "react-router-dom";
 const Dashboard = () => {
   const { auth } = useAuthContext();
   const { isLoading } = useGetStats();
-  const { totalAnalytics, likeWeekly, viewWeekly, commentsWeekly } =
-    useAnalyticsStore();
-  const {isLoading : blogsLoading} = useGetAllBlogsOfUser();
+  const { totalAnalytics, likeWeekly, viewWeekly, commentsWeekly } =useAnalyticsStore();
+  const {isLoading : blogsLoading} = useGetAllBlogsOfUser(auth._id);
   const {blogs} = useBlogStore();
 
 
@@ -51,9 +50,11 @@ const Dashboard = () => {
         {
           blogsLoading ? <div className="flex w-full h-full items-center justify-center">
           <span className="loading loading-infinity loading-lg"></span>
-        </div> : blogs.map((blog)=>{
+        </div> : blogs.length > 0 ? blogs.map((blog, index) => {
           return<Accordion blog={blog}/>
-        })
+        }) : <div className="flex w-full h-full items-center justify-center">
+          <h1 className="text-2xl font-bold">No Blogs Yet</h1>
+        </div>
         }
       </div>
     </div>

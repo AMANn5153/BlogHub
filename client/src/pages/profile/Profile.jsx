@@ -6,6 +6,9 @@ import useBlogStore from "../../store/useBlogStore";
 import useUser from "../../hooks/user/useUser";
 import useProfile from "../../store/useProfile";
 import { CiFilter } from "react-icons/ci";
+import FollowButton from "../../components/Button/FollowButton";
+import useSubscribedProfile from "../../hooks/subscribe/useSubscribedProfile";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
     const {auth} = useAuthContext();
@@ -14,6 +17,7 @@ const Profile = () => {
     const {isLoading : blogsLoading} = useGetAllBlogsOfUser(_id);
     const {blogs} = useBlogStore(); 
     const {profile} = useProfile();
+    const  {subscribedProfile, isSubProfileLoading} = useSubscribedProfile(_id);
 
     
   return (
@@ -36,13 +40,27 @@ const Profile = () => {
               <p>Creative Developer, Generative AI| JavaScript, HTML, CSS</p>
             </div>
             <div>
-             {auth._id !== profile?._id ? <button className="btn bg-blue-950 text-white btn-sm">Follow</button>
+             {auth._id !== profile?._id ? <FollowButton authorID={profile?._id}/>
             :<button className="btn bg-blue-950 text-white btn-sm">Edit</button>
             }
             </div>
         </div>
-        <div className="flex flex-col justify-start items-start w-full h-1/2 bg-white p-10">
+        <div className="flex flex-col gap-2 justify-start items-start w-full h-1/2 bg-white p-10">
           <h2 className="text-xl font-bold text-gray-800">Following</h2>
+          <div className="flex w-full flex-col gap-2">
+            {subscribedProfile?.map((sub)=>(
+              <div className=" flex w-full p-1 gap-2 shadow-md rounded-md bg-slate-300 items-center">
+                <div className="rounded-full w-10 h-10 bg-white">
+                  <img src={sub.profilePic} alt="profile pic" className="rounded-full w-10 h-10"/>
+                </div>
+                <div>
+                <Link to={`/profile/${sub._id}`}>
+                  <h1 className="text-gray-800 hover:underline hover:text-cyan-800">{sub.name}</h1>
+                </Link>
+                </div>
+              </div>
+            ))}
+            </div>
         </div>
       </div>
     </div>

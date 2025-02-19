@@ -2,7 +2,7 @@ import { TbNumber0Small } from "react-icons/tb";
 import { create } from "zustand";
 
 const useBlogStore = create((set) => ({
-    blogs : null,
+    blogs : [],
     blog : null,
 
     setSingleBlog : (blog)=>{

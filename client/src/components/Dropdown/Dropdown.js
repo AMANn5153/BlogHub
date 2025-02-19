@@ -2,6 +2,7 @@ import React from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { Link } from "react-router-dom";
 import timeDuration from "../../utils/time";
+import FollowButton from "../Button/FollowButton";
 
 const Dropdown = ({ author }) => {
   const { auth } = useAuthContext();
@@ -29,22 +30,17 @@ const Dropdown = ({ author }) => {
         </div>
         <div>
           <Link to={{ pathname: `/profile/${author._id}` }}>
-            <h1 className="text-xl hover:text-cyan-800 hover:underline font-bold">
+            <h1 className="text-xl text-black hover:text-cyan-800 hover:underline font-bold">
               {author.name}
             </h1>
           </Link>
         </div>
         <div>
-          <p>Creative Developer, Generative AI| JavaScript, HTML, CSS</p>
+          <p className="text-black">Creative Developer, Generative AI| JavaScript, HTML, CSS</p>
         </div>
         <div>
           {auth?._id !== author?._id ? (
-            <button
-              className="btn bg-blue-950 text-white btn-sm"
-              onClick={handleFollow}
-            >
-              Follow
-            </button>
+            <FollowButton authorID={author._id}/>
           ) : (
             <button className="btn bg-blue-950 text-white btn-sm">Edit</button>
           )}

@@ -43,7 +43,7 @@ const createUser = async (req, res, next) => {
        const path = req.file?.path;
 
        let localPath = "";
-       
+
        if(path){
            const replaceSlash = path.replace(/\\/g, "/");
            localPath = `http://localhost:3001/${replaceSlash}`
@@ -250,6 +250,10 @@ const changePassword = asyncHandler(async(req, res, next)=>{
         })
     }
 
+    if(!decodedToken.email){
+        throw new ApiError("email is different", 401, "changePassword");
+    }
+
     const user = await User.findOne({email : decodedToken.email});
 
     if(!user){
@@ -257,7 +261,6 @@ const changePassword = asyncHandler(async(req, res, next)=>{
     }   
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
 
     const updatePassword = await User.findOneAndUpdate({_id : user._id}, {$set :{password : hashedPassword}}, {new : true} );
 

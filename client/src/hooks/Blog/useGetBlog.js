@@ -22,7 +22,7 @@ const useGetBlog = (id) => {
                 if (!response.ok) {
                     throw new Error(responseData.message || "Failed to fetch the blog.");
                 }
-                console.log(responseData);
+                
                 setSingleBlog(responseData.data);
                 initialBlogLikes(responseData.likes);
                 initialSaveBlog(responseData.saves);

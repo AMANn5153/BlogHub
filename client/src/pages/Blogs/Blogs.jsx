@@ -24,6 +24,7 @@ import useViewsBlogs from "../../hooks/Blog/useViewsBlogs";
 import useBlogStore from "../../store/useBlogStore";
 import { Link } from "react-router-dom";
 import Dropdown from "../../components/Dropdown/Dropdown";
+import FollowButton ,{FollowButtonLink} from "../../components/Button/FollowButton";
 
 const Blogs = () => {
   const commentRef = useRef();
@@ -129,18 +130,22 @@ const Blogs = () => {
               className="border border-cyan-400 fit w-full h-auto"
             />
           </div>
-          <Link to={{pathname:`/profile/${author._id}`}}>
+    
           <div className="m-6  flex flex-row justify-start items-center">
             <Dropdown author = {author}/>
             <div className="m-1 flex flex-col">
-              <h1 className="text-xl hover:text-cyan-800 font-bold">{author.name}</h1>
+              <div className = "flex flex-row gap-1 items-center">
+                <Link to={{pathname:`/profile/${author._id}`}}>
+                  <h1 className="text-xl hover:text-cyan-800 font-bold">{author.name}</h1>
+                </Link>
+                <FollowButtonLink authorID={author._id}/>
+              </div>
               <h1>
                 {dateString} &nbsp; {time > 0 ? time : duration}{" "}
                 {time > 0 ? "hours" : duration > 1 ? "days" : "day"} ago
               </h1>
             </div>
           </div>
-          </Link>
           <div className="m-6 w-full flex flex-col justify-center items-start">
             <h1 className="text-7xl font-bold">{heading}</h1>
           </div>
@@ -155,7 +160,7 @@ const Blogs = () => {
         <hr/>
           <div className="flex flex-row justify-around ">
             <h1 ref = {commentRef}  className="text-2xl font-bold m-6 text-black">Top Comments {comments.length}</h1>
-            <button className="btn btn-success">Subscribe</button>
+            <FollowButton authorID = {author._id}/>
           </div>
           <br/>
           <div ref = {commentRef} className="flex flex-col gap-4 w-full">

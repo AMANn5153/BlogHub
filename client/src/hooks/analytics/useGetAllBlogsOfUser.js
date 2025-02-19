@@ -35,7 +35,7 @@ const useGetAllBlogsOfUser = (_id = null) => {
         }
     }
     getAllBlogsOfUser();    
-    },[auth?._id]);
+    },[ _id]);
     return {isLoading};
 } 
 

@@ -259,13 +259,11 @@ const deleteImage = async (req, res, next) =>{
 
 
 const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
-    const _id = new mongoose.Types.ObjectId(`${req.query._id}`) || req.user._id;
-    console.log(_id);
-    
+    const _id = req.query._id;
 
     const allBlogsOfUser = await Blogs.aggregate([
         {
-            $match : {author : _id }
+            $match : {author : new mongoose.Types.ObjectId(`${_id}`) }  
         },
         {
             $lookup:{
