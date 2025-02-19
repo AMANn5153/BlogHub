@@ -13,6 +13,7 @@ import useLikePostComment from "../../hooks/Likes/usePostLikeComment";
 import useLikeStore from "../../store/useLikeStore";
 import {Link, useNavigate} from "react-router-dom";
 import { FcLike } from "react-icons/fc";
+import Dropdown from "../Dropdown/Dropdown";
 
 
 const CommentCard = ({comment}) => {
@@ -38,21 +39,22 @@ const CommentCard = ({comment}) => {
     <>
       <div className="bg-gray-200 rounded rounded-2xl grid ml-6 mb-6 p-4 w-2/3 grid-cols-[1fr_12fr] " >
         <div className="grid-cols-1">
-          <div className="avatar">
-            <div className="w-12 rounded-full">
-              <img src={comment?.author?.profilePic}/>
-            </div>
-          </div>
+          <Dropdown author={comment?.author}/>
         </div>
         <div className=" grid-col-2 grid-rows-[12fr_1fr]">
-          <Link to={{pathname:`/comment/${comment._id}`}}>
-          <div className="tiptap  border border-1 rounded-xl ">
-            <div className="m-5 text-lg font-semibold"> 
-              {comment?.author?.name}
-            </div>
-              {parse(comment?.comment)}
+          <div className="  border border-1 rounded-xl ">
+            <Link to={{pathname:`/profile/${comment?.author?._id}`}}>
+              <div className="m-5 text-black hover:underline hover:text-cyan-700 font-semibold"> 
+                {comment?.author?.name}
+              </div>
+            </Link>
+            <Link to={{pathname:`/comment/${comment._id}`}}>
+              <div>
+                <p className="tiptap">{parse(comment?.comment)}</p>
+              </div>
+            </Link>
           </div>
-          </Link>
+        
           <div className=" card-footer flex flex-row gap-4 items-start w-full">
             {
               reply 

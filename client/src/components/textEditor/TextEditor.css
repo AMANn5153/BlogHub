@@ -1,6 +1,7 @@
 .ProseMirror{
-  height:24rem;
+  height:auto;
   outline:none;
+  position:inherit;
 }
 .ProseMirror-focused{
   outline:none;
@@ -25,6 +26,7 @@ Inspect
     font-family: 'JetBrainsMono', monospace;
     margin: 1.5rem 0;
     padding: 0.75rem 1rem;
+    z-index: 0;
 
     code {
       background: none;
@@ -117,7 +119,7 @@ Inspect
   word-break: break-all;
   margin: 2rem;
   font-size: 1.5rem;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 .tiptap pre{

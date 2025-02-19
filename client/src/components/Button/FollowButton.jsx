@@ -10,18 +10,18 @@ const FollowButton = ({authorID}) => {
   const {subscribeLoading ,subscribe} = useSubscribe()
   const {subscribers} = useSubscriberStore();
   useGetSubscribed();
-  
+
   const handleSubscribe = async (e) => {
     await subscribe(authorID)
   }
 
   return (
-      <button onClick={handleSubscribe} className={`btn  btn-info  `}>
+      <button onClick={handleSubscribe} className={`btn  btn-info   `}>
         {subscribeLoading 
         ?
         <span className="loading loading-ring loading-lg"></span>
         :
-        subscribers.some((sub)=>sub.subscribedToUser === authorID) ? "Following" : "Follow"
+        subscribers.some((sub)=>sub.subscribedToUser === authorID) ? "Subscribed" : "Subscribe"
         }
         
         </button>
@@ -47,7 +47,7 @@ export const FollowButtonLink = ({authorID}) => {
       ?
       <span className="loading loading-ring loading-lg"></span>
       :
-      subscribers.some((sub)=>sub.subscribedToUser === authorID) ? "Following" : "Follow"
+      subscribers.some((sub)=>sub.subscribedToUser === authorID) ? "Subscribed" : "Subscribe"
       }</button>
   )
 }
