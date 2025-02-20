@@ -31,18 +31,17 @@ const useAuthFetch = () => {
     const {refreshToken} = useRefreshToken();
     const authFetch = async(apiUrl, options={}) =>{
 
-        console.log(options);
-
         let cloneBody = null;
         
         if(options.body && ['POST', 'PUT', 'PATCH'].includes(options.method)){
-            cloneBody = options.body instanceof FormData ? new FormData(options.body) : options.body;
+            cloneBody = options.body instanceof FormData ? options.body : options.body;
         }
 
         options.credentials = "include";
 
         let response = await fetch (apiUrl, options);
 
+        console.log(response);
         
 
         if(response.status === 401){

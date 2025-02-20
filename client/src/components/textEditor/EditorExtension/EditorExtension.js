@@ -50,7 +50,7 @@ const extensions = [
     inline: true,
   }),
   Heading.configure({
-    levels: [2, 3],
+    levels: [1, 2, 3],
   }),
   NewlineExtension,
   Link.configure({

@@ -78,11 +78,11 @@ const Card = ({
           </div>
           {coverImage ? (
             <div className="w-full h-full flex justify-center items-center">
-              <div className="w-40 h-40 rounded-2xl">
+              <div className="w-40 h-40 ">
                 <img
                   src={coverImage}
                   alt=""
-                  className="rounded-2xl w-40 h-40"
+                  className="rounded-lg shadow-sm object-contain  w-40 h-40"
                 />
               </div>
             </div>

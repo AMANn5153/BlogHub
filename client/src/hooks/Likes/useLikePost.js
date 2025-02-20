@@ -10,10 +10,10 @@ const useLikePost = () => {
     const {auth} = useAuthContext();
     const {authFetch} = useAuthFetch();
 
-    const likePost = async (blogId)=>{
+    const likePost = async (blogId, authorID)=>{
         try{
             setLikePostLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}`, {
+            const response = await authFetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}&&authorID=${authorID}`, {
                 method: "POST",
                 Credentials: "include",
                 headers: {

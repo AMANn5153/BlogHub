@@ -12,19 +12,6 @@ const userSchema = new mongoose.Schema({
         trim:true,
     },
 
-    bio:{
-        type:String,
-        trim:true,
-    },
-
-    website:{
-        type: String,
-        validate(val){
-            if(!validator.isURL(val))
-                throw new Error("Invalid URL");
-        }
-    },
-
     username:{
         type:String,
         require:true,
@@ -51,6 +38,30 @@ const userSchema = new mongoose.Schema({
         type:String,
         trim:true
     },
+
+    bio:{
+        type:String,
+        trim:true,
+        maxlength:200
+    },
+
+    website:{
+        type: String,
+        validate(val){
+            if(!validator.isURL(val))
+                throw new Error("Invalid URL");
+        }
+    },
+
+    workingAt : {
+        type : String,
+        trim : true
+    },
+
+    location : {
+        type : String,
+        trim : true
+    }
 
 }, {timestamps:true});
 

@@ -3,8 +3,8 @@ const Likes = require("../models/like.model.js");
 const mongoose = require("mongoose");
 const Comments = require("../models/comments.model.js");
 
-const toggleBlogLike = asyncHandler(async (req, res) => { 
-    const {blogId} = req.query;
+const toggleBlogLike = asyncHandler(async (req, res, next) => { 
+    const {blogId, authorID} = req.query;
     
   if(!blogId){
     throw new ApiError("blogId is required", 400, "toggleBlogLike");
@@ -12,16 +12,19 @@ const toggleBlogLike = asyncHandler(async (req, res) => {
   
   const like = await Likes.findOne({
       userId : new mongoose.Types.ObjectId(`${req.user._id}`),
-      blogId : new mongoose.Types.ObjectId(`${blogId}`)
+      blogId : new mongoose.Types.ObjectId(`${blogId}`),
+      authorID : new mongoose.Types.ObjectId(`${authorID}`),
   });
 
   if(!like){
       const toggleLike = await Likes.create(
-          {
+        {
           userId : new mongoose.Types.ObjectId(`${req.user._id}`),
           blogId : new mongoose.Types.ObjectId(`${blogId}`),
-      }
+          authorID : new mongoose.Types.ObjectId(`${authorID}`),
+        }
       )  
+
         return res.status(200).json({
             success : true,
             message : "like toggled successfully",
@@ -31,6 +34,7 @@ const toggleBlogLike = asyncHandler(async (req, res) => {
       const ToggleLike  = await Likes.deleteOne({
         blogId : new mongoose.Types.ObjectId(`${blogId}`),
         userId : new mongoose.Types.ObjectId(`${req.user._id}`),
+        authorID : new mongoose.Types.ObjectId(`${authorID}`),
     });
     return res.status(200).json({
       success : true,

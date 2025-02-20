@@ -3,6 +3,7 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 import { Link } from "react-router-dom";
 import timeDuration from "../../utils/time";
 import FollowButton from "../Button/FollowButton";
+import EditButton from "../Button/EditButton";
 
 const Dropdown = ({ author }) => {
   const { auth } = useAuthContext();
@@ -42,7 +43,7 @@ const Dropdown = ({ author }) => {
           {auth?._id !== author?._id ? (
             <FollowButton authorID={author._id}/>
           ) : (
-            <button className="btn bg-blue-950 text-white btn-sm">Edit</button>
+            <EditButton/>
           )}
         </div>
       </div>

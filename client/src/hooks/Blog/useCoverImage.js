@@ -32,6 +32,8 @@ const useCoverImage = () =>{
                 throw new Error(responseData.message);
             }
 
+            console.log(responseData);
+
             return ({url : responseData.url, name : responseData.name});
 
         }

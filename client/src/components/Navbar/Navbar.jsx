@@ -4,6 +4,11 @@ import { NavLink } from 'react-router-dom';
 import useLogout from '../../hooks/logout/useLogout';
 import { useNavigate } from 'react-router-dom';
 import '../../index.css';
+import { MdDashboard, MdOutlineSettings } from 'react-icons/md';
+import { RiLogoutCircleLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
+
+
 
 const Navbar = () => {
   const {auth} = useAuthContext();
@@ -59,20 +64,24 @@ const Navbar = () => {
       </div>
       <ul
         tabIndex={0}
-        className=" menu menu-sm bg-white dropdown-content rounded-box mt-3 w-52 p-2 shadow shadow-md">
+        className="  menu menu-sm bg-white dropdown-content rounded-box mt-3 w-52 p-2 shadow-md">
         <li>
-          <NavLink to={`/profile/${auth?._id}`} className="justify-between underline">
+          <NavLink to={`/profile/${auth?._id}`} className="hover:bg-blue-700 hover:text-white justify-between underline">
             {auth?.username}
+            <CgProfile />
           </NavLink>
         </li>
         <li>
           <NavLink to = "/dashboard" className="justify-between">
-          DashBoard
+          DashBoard 
+          <MdDashboard />
           </NavLink>
             
         </li>
-        <li><NavLink to = "/settings">Settings</NavLink></li>
-        <li><button onClick={handleLogout}>Logout</button></li>
+        <li><NavLink to = "/settings" className="justify-between">Settings<MdOutlineSettings />
+        </NavLink></li>
+        <li><button onClick={handleLogout} className='justify-between'>Logout <RiLogoutCircleLine />
+        </button></li>
       </ul>
     </div>:""}
   </div>

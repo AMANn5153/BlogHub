@@ -9,6 +9,7 @@ import { CiFilter } from "react-icons/ci";
 import FollowButton from "../../components/Button/FollowButton";
 import useSubscribedProfile from "../../hooks/subscribe/useSubscribedProfile";
 import { Link } from "react-router-dom";
+import EditButton from "../../components/Button/EditButton";
 
 const Profile = () => {
     const {auth} = useAuthContext();
@@ -23,12 +24,12 @@ const Profile = () => {
   return (
     <div className = "grid bg-white grid-cols-[4fr_2fr]">
       <div className = "flex w-full  flex-col gap-5 items-start">
-      <h1 className = "text-6xl m-10 w-full font-bold text-black">{profile?.name}</h1>
+      <h1 className = "text-5xl m-10 w-full capitalize font-bold text-black">{profile?.name}</h1>
       <div className="w-full"> 
         <Tabs blogs={blogs}/> 
       </div>
       </div>
-      <div className=" flex h-screen flex-col sticky top-0 right-0 w-full h-full justify-start items-center bg-white">
+      <div className=" flex h-screen flex-col sticky top-0 right-0 w-full justify-start items-center bg-white">
         <div className = "flex p-10 w-full h-1/2 flex-col gap-3 items-start ">
             <div className = "rounded-full w-20 h-20 bg-white">
                 <img src={profile?.profilePic} alt="profile pic" className="rounded-full w-20 h-20"/>
@@ -41,7 +42,7 @@ const Profile = () => {
             </div>
             <div>
              {auth._id !== profile?._id ? <FollowButton authorID={profile?._id}/>
-            :<button className="btn bg-blue-950 text-white btn-sm">Edit</button>
+            :<EditButton/>
             }
             </div>
         </div>

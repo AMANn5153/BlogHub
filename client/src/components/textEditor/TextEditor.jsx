@@ -32,6 +32,7 @@ const TextEditor = ({
 
   const handleCoverImage = async (e) => {
     const image = e.target.files[0];
+    
     const { url, name } = await uploadCoverImage(image);
     setCoverImage(`${url}`);
   };
@@ -74,20 +75,21 @@ const TextEditor = ({
           >{`remove ${coverImageName[coverImageName.length - 1]}`}</button>
         </div>
       )}
-      <textarea
+     <textarea
         placeholder="HEADING"
         value={heading}
         className=" w-full 
-              bg-transparent  p-5 
+              bg-transparent p-5 
             text-white font-extrabold text-6xl outline-none
-            resize-none"
+              resize-none
+            "
         onChange={changeHeading}
-      ></textarea>
+      ></textarea> 
       <div className=" text-wrap border-1 ">
         <div className="sticky top-0">
           <ToolBar />
         </div>
-        <div className=" w-full h-full p-4">
+        <div className=" w-full h-full ">
           <EditorContent editor={editor} className="leading-relaxed " />
         </div>
       </div>

@@ -9,8 +9,8 @@ const { query } = require("express");
 const analytics = asyncHandler(async (req, res, next) => {
 
     
-    const totalLikes = await   Like.countDocuments({
-        userId : new mongoose.Types.ObjectId(`${req.user._id}`)
+    const totalLikes = await  Like.countDocuments({
+        authorID : new mongoose.Types.ObjectId(`${req.user._id}`),
     })
 
 

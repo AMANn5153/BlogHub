@@ -62,9 +62,11 @@ const Blogs = () => {
   const savedByUser = saveBlog.length > 0 ? saveBlog?.some((save)=>save.userId === auth?._id && save.blogId === id ) : false;
 
   if(!blog){
-    return (<div className="flex w-full h-full items-center justify-center">
-    <span className="loading loading-infinity loading-lg"></span>
-  </div>)
+    return (
+    <div className="flex w-full h-full items-center justify-center">
+      <span className="loading loading-infinity loading-lg"></span>
+    </div>
+  )
   }
 
 
@@ -78,7 +80,7 @@ const Blogs = () => {
 
 
   const handleLike = async () =>{
-    await likePost(id);
+    await likePost(id, author?._id);
   }
 
   const handleSave = async () => {
@@ -127,7 +129,7 @@ const Blogs = () => {
             <img
               src={coverImage}
               alt=""
-              className="border border-cyan-400 fit w-full h-auto"
+              className="border object-contain w-full h-60 "
             />
           </div>
     
@@ -154,7 +156,7 @@ const Blogs = () => {
           <hr className=" w-1/3"/>
           </div>
           <br/>
-          <div className=" tiptap m-6 max-w-screen flex flex-col flex-wrap justify-center items-start">
+          <div className="tiptap m-6 max-w-screen flex flex-col flex-wrap justify-center items-start">
             {parse(content)}
           </div>
         <hr/>
