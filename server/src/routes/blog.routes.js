@@ -29,7 +29,7 @@ blogRouter.route("/uploadCoverImage").post(authenticate, uploadCoverImage.single
 
 blogRouter.route("/deleteCoverImage").delete(authenticate, removeCoverImage);
 
-blogRouter.route("/blogOfUser").get(authenticate, getAllBlogOfUser);
+blogRouter.route("/blogOfUser").get(getAllBlogOfUser);
 
 blogRouter.route("/deleteBlog").delete(authenticate, deleteBlog);
 

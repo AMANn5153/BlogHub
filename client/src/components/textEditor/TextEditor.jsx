@@ -55,7 +55,7 @@ const TextEditor = ({
     <>
       {!coverImage ? (
         <div className=" flex rounded-md border-2 border-green-300 flex-col justify-center items-center w-48 h-14">
-          <h1 className="text-white text-xl font-bold font-sans m-2">
+          <h1 className="text-black text-xl font-bold font-sans m-2">
             Cover Image
           </h1>
           <input
@@ -70,7 +70,7 @@ const TextEditor = ({
       ) : (
         <div className=" flex rounded-md border-2 border-green-300 overflow-hidden  flex-col justify-center items-center w-48 h-14">
           <button
-            className="btn btn-secondary w-48 h-14"
+            className="btn border-t-cyan-400  w-48 h-14"
             onClick={handleRemoveCoverImage}
           >{`remove ${coverImageName[coverImageName.length - 1]}`}</button>
         </div>
@@ -78,18 +78,18 @@ const TextEditor = ({
      <textarea
         placeholder="HEADING"
         value={heading}
-        className=" w-full 
+        className=" w-full placeholder:text-gray-600
               bg-transparent p-5 
-            text-white font-extrabold text-6xl outline-none
+            text-black font-extrabold text-6xl outline-none
               resize-none
             "
         onChange={changeHeading}
       ></textarea> 
-      <div className=" text-wrap border-1 ">
-        <div className="sticky top-0">
+      <div className=" text-wrap border-1 border-black ">
+        <div className="sticky z-[1] top-0">
           <ToolBar />
         </div>
-        <div className=" w-full h-full ">
+        <div className="border border-2 rounded-lg w-full h-full ">
           <EditorContent editor={editor} className="leading-relaxed " />
         </div>
       </div>

@@ -10,6 +10,9 @@ const Views = require("../models/views.model");
 
 
 const getAllBlog = asyncHandler(async (req, res, next)=>{
+
+    let {filter} = req.query;
+
     const blog = await Blogs.aggregate([
         {
             $lookup: {
@@ -67,8 +70,16 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
               "author.updatedAt" : 0,
 
             }
+        },
+        {
+            $sort:{
+                [filter === "latest" ? "createdAt" : filter === "mostLiked" ? "likesCount" : filter === "mostCommented" ? "commentsCount" : "likesCount"] : -1,
+
+            }
         }
     ])
+
+
     res.status(200).json({
         success : true,
         status : 200,
@@ -261,6 +272,7 @@ const deleteImage = async (req, res, next) =>{
 const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
     const _id = req.query._id;
 
+    
     const allBlogsOfUser = await Blogs.aggregate([
         {
             $match : {author : new mongoose.Types.ObjectId(`${_id}`) }  

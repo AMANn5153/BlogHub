@@ -1,17 +1,23 @@
 import Card from "../../components/Card/Card";
 import useGetAllBlog from "../../hooks/Blog/useGetAllBlog";
+import { CiFilter } from "react-icons/ci";
+import { useState } from "react";
 
 const Home = () => {
-  const { blogs, loading } = useGetAllBlog();
+  const [filter, setFilter] = useState("mostLiked");
+  const { blogs, loading } = useGetAllBlog(filter);
 
+  const handleFilter = (e)=>{
+    setFilter(e.target.name);
+  }
+ 
   if(!blogs || loading){
     return (<div className="flex w-full h-full items-center justify-center">
     <span className="loading loading-infinity loading-lg"></span>
   </div>)
   }
-
-
-  console.log(blogs);
+  
+  
 
   return (
     <>
@@ -20,12 +26,28 @@ const Home = () => {
           <h1 className="text-4xl font-bold">Blogs</h1>
         </div>
         <div className="flex w-full h-full flex-row items-center justify-around p-5 flex-wrap">
-          <input
-            type="search"
-            placeholder="what are you looking for?"
-            className="input bg-white input-bordered w-full max-w-xs"
-          />
-          <div className="flex w-full flex-col justify-around align-center flex-wrap ">
+          <div className="w-full bg-stone-200 rounded-lg h-20 flex flex-row items-center justify-around">
+            <input
+              type="search"
+              placeholder="what are you looking for?"
+              className="input text-black bg-white placeholder:text-black input-bordered w-full max-w-xs"
+            />
+            <div className="tooltip tooltip-left dropdown dropdown-bottom hover:cursor-pointer" data-tip="Filter">
+              <div tabIndex={0} className="text-black"><CiFilter size={30}/></div>
+              <div tabIndex={0} className="dropdown-content menu w-58  z-[100] rounded-box p-2  shadow-lg">
+                  <li>
+                    <button name="latest" onClick={handleFilter} className="w-full btn btn-ghost hover:bg-white p-1 bg-white text-black">Latest</button>
+                  </li>
+                  <li>
+                    <button name="mostLiked" onClick={handleFilter} className="w-full btn btn-ghost hover:bg-white p-1 bg-white text-black">Most Liked</button>
+                  </li>
+                  <li>
+                    <button name="mostCommented" onClick={handleFilter} className="w-full btn btn-ghost hover:bg-white p-1 bg-white  text-black">Most Commented</button>
+                  </li>
+              </div>
+            </div>
+          </div> 
+          <div className="flex w-full bg-stone-300 flex-col justify-around align-center flex-wrap ">
             {loading ? (
               <div className="flex w-full h- full items center justify-center">
                 <span className="loading loading-infinity loading-lg"></span>

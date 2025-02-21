@@ -4,8 +4,8 @@ const authenticate = require("../middleware/authenticate.middleware.js");
 
 followerRouter.route("/addSubscriber").post(authenticate, addSubscriber);
 
-followerRouter.route("/getSubscribed").get(authenticate, getSubscribed);
+followerRouter.route("/getSubscribed").get( getSubscribed);
 
-followerRouter.route("/getSubscribedProfile").get(authenticate, getSubscribedProfile);
+followerRouter.route("/getSubscribedProfile").get( getSubscribedProfile);
 
 module.exports = followerRouter;

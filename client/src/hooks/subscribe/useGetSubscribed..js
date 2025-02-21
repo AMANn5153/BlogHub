@@ -4,7 +4,7 @@ import useAuthFetch from "../../utils/authFetch";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 
-const useGetSubscribed = () =>{
+const useGetSubscribed = (_id) =>{
     const {authFetch} = useAuthFetch();
     const {setSubscribed} = useSubscriberStore();
     const [isGetSubscribed, setIsGetSubscribed] = useState(false);
@@ -15,7 +15,7 @@ const useGetSubscribed = () =>{
         const getSubscribed = async()=>{
             try{
                 setIsGetSubscribed(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/subscribe/getSubscribed`,{
+                const response = await authFetch(`http://localhost:3001/api/v1/subscribe/getSubscribed?_id=${_id}`,{
                     method: "GET",
                     Credentials : "include",
                 });

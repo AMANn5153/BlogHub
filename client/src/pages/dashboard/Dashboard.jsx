@@ -106,7 +106,9 @@ const Accordion = ({blog}) => {
             className="dropdown-content menu bg-slate-100 rounded-box z-[1] w-52 p-2 shadow"
           >
             <li>
+             <Link to={{pathname : `stats/${blog._id}`}}> 
               <button className="btn text-black btn-ghost" >Stats</button>
+             </Link>
             </li>
             <li>
               <button className="btn text-black btn-ghost">Edit</button>

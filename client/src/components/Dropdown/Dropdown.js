@@ -8,8 +8,6 @@ import EditButton from "../Button/EditButton";
 const Dropdown = ({ author }) => {
   const { auth } = useAuthContext();
 
-  const handleFollow = (e) => {
-  };
 
   return (
     <div className="dropdown dropdown-hover">
@@ -41,7 +39,7 @@ const Dropdown = ({ author }) => {
         </div>
         <div>
           {auth?._id !== author?._id ? (
-            <FollowButton authorID={author._id}/>
+            <FollowButton authorID={author?._id}/>
           ) : (
             <EditButton/>
           )}

@@ -8,8 +8,6 @@ const CommentThread = () => {
     const {commentThreadLoading} = useGetCommentThread({id});
     const {comments} = useCommentStore();
 
-    console.log(comments);
-
     return (
         <>
         {

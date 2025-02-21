@@ -4,6 +4,7 @@ import parse from "html-react-parser";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import useCreateBlog from "../../hooks/Blog/useCreateBlog";
 import useEditorContext from "../../components/textEditor/EditorContext/EditorContext";
+import { Link } from "react-router-dom";
 
 const CreateBlog = () => {
   const { auth } = useAuthContext();
@@ -47,7 +48,7 @@ const CreateBlog = () => {
     setHeading("");
     setConvertedContent("");
     setCoverImage("");
-    editor.command.clearContent();
+    editor.commands.clearContent(true);
   };
 
   const handleSave = async () => {
@@ -62,59 +63,73 @@ const CreateBlog = () => {
 
   return (
     <>
-      <div className="flex flex-col h-auto ">
-        <div role="tablist" className="tabs m-5 tabs-bordered">
-          <input
-            type="radio"
-            name="my_tabs_2"
-            role="tab"
-            className="tab text-xl"
-            aria-label="Edit"
-            defaultChecked
-          />
+      <div className="grid grid-cols-[12fr_1fr] bg-white">
+        <div className="flex bg-white flex-col h-auto ">
           <div
-            role="tabpanel"
-            className="tab-content bg-base-100 rounded-box p-6"
+            role="tablist"
+            className="tabs m-5 bg-white text-black tabs-bordered"
           >
-            <TextEditor
-              setConvertedContent={setConvertedContent}
-              setHeading={setHeading}
-              heading={heading}
-              setCoverImage={setCoverImage}
-              coverImage={coverImage}
+            <input
+              type="radio"
+              name="my_tabs_2"
+              role="tab"
+              className="tab text-xl"
+              aria-label="Edit"
+              defaultChecked
             />
-          </div>
+            <div
+              role="tabpanel"
+              className="tab-content bg-white rounded-box p-6"
+            >
+              <TextEditor
+                setConvertedContent={setConvertedContent}
+                setHeading={setHeading}
+                heading={heading}
+                setCoverImage={setCoverImage}
+                coverImage={coverImage}
+              />
+            </div>
 
-          <input
-            type="radio"
-            name="my_tabs_2"
-            role="tab"
-            className="tab text-xl"
-            aria-label="Preview"
-          />
-          <div role="tabpanel" className="tab-content rounded-box p-6">
-            <div className="tiptap w-full h-full">
-              {parse(`
+            <input
+              type="radio"
+              name="my_tabs_2"
+              role="tab"
+              className="tab text-xl"
+              aria-label="Preview"
+            />
+            <div role="tabpanel" className="tab-content rounded-box p-6">
+              <div className="tiptap w-full h-full">
+                {parse(`
               <img src="${coverImage}" alt="" className="h-auto max-w-screen-md rounded-lg"/>
               <hr/>
               <h1>${heading}</h1>
               ${convertedContent}`)}
+              </div>
             </div>
           </div>
+          <div className="flex flex-row flex-shrink-0 m-5 justify-around items-center w-60 h-60">
+            <button
+              className="btn  color-white btn btn- hover:btn-info hover:text-white bg-blue-500 rounded rounded-md  text-white font-bold py-2 px-4 rounded"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+            <button
+              className=" btn color-white btn bg-green-400 hover:btn-success hover:text-white rounded rounded-md text-white font-bold py-2 px-4 rounded"
+              onClick={handlePublish}
+            >
+              publish
+            </button>
+          </div>
         </div>
-        <div className="flex flex-row flex-shrink-0 m-5 justify-around items-center w-60 h-60">
+        <div className="flex m-5 flex-col justify-start items-center bg-white">
+          <Link to={{ pathname: "/" }}>
           <button
-            className="color-white btn btn- hover:btn-info hover:text-white bg-blue-500 rounded rounded-md  text-white font-bold py-2 px-4 rounded"
-            onClick={handleSave}
+            className="tooltip tooltip-bottom btn btn-circle btn-error"
+            data-tip="close Editor"
           >
-            Save
-          </button>
-          <button
-            className="color-white btn bg-green-400 hover:btn-success hover:text-white rounded rounded-md text-white font-bold py-2 px-4 rounded"
-            onClick={handlePublish}
-          >
-            publish
-          </button>
+            X
+          </button></Link>
         </div>
       </div>
     </>

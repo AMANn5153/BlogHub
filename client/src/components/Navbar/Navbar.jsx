@@ -7,6 +7,7 @@ import '../../index.css';
 import { MdDashboard, MdOutlineSettings } from 'react-icons/md';
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
+import { CiEdit } from "react-icons/ci";
 
 
 
@@ -37,7 +38,8 @@ const Navbar = () => {
       
       {auth? 
        <NavLink to="/createBlog">
-       <button className='btn btn-ghost text-black text-xl  hover:cursor-pointer '>Create Blog</button>
+       <button className='btn btn-ghost text-black text-xl  hover:cursor-pointer '>Create Blog <CiEdit />
+       </button>
      </NavLink>
       : 
       <NavLink to="/login">
@@ -54,7 +56,7 @@ const Navbar = () => {
     
     </div>
     {auth ? 
-    <div className="dropdown rounded-full  dropdown-end">
+    <div className="dropdown rounded-full dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
           <img

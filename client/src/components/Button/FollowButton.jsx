@@ -2,37 +2,40 @@ import React from 'react'
 import useSubscribe from '../../hooks/subscribe/useSubscribe'
 import useSubscriberStore from '../../store/useSubscriberStore'
 import useGetSubscribed from '../../hooks/subscribe/useGetSubscribed.'
-
+import LoginModal from '../Modal/LoginModal'
+import useAuthContext from '../../context/authContext/useAuthContext'
 
 
 const FollowButton = ({authorID}) => {
-
+  const {auth} = useAuthContext();
   const {subscribeLoading ,subscribe} = useSubscribe()
   const {subscribers} = useSubscriberStore();
-  useGetSubscribed();
+  useGetSubscribed(auth?._id);
 
   const handleSubscribe = async (e) => {
     await subscribe(authorID)
   }
 
   return (
-      <button onClick={handleSubscribe} className={`btn  btn-info   `}>
+    <>
+      <button onClick={auth ? handleSubscribe : ()=>{document.getElementById("my_modal_3").showModal()}} className={`btn  btn-info   `}>
         {subscribeLoading 
         ?
         <span className="loading loading-ring loading-lg"></span>
         :
         subscribers.some((sub)=>sub.subscribedToUser === authorID) ? "Subscribed" : "Subscribe"
         }
-        
-        </button>
+      </button>
+      <LoginModal/>
+    </>
   )
 }
 
 export const FollowButtonLink = ({authorID}) => {
-  
+  const {auth} = useAuthContext();
   const {subscribeLoading, subscribe} = useSubscribe()
   const {subscribers} = useSubscriberStore();
-  useGetSubscribed();
+  useGetSubscribed(auth?._id);
 
 
 
@@ -40,10 +43,9 @@ export const FollowButtonLink = ({authorID}) => {
     await subscribe(authorID);
   }  
 
-  console.log(subscribers);
 
   return (
-    <button onClick={handleSubscribe} className="btn  btn-link"> {subscribeLoading 
+    <button onClick={auth ? handleSubscribe :   ()=>{document.getElementById("my_modal_3").showModal()}} className="btn  btn-link"> {subscribeLoading 
       ?
       <span className="loading loading-ring loading-lg"></span>
       :

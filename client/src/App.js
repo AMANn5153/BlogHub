@@ -19,6 +19,7 @@ import ForgetPassword from './pages/Login/ForgetPassword.jsx';
 import ChangePassword from './pages/Login/ChangePassword.jsx';
 import Settings from './pages/Settings/Settings'; 
 import Profile from "./pages/profile/Profile";
+import Stats from "./pages/dashboard/Stats";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="/comment/:id" element={<CommentThread/>}></Route>
         <Route path='/dashboard' element={<PrivateRoute><Dashboard/></PrivateRoute>}></Route>
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>}></Route>
+        <Route path="dashboard/stats/:blogID" element={<PrivateRoute><Stats/></PrivateRoute>}></Route>
       </Route>
     </Routes>
   </BrowserRouter> 

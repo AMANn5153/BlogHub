@@ -45,7 +45,7 @@ const Comments = ({blogId, authorId}) => {
             <div className="bg-transparent w-full border-2 border-cyan-300 h-56 rounded-xl overflow-y-auto">
               <EditorContent editor={editor} />
             </div>
-            <div className="sticky bottom-0 w-full rounded-xl">
+            <div className=" w-full rounded-xl">
               <ToolBar />
             </div>
           </div>
@@ -58,10 +58,7 @@ const Comments = ({blogId, authorId}) => {
                   ? handleSubmit
                   : () => document.getElementById("my_modal_3").showModal()
               }
-              data-tip={`${auth ? "Comment" : "Login to comment"}`}
-
-              
-            >
+              data-tip={`${auth ? "Comment" : "Login to comment"}`}>
               Comment
             </button>
           </div>

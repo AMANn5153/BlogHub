@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import useBlogStore from "../../store/useBlogStore";
 import { toast } from "react-toastify";
 
-const useGetAllBlog = () => {
+const useGetAllBlog = (filter = null) => {
     const [loading, setLoading] = useState(false);
     const {blogs, setBlog} = useBlogStore();
    
@@ -11,7 +11,7 @@ const useGetAllBlog = () => {
         const getBlog = async ()=>{
             try{
                 setLoading(true);
-                const response = await fetch("http://localhost:3001/api/v1/blog/getAllBlog");
+                const response = await fetch(`http://localhost:3001/api/v1/blog/getAllBlog?filter=${filter}`);
                 const responseData = await response.json();
                 if(!response.ok){
                     throw new Error(responseData.message);
@@ -33,7 +33,7 @@ const useGetAllBlog = () => {
         }
         getBlog();
     }, 
-    [setBlog]);
+    [setBlog, filter]);
 
     return {blogs, loading};
 

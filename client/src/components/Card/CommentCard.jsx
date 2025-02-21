@@ -37,7 +37,7 @@ const CommentCard = ({comment}) => {
 
   return (
     <>
-      <div className="bg-gray-200 rounded rounded-2xl grid ml-6 mb-6 p-4 w-2/3 grid-cols-[1fr_12fr] " >
+      <div className="bg-white rounded rounded-2xl grid ml-6 mb-6 p-4 w-2/3 grid-cols-[1fr_12fr] " >
         <div className="grid-cols-1">
           <Dropdown author={comment?.author}/>
         </div>
@@ -92,7 +92,7 @@ const CommentCard = ({comment}) => {
 const Reply = ({removeReply, commentId})=>{
   const {postReply} = usePostReply();
   const { editor } = useEditorContext();
-  const [reply, setReply] = useState();
+  const [reply, setReply] = useState(null);
   const {auth} = useAuthContext();
   const navigate = useNavigate();
 
@@ -122,7 +122,7 @@ const Reply = ({removeReply, commentId})=>{
           <div className="flex gap-4 flex-row">
             <button
               type="submit"
-              className="btn btn-primary"
+              className={`btn  btn-primary `}
               onClick={
                 auth
                   ? handleSubmit

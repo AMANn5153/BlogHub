@@ -14,7 +14,6 @@ const useRefreshToken = () =>{
             if(!response.ok){
                 localStorage.removeItem("user");
                 setAuth(null);
-                navigate("/login");
             }
         }
         catch(error){

@@ -3,7 +3,30 @@ const asyncHandler = require("../utils/asyncHandler");
 const Like = require("../models/like.model");
 const mongoose = require("mongoose");
 const Comments = require("../models/comments.model");
-const { query } = require("express");
+const moment = require("moment-timezone");
+
+
+const mappingLikesAndDates = (stats, startDay, endDay, statsType) => {
+    const map = {};
+    stats.forEach(({_id, totalStats})=>{
+        map[_id] = totalStats;
+    });
+
+    const datesArray = [];
+
+    let currentDate = startDay.clone();
+
+    while(currentDate.isSameOrBefore(endDay)){
+        const dateString = currentDate.format("YYYY-MM-DD");
+        datesArray.push({
+            date : dateString,
+            [statsType] : map[dateString] || 0
+        });
+        currentDate.add(1, "day");
+    }
+
+    return datesArray;
+}
 
 
 const analytics = asyncHandler(async (req, res, next) => {
@@ -38,6 +61,10 @@ const analytics = asyncHandler(async (req, res, next) => {
 
 const statsWeekly = asyncHandler(async (req, res, next) => {
     const {blogID} = req.query;
+    const timezone = "Asia/Kolkata";
+
+    const endDay = moment.tz(timezone).endOf("day")
+    const startDay = moment.tz(timezone).subtract(6, "days").startOf("day")
 
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -46,7 +73,6 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
         {
             $match : {
                 blogId : new mongoose.Types.ObjectId(`${blogID}`),
-                userId : new mongoose.Types.ObjectId(`${req.user._id}`),
                 createdAt : {
                     $gte : sevenDaysAgo
                 }
@@ -55,32 +81,22 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
         {
             $group : {
                 _id : {
-                    $dateToString : {
-                        format : "%Y-%m-%d",
-                        date : "$createdAt"
-                    }
+                        $dateToString : {
+                            format : "%Y-%m-%d",
+                            date : "$createdAt",
+                            timezone : timezone
+                        }
                     },
-                    totalLikes : {$sum : 1},
+                totalStats : {$sum : 1},
                 },            
         }
-        ,{
-            $sort : {
-                "_id" : 1
-            }
-        },{
-            $project : {
-                _id : 0,
-                "dates" : "$_id",
-                totalViews : 1
-            }
-        }
     ]);
+
 
     const viewStatsWeekly = await Views.aggregate([
         {
             $match : {
                 blogId : new mongoose.Types.ObjectId(`${blogID}`),
-                userId : new mongoose.Types.ObjectId(`${req.user._id}`),
                 createdAt : {
                     $gte : sevenDaysAgo
                 }
@@ -91,21 +107,12 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
                 _id : {
                     $dateToString : {
                         format : "%Y-%m-%d",
-                        date : "$createdAt"
+                        date : "$createdAt",
+                        timezone : timezone
                     }
                     },
-                    totalViews : {$sum : 1}
+                totalStats : {$sum : 1}
                 },            
-        },{
-            $sort : {
-                "_id" : 1
-            }
-        },{
-            $project : {
-                _id : 0,
-                "dates" : "$_id",
-                totalViews : 1
-            }
         }
     ]);
 
@@ -121,35 +128,29 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
         },
         {
             $group : {
-                _id : {
-                    $dateToString : {
-                        format : "%Y-%m-%d",
-                        date : "$createdAt"
-                    }
-                    },
-                    totalComments : {$sum : 1}
+                    _id : {
+                         $dateToString : 
+                            {
+                                format : "%Y-%m-%d",
+                                date : "$createdAt",
+                                timezone : timezone
+                            }   
+                        },
+                    totalStats : {$sum : 1}
                 },            
-        },{
-            $sort : {
-                "_id" : 1
-            }
-        },{
-            $project : {
-                _id : 0,
-                "dates" : "$_id",
-                totalComments : 1
-            }
         }
     ]);
 
- 
+    const weeklyLikes = await mappingLikesAndDates(likeStatsWeekly, startDay, endDay, "likes");
+    const weeklyViews = await mappingLikesAndDates(viewStatsWeekly, startDay, endDay, "views");
+    const weeklyComments = await mappingLikesAndDates(commentStatsWeekly, startDay, endDay, "comments");
 
     return res.status(200).json({
         success : true,
         message : "stats weekly",
-        weeklyLikes : likeStatsWeekly,
-        weeklyViews : viewStatsWeekly,
-        weeklyComments : commentStatsWeekly
+        weeklyLikes,
+        weeklyViews ,
+        weeklyComments 
     })
 });
 

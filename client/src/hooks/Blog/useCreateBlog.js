@@ -3,18 +3,19 @@ import useBlogStore from "../../store/useBlogStore";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import useAuthFetch from "../../utils/authFetch";
+import { useNavigate } from "react-router-dom";
 
 const useCreateBlog = ()=>{
     const[loading, setLoading] = useState(false);
     const {auth} = useAuthContext();
-    const {setBlog} = useBlogStore();
     const {authFetch} = useAuthFetch();
+    const navigate = useNavigate();
 
     const createBlog = async({author,coverImage, title, content, status}) =>{
         setLoading(true);
         if(!checkFields({author,title, content, coverImage, status})){
             setLoading(false);
-            return;
+            return false;
         }
         try {
             const response = await authFetch(`http://localhost:3001/api/v1/blog/newBlog`,{
@@ -32,7 +33,7 @@ const useCreateBlog = ()=>{
                 throw new Error(responseData.message);
             }
 
-            setBlog(responseData.data);
+            navigate(`/blog/${responseData.data._id}`);
 
         } catch (error) {
             console.log(`error in initialization of blog`,error.message);

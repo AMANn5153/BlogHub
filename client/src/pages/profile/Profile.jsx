@@ -41,7 +41,7 @@ const Profile = () => {
               <p>Creative Developer, Generative AI| JavaScript, HTML, CSS</p>
             </div>
             <div>
-             {auth._id !== profile?._id ? <FollowButton authorID={profile?._id}/>
+             {auth?._id !== profile?._id ? <FollowButton authorID={profile?._id}/>
             :<EditButton/>
             }
             </div>
