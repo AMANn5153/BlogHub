@@ -20,6 +20,7 @@ import ChangePassword from './pages/Login/ChangePassword.jsx';
 import Settings from './pages/Settings/Settings'; 
 import Profile from "./pages/profile/Profile";
 import Stats from "./pages/dashboard/Stats";
+import EditBlog from "./pages/createBlog/EditBlog";
 
 function App() {
   return (
@@ -35,10 +36,10 @@ function App() {
       <Route path='/signup' element={<><SignupProvider><Signup/></SignupProvider></>}></Route>
       <Route path='/upload' element={<><SignupProvider><UploadImage/></SignupProvider></>}></Route>
       <Route path='/createpassword' element={<><SignupProvider><CreatePassword/></SignupProvider></>}></Route>
-      <Route path='/createBlog' element={
-      <EditorContextProvider purpose="blog">
+      <Route path='/createBlog/edit/:blogId?' element={
+      <EditorContextProvider purpose="edit">
         <PrivateRoute>
-          <CreateBlog/>
+          <EditBlog/>
         </PrivateRoute>
       </EditorContextProvider>
       }> 

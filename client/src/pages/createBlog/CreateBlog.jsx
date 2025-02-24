@@ -5,35 +5,14 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 import useCreateBlog from "../../hooks/Blog/useCreateBlog";
 import useEditorContext from "../../components/textEditor/EditorContext/EditorContext";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const CreateBlog = () => {
+const CreateBlog = (props) => {
+  const {setConvertedContent, convertedContent, setHeading, heading, setCoverImage, coverImage} = props;
+  console.log(convertedContent)
   const { auth } = useAuthContext();
   const { createBlog, loading } = useCreateBlog();
   const { editor } = useEditorContext();
-
-  // blog already exists in the local storage
-  const blog = JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`));
-
-  const [convertedContent, setConvertedContent] = useState(
-    blog ? blog.html : ""
-  );
-
-  const [heading, setHeading] = useState(blog ? blog.title : "");
-
-  const [coverImage, setCoverImage] = useState(blog ? blog.cover : "");
-
-  // create and save blog to local storage
-  useEffect(() => {
-    localStorage.setItem(
-      `user-${auth._id}-Blog-1`,
-      JSON.stringify({
-        author: auth._id,
-        title: heading,
-        cover: coverImage,
-        html: convertedContent,
-      })
-    );
-  }, [heading, convertedContent, coverImage]);
 
   const handlePublish = async () => {
     await createBlog({

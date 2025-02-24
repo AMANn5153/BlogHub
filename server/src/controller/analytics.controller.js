@@ -4,6 +4,7 @@ const Like = require("../models/like.model");
 const mongoose = require("mongoose");
 const Comments = require("../models/comments.model");
 const moment = require("moment-timezone");
+const { listenerCount } = require("../models/user.model");
 
 
 const mappingLikesAndDates = (stats, startDay, endDay, statsType) => {
@@ -59,22 +60,25 @@ const analytics = asyncHandler(async (req, res, next) => {
 });
 
 
-const statsWeekly = asyncHandler(async (req, res, next) => {
+const statsLineChart = asyncHandler(async (req, res, next) => {
     const {blogID} = req.query;
+    let {period} = req.query;
     const timezone = "Asia/Kolkata";
 
     const endDay = moment.tz(timezone).endOf("day")
-    const startDay = moment.tz(timezone).subtract(6, "days").startOf("day")
+    const startDay = moment.tz(timezone).subtract(period, "days").startOf("day")
 
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const timePassed = new Date();
+    timePassed.setDate(timePassed.getDate() - period);
 
-    const likeStatsWeekly = await Like.aggregate([
+    
+
+    const likeStats = await Like.aggregate([
         {
             $match : {
                 blogId : new mongoose.Types.ObjectId(`${blogID}`),
                 createdAt : {
-                    $gte : sevenDaysAgo
+                    $gte : timePassed
                 }
             }
         },
@@ -93,12 +97,12 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
     ]);
 
 
-    const viewStatsWeekly = await Views.aggregate([
+    const viewStats = await Views.aggregate([
         {
             $match : {
                 blogId : new mongoose.Types.ObjectId(`${blogID}`),
                 createdAt : {
-                    $gte : sevenDaysAgo
+                    $gte : timePassed
                 }
             }
         },
@@ -117,12 +121,12 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
     ]);
 
 
-    const commentStatsWeekly = await Comments.aggregate([
+    const commentStats = await Comments.aggregate([
         {
             $match : {
                 blogId : new mongoose.Types.ObjectId(`${blogID}`),
                 createdAt : {
-                    $gte : sevenDaysAgo
+                    $gte : timePassed
                 }
             }
         },
@@ -141,21 +145,30 @@ const statsWeekly = asyncHandler(async (req, res, next) => {
         }
     ]);
 
-    const weeklyLikes = await mappingLikesAndDates(likeStatsWeekly, startDay, endDay, "likes");
-    const weeklyViews = await mappingLikesAndDates(viewStatsWeekly, startDay, endDay, "views");
-    const weeklyComments = await mappingLikesAndDates(commentStatsWeekly, startDay, endDay, "comments");
+
+
+    const likes = await mappingLikesAndDates(likeStats, startDay, endDay, "likes");
+    const views = await mappingLikesAndDates(viewStats, startDay, endDay, "views");
+    const comments = await mappingLikesAndDates(commentStats, startDay, endDay, "comments");
+
+    likes.push( likeStats.length);
+    views.push( viewStats.length);
+    comments.push(commentStats.length);
 
     return res.status(200).json({
         success : true,
         message : "stats weekly",
-        weeklyLikes,
-        weeklyViews ,
-        weeklyComments 
+        likes,
+        views ,
+        comments,
     })
 });
 
 
+
+
+
 module.exports = {
     analytics,
-    statsWeekly
+    statsLineChart,
 }

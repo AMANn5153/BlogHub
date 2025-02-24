@@ -3,16 +3,16 @@ import useAuthFetch from "../../utils/authFetch";
 import useAnalyticsStore from "../../store/useAnalyticsStore";
 import { toast } from "react-toastify";
 
-const useGetWeeklyStats = (blogID) => {
+const useGetLineChartData = (blogID, period) => {
     const [isWeeklyLoading, setWeeklyLoading] = useState(false);
-    const {setLikeWeekly, setViewWeekly, setCommentsWeekly} = useAnalyticsStore();
+    const {setLike, setView, setComments} = useAnalyticsStore();
     
     const {authFetch} = useAuthFetch();
     useEffect(()=>{
         const getWeeklyStats = async() => {
             setWeeklyLoading(true);
             try{
-                const response = await authFetch(`http://localhost:3001/api/v1/analytics/getLikeWeeklyStats?blogID=${blogID}`, {
+                const response = await authFetch(`http://localhost:3001/api/v1/analytics/stats?blogID=${blogID}&period=${period}`, {
                     method : "GET",
                     headers:{
                         "content-type" : "application/json",
@@ -25,9 +25,9 @@ const useGetWeeklyStats = (blogID) => {
                     throw new Error(responseData.message);
                 }
 
-                setLikeWeekly(responseData.weeklyLikes);
-                setViewWeekly(responseData.weeklyViews);
-                setCommentsWeekly(responseData.weeklyComments);
+                setLike(responseData.likes);
+                setView(responseData.views);
+                setComments(responseData.comments);
 
             }
             catch(error){
@@ -47,10 +47,10 @@ const useGetWeeklyStats = (blogID) => {
             }
         }
         getWeeklyStats();
-    },[blogID]);
+    },[blogID, period]);
 
     return {isWeeklyLoading};
 }
 
 
-export default useGetWeeklyStats;
+export default useGetLineChartData;

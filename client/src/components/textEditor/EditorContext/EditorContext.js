@@ -17,6 +17,10 @@ export const EditorContextProvider = ({children, purpose}) => {
             return JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`))?.html;
         }
 
+        else if(purpose === "edit"){
+            return JSON.parse(localStorage.getItem(`user-${auth._id}-edit`))?.html;
+        }
+
         else if(purpose === "comment"){
             return  "";
         }

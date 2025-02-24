@@ -1,6 +1,6 @@
 import useAuthContext from "../context/authContext/useAuthContext";
-import useLogout from "../hooks/logout/useLogout";
 import { useNavigate } from "react-router-dom";
+import Alert from "../components/Alert/Alert";
 
 const useRefreshToken = () =>{
     const {setAuth} = useAuthContext();
@@ -35,13 +35,10 @@ const useAuthFetch = () => {
         if(options.body && ['POST', 'PUT', 'PATCH'].includes(options.method)){
             cloneBody = options.body instanceof FormData ? options.body : options.body;
         }
-
+        //
         options.credentials = "include";
 
-        let response = await fetch (apiUrl, options);
-
-        console.log(response);
-        
+        let response = await fetch (apiUrl, options);        
 
         if(response.status === 401){
             await refreshToken();

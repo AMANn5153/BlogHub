@@ -55,7 +55,7 @@ const addSubscriber = asyncHandler(async (req, res, next)=>{
 const getSubscribed = asyncHandler(async(req, res, next)=>{
     const _id = req.query._id;
 
-    if(_id){
+    if(!_id){
         return res.status(401).json({
             success : false,
             message : "user not found",
@@ -63,7 +63,7 @@ const getSubscribed = asyncHandler(async(req, res, next)=>{
     }
     
     const subscribed = await Subscribers.find({
-        userId : _id
+        userId : new mongoose.Types.ObjectId(`${_id}`)
     });
 
     res.status(200).json({

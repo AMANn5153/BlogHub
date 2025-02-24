@@ -2,9 +2,9 @@ import { create } from "zustand";
 
 const useAnalyticsStore = create((set)=>({
     totalAnalytics: {},
-    likeWeekly : [],
-    viewWeekly : [],
-    commentsWeekly : [],
+    like : [],
+    view : [],
+    comment : [],
     
     setTotalAnalytics : (stats)=>{
         set((state)=>{
@@ -12,21 +12,21 @@ const useAnalyticsStore = create((set)=>({
     });
     },
 
-    setLikeWeekly : (stats)=>{
+    setLike : (stats)=>{
         set((state)=>{
-            return {likeWeekly: [...stats]}
+            return {like: [...stats]}
         })
     },
 
-    setViewWeekly : (stats)=>{
+    setView : (stats)=>{
         set((state)=>{
-            return {viewWeekly : [...stats]}
+            return {view: [...stats]}
         })
     },
 
-    setCommentsWeekly : (stats)=>{
+    setComments : (stats)=>{
         set((state)=>{
-            return {commentsWeekly : [...stats]}
+            return {comment : [...stats]}
         })
     }
 }));

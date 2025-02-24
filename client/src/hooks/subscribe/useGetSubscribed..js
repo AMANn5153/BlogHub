@@ -15,7 +15,7 @@ const useGetSubscribed = (_id) =>{
         const getSubscribed = async()=>{
             try{
                 setIsGetSubscribed(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/subscribe/getSubscribed?_id=${_id}`,{
+                const response = await fetch(`http://localhost:3001/api/v1/subscribe/getSubscribed?_id=${_id}`,{
                     method: "GET",
                     Credentials : "include",
                 });

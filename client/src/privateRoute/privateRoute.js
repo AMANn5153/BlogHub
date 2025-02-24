@@ -6,7 +6,7 @@ const PrivateRoute = ({children})=>{
     const {auth} = useAuthContext();
     return (
         <>
-            {auth ? children : <Navigate to="/"/>}
+            {auth ? children :<> <Navigate to="/"/></>}
         </>
     )
 }
