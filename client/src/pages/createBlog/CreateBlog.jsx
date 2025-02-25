@@ -4,15 +4,43 @@ import parse from "html-react-parser";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import useCreateBlog from "../../hooks/Blog/useCreateBlog";
 import useEditorContext from "../../components/textEditor/EditorContext/EditorContext";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { FaHeading } from "react-icons/fa6";
+import {useEditorStateContext} from "../../context/editorStateContext/EditorStateContext";
+import Heading from "@tiptap/extension-heading";
 
-const CreateBlog = (props) => {
-  const {setConvertedContent, convertedContent, setHeading, heading, setCoverImage, coverImage} = props;
-  console.log(convertedContent)
+const CreateBlog = () => {
   const { auth } = useAuthContext();
   const { createBlog, loading } = useCreateBlog();
+  const {blogId} = useParams();
   const { editor } = useEditorContext();
+  const { editorState } = useEditorStateContext();
+
+
+  // blog already exists in the local storage
+  const {title , html, cover, id} = editorState
+
+
+  const [convertedContent, setConvertedContent] = useState(
+   html 
+  );
+
+  const [heading, setHeading] = useState(title );
+
+  const [coverImage, setCoverImage] = useState(cover);
+
+  // create and save blog to local storage
+  useEffect(() => {
+    localStorage.setItem(
+      !blogId ? `user-${auth._id}-Blog-1` : `user-${auth._id}-${id}-edit`,
+      JSON.stringify({
+        author: auth._id,
+        title: heading,
+        cover: coverImage,
+        html: convertedContent,
+      })
+    );
+  }, [heading, convertedContent, coverImage]);
 
   const handlePublish = async () => {
     await createBlog({

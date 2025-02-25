@@ -91,7 +91,7 @@ const Blogs = () => {
     <>
       
       <div className=" grid w-full grid-cols-[1fr_12fr] gap-4 ">
-        <div className="grid-cols-1 h-screen  border-black-400 rounded-2xl sticky top-0 ">
+        <div className=" bg-gradient-to-br from-white to-stone-50 grid-cols-1 h-screen  border-black-400 rounded-2xl sticky top-0 ">
           <div className="h-full rounded-2xl flex flex-col justify-center p-5 items-center">
             <div className="flex flex-col justify-around h-1/2 w-full items-center">
               <div className="text-3xl font-bold hover:cursor-pointer flex flex-col justify-center">
@@ -124,7 +124,7 @@ const Blogs = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white overflow-hidden max-w-full rounded-2xl  ">
+        <div className="bg-gradient-to-br from-white to-stone-100 overflow-hidden max-w-full rounded-2xl  ">
           <div className=" rounded-lg border overflow-hidden border-10 border-red w-full flex flex-col justify-center items-center">
             <img
               src={coverImage}

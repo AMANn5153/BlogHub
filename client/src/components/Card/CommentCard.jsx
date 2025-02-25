@@ -14,6 +14,10 @@ import useLikeStore from "../../store/useLikeStore";
 import {Link, useNavigate} from "react-router-dom";
 import { FcLike } from "react-icons/fc";
 import Dropdown from "../Dropdown/Dropdown";
+import {useEditorStateContext} from "../../context/editorStateContext/EditorStateContext";
+import { CiEdit } from "react-icons/ci";
+import timeDuration from "../../utils/time";
+import { SlOptions } from "react-icons/sl";
 
 
 const CommentCard = ({comment}) => {
@@ -21,6 +25,7 @@ const CommentCard = ({comment}) => {
   const {likePostComment} = useLikePostComment();
   const {CommentLike} = useLikeStore();
   const {auth} = useAuthContext();
+  const {setEditorState} = useEditorStateContext();
   
   const changeLike = async () =>{
     await likePostComment(comment._id);
@@ -31,9 +36,9 @@ const CommentCard = ({comment}) => {
     setReply(true);
   }
 
+  const{duration, time, dateString} = timeDuration(comment?.createdAt);
 
   const likedByUser = CommentLike.length > 0 ? CommentLike?.some((like)=>like.userId === auth._id && like.commentId === comment._id ) : false;
-
 
   return (
     <>
@@ -43,11 +48,19 @@ const CommentCard = ({comment}) => {
         </div>
         <div className=" grid-col-2 grid-rows-[12fr_1fr]">
           <div className="  border border-1 rounded-xl ">
+            <div className="flex flex-row justify-between items-center">
             <Link to={{pathname:`/profile/${comment?.author?._id}`}}>
-              <div className="m-5 text-black hover:underline hover:text-cyan-700 font-semibold"> 
+              <div className="ml-2 mt-2 text-black hover:underline hover:text-cyan-700 font-semibold"> 
                 {comment?.author?.name}
               </div>
             </Link>
+            <div>
+              <button className=" m-2 btn btn-circle btn-sm btn-ghost">
+                <SlOptions />
+              </button>
+            </div>
+            </div>
+            <div className="ml-2 "><p className="text-sm">{dateString}</p></div>
             <Link to={{pathname:`/comment/${comment._id}`}}>
               <div>
                 <p className="tiptap">{parse(comment?.comment)}</p>
@@ -55,7 +68,7 @@ const CommentCard = ({comment}) => {
             </Link>
           </div>
         
-          <div className=" card-footer flex flex-row gap-4 items-start w-full">
+          <div className=" card-footer flex flex-row gap-2 items-start w-full">
             {
               reply 
               ?
@@ -66,19 +79,20 @@ const CommentCard = ({comment}) => {
               </>
               :
               <>
-              <button className="btn btn-ghost text-2xl tooltip tooltip-bottom hover:cursor-pointer hover:bg-red-600"
+              <button className="btn btn-ghost btn-sm btn-circle tooltip tooltip-bottom hover:cursor-pointer"
               onClick={changeLike}
               data-tip="like">
               {
-              likedByUser?<FcLike/>:
-              <IoIosHeartEmpty />
+              likedByUser?<FcLike size={20}/>:
+              <IoIosHeartEmpty size={20}/>
               } 
               </button>
-              <button className="btn btn-ghost text-2xl tooltip tooltip-bottom hover:cursor-pointer"
+              <button className="btn btn-ghost btn-sm btn-circle tooltip tooltip-bottom hover:cursor-pointer"
                 onClick={changeReply}
                 data-tip="reply">
-                  <GoComment />
+                  <GoComment size={20}/>
               </button>
+
               </>
             }
           </div>
@@ -122,7 +136,7 @@ const Reply = ({removeReply, commentId})=>{
           <div className="flex gap-4 flex-row">
             <button
               type="submit"
-              className={`btn  btn-primary `}
+              className={`btn btn-sm btn-circle btn-primary `}
               onClick={
                 auth
                   ? handleSubmit
@@ -131,7 +145,7 @@ const Reply = ({removeReply, commentId})=>{
             >
               Comment
             </button>
-            <button className="btn  btn-primary btn-ghost" onClick={()=>removeReply(false)}>
+            <button className="btn btn-sm btn-circle btn-primary btn-ghost" onClick={()=>removeReply(false)}>
               Dismiss
             </button>
           </div>

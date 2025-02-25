@@ -14,6 +14,7 @@ import useGetAllBlogsOfUser from "../../hooks/analytics/useGetAllBlogsOfUser";
 import { Link } from "react-router-dom";
 import StatsCard from "../../components/Stats/StatsCard";
 import CreateBlog from "../createBlog/CreateBlog";
+import { useEditorStateContext } from "../../context/editorStateContext/EditorStateContext";
 
 const Dashboard = () => {
   const { auth } = useAuthContext();
@@ -61,6 +62,8 @@ const Accordion = ({ blog }) => {
   const publishedAt = new Date(blog.createdAt).toLocaleDateString("en-US", {
     timeZone: "Asia/Kolkata",
   });
+
+  const {setEditorState} = useEditorStateContext();
 
   return (
     <div className="grid p-10 grid-cols-[4fr_2fr_2fr] bg-white rounded-lg shadow-md ">
@@ -116,13 +119,17 @@ const Accordion = ({ blog }) => {
               <Link
                 className="w-full justify-center"
                 to={{
-                  pathname: `/createBlog/edit/${blog._id}`,
+                  pathname: `/createBlog/${blog._id}`,
                 }}
-                state= {{
-                  title: blog?.heading,
-                  html: blog?.content,
-                  cover: blog?.coverImage,
-                }}
+
+                onClick={()=>setEditorState({
+                  id: blog._id,
+                  title: blog.heading,
+                  html: blog.content,
+                  cover: blog.coverImage,
+                  edit : true,
+                })}
+
               >
                 Edit
               </Link>
