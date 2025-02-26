@@ -50,7 +50,69 @@ const toggleSaveBlog = asyncHandler(async (req, res, next) => {
 
 });
 
+const getAllSaves = asyncHandler(async(req, res, next)=>{
+    const saves = await Saves.aggregate([
+        {
+            $match:{
+                userId : new mongoose.Types.ObjectId(`${req.user._id}`)
+            }
+        },
+        {
+            $lookup:{
+                from : "blogs",
+                localField : "blogId",
+                foreignField : "_id",
+                as : "blog",
+                pipeline :[
+                    {
+                        $lookup:{
+                            from : "users",
+                            localField : "author",
+                            foreignField : "_id",
+                            as : "author",
+                            pipeline : [
+                                {
+                                    $project : {
+                                        _id : 1,
+                                        "name" : 1,
+                                        "profilePic" : 1,
+                                    }
+                                }
+                            ]
+                        }
+                    },{
+                        $addFields : {
+                            author : {
+                                $first : "$author"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $unwind : "$blog"
+        },{
+            $project : {
+                _id:0,
+                userId :0,
+                blogId : 0
+            }
+        }
+    ])
+
+    res.status(200).json({
+        success : true,
+        message : "saves fetched successfully",
+        data : saves
+    })
+
+})
+
+
+
 
 module.exports = {
-    toggleSaveBlog
+    toggleSaveBlog,
+    getAllSaves
 }

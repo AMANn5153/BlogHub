@@ -25,10 +25,10 @@ export const Signin = () => {
     }
 
   return (
-    <div className="bg-slate-400 flex flex-col items-center justify-center w-full h-screen">
-        <div className="bg-slate-100 rounded-md flex flex-col items-center justify-around w-4/5 h-4/5">
+    <div className="bg-gradient-to-br from-white to-stone-200 flex flex-col items-center justify-center w-full h-screen">
+        <div className=" rounded-md flex flex-col items-center justify-around w-4/5 h-4/5">
             <div className="flex flex-col items-start justify-around">
-                <h1 className="text-6xl font-bold">Sign up</h1>
+                <h1 className="text-6xl font-bold text-black">Sign up</h1>
             </div>
             <div className="flex flex-col items-start w-1/2 h-4/5 justify-around">
 
@@ -64,7 +64,7 @@ export const Signin = () => {
                     </button>
                     </NavLink>
                 
-                    <NavLink to="/login">already have an account? <span className="text-red-500">Login</span></NavLink>
+                    <NavLink to="/login" className="text-black">already have an account? <span className="text-red-500">Login</span></NavLink>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@ const UploadImage = () => {
 
 
     return (
-        <div className='flex flex-col h-screen w-full  items-center justify-around bg-white'>
+        <div className='flex flex-col h-screen w-full  items-center justify-around bg-gradient-to-br from-white to-stone-100'>
             <div className='w-full flex items-center justify-center'><h1 className='text-2xl text-black font-bold'>Upload Image</h1></div>
             <div className=" border border-green-300 rounded-full overflow-hidden w-72 h-72">
                 <input type="file" className=" absolute z-0 w-72 h-72 opacity-0 hover:cursor-pointer" onChange={handleChange} />
@@ -139,8 +139,8 @@ const CreatePassword = ()=>{
     return (
         <>
         {loading ? <span className="loading loading-ring loading-lg"></span>:
-        <div className='flex flex-col items-center justify-around w-full h-screen'>
-        <h1 className='text-2xl font-bold'>Create Password</h1>
+        <div className='flex bg-gradient-to-br from-white to-stone-200 flex-col items-center justify-around w-full h-screen'>
+        <h1 className='text-2xl font-bold text-black'>Create Password</h1>
             <div className="flex flex-col items-center w-full h-4/5 justify-evenly">
                 <div className="flex w-72 flex-row items-center justify-end ">
                     <input className='absolute  z-0 w-72 outline-none rounded-md p-2 h-10' type={showPassword ? "text" : "password"}

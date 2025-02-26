@@ -18,6 +18,8 @@ import {useEditorStateContext} from "../../context/editorStateContext/EditorStat
 import { CiEdit } from "react-icons/ci";
 import timeDuration from "../../utils/time";
 import { SlOptions } from "react-icons/sl";
+import { MdOutlineDelete } from "react-icons/md";
+import useDeleteComment from "../../hooks/Comment/useDeleteComment";
 
 
 const CommentCard = ({comment}) => {
@@ -26,6 +28,8 @@ const CommentCard = ({comment}) => {
   const {CommentLike} = useLikeStore();
   const {auth} = useAuthContext();
   const {setEditorState} = useEditorStateContext();
+  const {deleteCommentLoading, deleteComment} = useDeleteComment();
+  const navigate = useNavigate();
   
   const changeLike = async () =>{
     await likePostComment(comment._id);
@@ -36,7 +40,16 @@ const CommentCard = ({comment}) => {
     setReply(true);
   }
 
-  const{duration, time, dateString} = timeDuration(comment?.createdAt);
+  const handleEdit = () =>{
+    setEditorState(comment.comment);
+    navigate(`/editComment/${comment._id}`);
+  }
+
+  const handleDelete = async () => {
+    await deleteComment(comment._id);
+  }
+
+  const{ dateString} = timeDuration(comment?.createdAt);
 
   const likedByUser = CommentLike.length > 0 ? CommentLike?.some((like)=>like.userId === auth._id && like.commentId === comment._id ) : false;
 
@@ -54,11 +67,18 @@ const CommentCard = ({comment}) => {
                 {comment?.author?.name}
               </div>
             </Link>
-            <div>
-              <button className=" m-2 btn btn-circle btn-sm btn-ghost">
+            {comment.author._id === auth._id ?
+            <div className="dropdown dropdown-bottom ">
+              <button tabIndex={0} className=" m-2 btn btn-circle btn-sm btn-ghost">
                 <SlOptions />
               </button>
-            </div>
+              <ul tabIndex={0} className=" bg-gradient-to-br from-white to-stone-200 flex flex-col dropdown-content menu-sm bg-slate-100 rounded-box z-[1] w-52 p-2 shadow">
+                <li className="btn btn-ghost" onClick={handleEdit} >Edit <CiEdit /></li>
+                <li className="btn btn-ghost hover:bg-red-600"
+                 onClick={handleDelete} >{deleteCommentLoading ? 
+                 <span className="loading loading-ring"></span> : ("Delete")} <MdOutlineDelete /></li>
+              </ul>
+            </div>: null}
             </div>
             <div className="ml-2 "><p className="text-sm">{dateString}</p></div>
             <Link to={{pathname:`/comment/${comment._id}`}}>
@@ -103,7 +123,7 @@ const CommentCard = ({comment}) => {
 };
 
 
-const Reply = ({removeReply, commentId})=>{
+export const Reply = ({removeReply, commentId})=>{
   const {postReply} = usePostReply();
   const { editor } = useEditorContext();
   const [reply, setReply] = useState(null);
@@ -136,7 +156,7 @@ const Reply = ({removeReply, commentId})=>{
           <div className="flex gap-4 flex-row">
             <button
               type="submit"
-              className={`btn btn-sm btn-circle btn-primary `}
+              className={`btn  btn-primary `}
               onClick={
                 auth
                   ? handleSubmit
@@ -145,7 +165,7 @@ const Reply = ({removeReply, commentId})=>{
             >
               Comment
             </button>
-            <button className="btn btn-sm btn-circle btn-primary btn-ghost" onClick={()=>removeReply(false)}>
+            <button className="btn  btn-primary btn-ghost" onClick={()=>removeReply(false)}>
               Dismiss
             </button>
           </div>

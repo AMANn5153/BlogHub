@@ -55,7 +55,7 @@ const TextEditor = ({
     <>
       {!coverImage ? (
         <div className=" flex rounded-md border-2 border-green-300 flex-col justify-center items-center w-48 h-14">
-          <h1 className="text-black text-xl font-bold font-sans m-2">
+          <h1 className="text-black text-xl font-bold m-2">
             Cover Image
           </h1>
           <input

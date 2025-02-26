@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 const LoginModal = () =>{
     return(
         <dialog id="my_modal_3" className="modal glass-effect text-black ">
-        <div className="modal-box bg-white w-full max-h-xl h-1/2 max-w-5xl">
+        <div className="modal-box bg-gradient-to-br from-white to-gray-400 w-full max-h-xl h-1/2 max-w-5xl">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-sm btn-circle btn-secondary absolute right-2 top-2">

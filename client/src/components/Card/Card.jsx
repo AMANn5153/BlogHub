@@ -22,10 +22,9 @@ const Card = ({
   const {auth} = useAuthContext();
   const { duration, time, dateString } = timeDuration(createdAt);
   const readTime = Math.ceil(parse(content).length/200);
-  console.log(author._id);
   return (
     <>
-        <div className="grid grid-cols-[4fr_2fr] bg-white  ">
+        <div className="bg-white grid grid-cols-[4fr_2fr]   ">
           <div className="flex flex-col  m-2 p-12 cursor-pointer ">
             <div className="flex flex-row gap-2 items-start">
               <Dropdown author = {author} createdAt={createdAt}/>

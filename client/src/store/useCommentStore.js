@@ -11,6 +11,14 @@ const useCommentStore = create((set) => ({
         set(() => ({ comments: [...newComments] }));
     },
 
+    deleteCommentThread: (commentId)=>{
+        set((state)=>{
+            return {
+                comments : state.comments.filter((comment)=>comment._id !== commentId)
+            }
+        })
+    },
+
     setReply: (newReply) => {
         set((state) => {
             if (state.comments.length > 0) {

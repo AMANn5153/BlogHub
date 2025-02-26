@@ -209,10 +209,121 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
     });
 });
 
+const editComment = asyncHandler(async(req, res, next)=>{
+    const {commentId} = req.query;
+    const {comment} = req.body;
+
+    if(!commentId){
+        throw new ApiError("commentId is required", 400, "editComment");
+    }
+
+    if(!comment){
+        throw new ApiError("comment is required", 400, "editComment");
+    }
+
+    const commentExists = await Comments.findOne({
+        _id : new mongoose.Types.ObjectId(`${commentId}`)
+    })
+
+    if(!commentExists){
+        throw new ApiError("comment not found", 404, "editComment");
+    }
+
+    const updatedComment = await Comments.findOneAndUpdate({
+        _id : new mongoose.Types.ObjectId(`${commentId}`)
+
+    },{
+        $set : {
+            comment : comment
+        }
+    },{
+        new:true
+    });
+
+    const editedComment = await Comments.aggregate([
+        {
+            $match : {
+                _id : updatedComment._id
+            }
+        },
+        {
+            $lookup:{
+                from : "blogs",
+                localField : "blogId",
+                foreignField : "_id",
+                as : "blog",
+                pipeline:[
+                    {
+                        $project: {
+                            "_id":1,
+                            "heading" : 1,
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $lookup:{
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author",
+                pipeline : [
+                    {
+                        $project : {
+                            "_id" : 1,
+                            "name" : 1,
+                            "profilePic" : 1,
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $unwind : "$author"
+        }
+    ]);
+
+    res.status(200).json({
+        success : true,
+        message : "comment updated successfully",
+        data : editedComment
+    });
+
+})
+
+const deleteComment = asyncHandler(async(req, res, next)=>{
+    const {commentId} = req.query;
+
+    if(!commentId){
+        throw new ApiError("Comment id is required", 400, "deleteComment");
+    }
+
+    const commentExists = await Comments.find({_id : new mongoose.Types.ObjectId(`${commentId}`)});
+
+    if(!commentExists){
+        throw new ApiError("Comment not found", 404, "deleteComment");
+    }
+
+    const deletedThread =await Comments.deleteMany({parentId : new mongoose.Types.ObjectId(`${commentId}`)});
+    const deletedComment = await Comments.deleteOne({_id : new mongoose.Types.ObjectId(`${commentId}`)});
+
+    res.status(200).json({
+        success : true,
+        message : "Comment deleted successfully",
+        data : {
+            deletedThread,
+            deletedComment,
+        }
+    });
+
+})
 
 module.exports = {
     newComment,
     newReply,
     getComments,
-    getCommentThread
+    getCommentThread,
+    editComment,
+    deleteComment
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useContext, createContext, useMemo } from "react";
 import useAuthContext from "../../../context/authContext/useAuthContext";
 import extensions from "../EditorExtension/EditorExtension";
@@ -21,12 +22,17 @@ export const EditorContextProvider = ({children, purpose}) => {
         }
 
         else if(purpose === "comment"){
-            return  editorState || "";
+            return "";
         }
 
         else if(purpose === "reply"){
+            return "";
+        }
+
+        else if(purpose === "commentEdit"){
             return editorState || "";
         }
+
     }, [purpose])
 
 

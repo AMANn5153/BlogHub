@@ -21,7 +21,7 @@ import Profile from "./pages/profile/Profile";
 import Stats from "./pages/dashboard/Stats.jsx";
 import CreateBlog from './pages/createBlog/CreateBlog.jsx';
 import EditorStateContext from './context/editorStateContext/EditorStateContext.js';
-
+import CommentEdit from './pages/Comment/CommentEdit.jsx';
 function App() {
   return (
     <>
@@ -54,6 +54,7 @@ function App() {
               <Dashboard/>
             </PrivateRoute>
         }></Route>
+        <Route path="/editComment/:commentId" element={<PrivateRoute><CommentEdit/></PrivateRoute>}></Route>
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>}></Route>
         <Route path="dashboard/stats/:blogID" element={<PrivateRoute><Stats/></PrivateRoute>}></Route>
       </Route>

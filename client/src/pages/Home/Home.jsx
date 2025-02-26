@@ -26,7 +26,7 @@ const Home = () => {
           <h1 className="text-4xl font-bold">Blogs</h1>
         </div>
         <div className="flex w-full h-full flex-row items-center justify-around p-5 flex-wrap">
-          <div className="w-full bg-stone-200 rounded-lg h-20 flex flex-row items-center justify-around">
+          <div className="w-full bg-gradient-to-br from-white to-stone-100 rounded-lg h-20 flex flex-row items-center justify-around">
             <input
               type="search"
               placeholder="what are you looking for?"

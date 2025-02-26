@@ -70,11 +70,11 @@ const CreateBlog = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[12fr_1fr] bg-white">
-        <div className="flex bg-white flex-col h-auto ">
+      <div className="grid grid-cols-[12fr_1fr] bg-gradient-to-br from-white to-stone-100">
+        <div className="flex flex-col h-auto ">
           <div
             role="tablist"
-            className="tabs m-5 bg-white text-black tabs-bordered"
+            className="tabs m-5  text-black tabs-bordered"
           >
             <input
               type="radio"
@@ -86,7 +86,7 @@ const CreateBlog = () => {
             />
             <div
               role="tabpanel"
-              className="tab-content bg-white rounded-box p-6"
+              className="tab-content rounded-box p-6"
             >
               <TextEditor
                 setConvertedContent={setConvertedContent}
@@ -116,7 +116,7 @@ const CreateBlog = () => {
           </div>
           <div className="flex flex-row flex-shrink-0 m-5 justify-around items-center w-60 h-60">
             <button
-              className="btn  color-white btn btn- hover:btn-info hover:text-white bg-blue-500 rounded rounded-md  text-white font-bold py-2 px-4 rounded"
+              className="btn  color-white  hover:btn-info hover:text-white bg-blue-500 rounded rounded-md  text-white font-bold py-2 px-4 rounded"
               onClick={handleSave}
             >
               Save
@@ -129,7 +129,7 @@ const CreateBlog = () => {
             </button>
           </div>
         </div>
-        <div className="flex m-5 flex-col justify-start items-center bg-white">
+        <div className="flex m-5 flex-col justify-start items-center">
           <Link to={{ pathname: "/" }}>
           <button
             className="tooltip tooltip-bottom btn btn-circle btn-error"

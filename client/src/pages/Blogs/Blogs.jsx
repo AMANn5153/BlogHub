@@ -125,11 +125,11 @@ const Blogs = () => {
           </div>
         </div>
         <div className="bg-gradient-to-br from-white to-stone-100 overflow-hidden max-w-full rounded-2xl  ">
-          <div className=" rounded-lg border overflow-hidden border-10 border-red w-full flex flex-col justify-center items-center">
+          <div className="   overflow-hidden  w-full flex flex-col justify-center items-center">
             <img
               src={coverImage}
               alt=""
-              className="border object-contain w-full h-60 "
+              className=" object-contain w-full h-60 "
             />
           </div>
     
