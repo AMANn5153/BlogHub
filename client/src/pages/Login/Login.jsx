@@ -7,7 +7,7 @@ const Login = () => {
         usernameOrEmail: "",
         password: "",
     });
-    const {Login} = useLogin();
+    const {Login, loading} = useLogin();
 
     const handleChange = (e) => {
         setCredentials({...credentials, [e.target.name]: e.target.value});
@@ -20,8 +20,8 @@ const Login = () => {
     }
 
     return (
-        <div className = "bg-slate-400 flex flex-col items-center justify-center h-screen">
-            <div className=" bg-slate-100 flex flex-col rounded-2xl items-center justify-around h-4/5 w-2/3">
+        <div className = "bg-gradient-to-br from-white to-green-200 flex flex-col items-center justify-center h-screen">
+            <div className=" flex flex-col  items-center justify-around h-4/5 w-2/3">
             <div className="text-6xl text-slate-950 font-bold">
                 <h1>Login</h1>
             </div>
@@ -36,7 +36,9 @@ const Login = () => {
                     <div className="w-4/5 m-3 flex flex-row justify-end text-red-600  "><NavLink to="/forgetPassword" >forget password?</NavLink></div> 
                 </div>
                 <div className="w-full flex flex-row items-start justify-between">
-                    <button className="bg-lime-600 text-gray-700 p-2 rounded-md w-16" onClick={handleSubmit}>Login</button>
+                    <button className="btn bg-lime-500 hover:bg-lime-600 text-white" onClick={handleSubmit}>{
+                        loading ? <span className="loading loading-ring loading-lg"></span> : "Login"
+                        }</button>
                     <NavLink to="/signup" className="text-gray-500">Don't have an account? <span className="text-lime-600 hover:text-lime-800">Sign up</span></NavLink>
                 </div>
             </div>

@@ -9,7 +9,7 @@ const authenticate = async (req, res, next) =>{
     if (!accessToken){
         return res.status(401).json({
             status : 401,
-            message : "unauthorized"
+            message : "session expired Login again"
         })
     }
     

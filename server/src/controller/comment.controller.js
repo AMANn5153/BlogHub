@@ -89,12 +89,53 @@ const newReply = asyncHandler(async(req, res, next)=>{
         parentId : commentExists._id
     });
 
-    const populatedReply = await Comments.findOne({_id : createdReply._id}).populate("author").select("-password");
+    const populatedReply = await Comments.aggregate([
+        {
+        $match :
+            {
+                blogId : commentExists.blogId ,
+                _id : createdReply._id
+            }
+        },
+        {
+            $lookup:{
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author",
+                pipeline : [
+                    {
+                        $project : {
+                            "_id" : 1,
+                            "name" : 1,
+                            "profilePic" : 1,
+                        }
+                    },
+                ]
+            }
+        },
+        {
+            $addFields : {
+                author : {
+                    $first : "$author"
+                }
+            }
+        },
+        {
+            $lookup:{
+                from : "likes",
+                localField : "_id",
+                foreignField : "commentId",
+                as : "likes",
+            }
+        },
+
+])
 
     res.status(201).json({
         success : true,
         message : "comment created successfully",
-        data : populatedReply
+        data : populatedReply[0]
     });
 
 });
@@ -113,16 +154,51 @@ const getComments = asyncHandler(async(req, res) => {
     }
 
 
-    const comments = await Comments.find({
-        blogId : new mongoose.Types.ObjectId(`${blogId}`), 
+    const comments = await Comments.aggregate([
+        {
+        $match :
+            {
+                blogId : new mongoose.Types.ObjectId(`${blogId}`), 
+                parentId : null
+            }
+        },
+        {
+            $lookup:{
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author",
+                pipeline : [
+                    {
+                        $project : {
+                            "_id" : 1,
+                            "name" : 1,
+                            "profilePic" : 1,
+                        }
+                    },
+                ]
+            }
+        },
+        {
+            $addFields : {
+                author : {
+                    $first : "$author"
+                }
+            }
+        },
+])
+
+    const likes = await Likes.find({
+        blogId : new mongoose.Types.ObjectId(`${blogId}`),
         parentId : null
-    }).sort({createdAt : -1}).populate("author");
+    })
 
     
     res.status(200).json({
         success : true,
         message : "comments fetched successfully",
-        data : comments
+        data : comments,
+        likes : likes
     })
 });
 
@@ -148,6 +224,7 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
                 pipeline : [
                     {
                         $project : {
+                            _id :1,
                             "name" : 1,
                             "profilePic" : 1,
                         }
@@ -173,6 +250,7 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
                             [
                                 {
                                     $project : {
+                                        _id:1,
                                         "name" : 1,
                                         "profilePic" : 1,
                                     }
@@ -187,7 +265,7 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
                                 $first : "$author"
                             }
                         }
-                    }
+                    },
                 ]
             }
         },
@@ -200,12 +278,16 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
         }
     ]);
 
+    const likes = await Likes.find({
+        blogId : comment[0].blogId
+    })
 
 
     res.status(200).json({
         status : "success",
         message : "Comments retrieved successfully",
-        comments : comment
+        comments : comment,
+        likes
     });
 });
 
@@ -306,15 +388,12 @@ const deleteComment = asyncHandler(async(req, res, next)=>{
     }
 
     const deletedThread =await Comments.deleteMany({parentId : new mongoose.Types.ObjectId(`${commentId}`)});
-    const deletedComment = await Comments.deleteOne({_id : new mongoose.Types.ObjectId(`${commentId}`)});
+    const deletedComment = await Comments.findOneAndDelete({_id : new mongoose.Types.ObjectId(`${commentId}`)});
 
     res.status(200).json({
         success : true,
         message : "Comment deleted successfully",
-        data : {
-            deletedThread,
-            deletedComment,
-        }
+        data : deletedComment.blogId,
     });
 
 })

@@ -86,7 +86,7 @@ const TextEditor = ({
         onChange={changeHeading}
       ></textarea> 
       <div className=" text-wrap border-1 border-black ">
-        <div className="sticky z-[1] top-0">
+        <div className="sticky z-[1000] top-0">
           <ToolBar />
         </div>
         <div className="border border-2 rounded-lg w-full h-full ">

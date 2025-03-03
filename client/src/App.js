@@ -19,9 +19,13 @@ import ChangePassword from './pages/Login/ChangePassword.jsx';
 import Settings from './pages/Settings/Settings'; 
 import Profile from "./pages/profile/Profile";
 import Stats from "./pages/dashboard/Stats.jsx";
+import ThemeProvider from './context/themeContext/ThemeContext.js';
 import CreateBlog from './pages/createBlog/CreateBlog.jsx';
 import EditorStateContext from './context/editorStateContext/EditorStateContext.js';
 import CommentEdit from './pages/Comment/CommentEdit.jsx';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 function App() {
   return (
     <>
@@ -29,6 +33,8 @@ function App() {
     <SocketProvider>
     <EditorStateContext >
     <BrowserRouter>
+    <ThemeProvider>
+    <ScrollToTop/>
     <Routes>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/forgetPassword' element={<ForgetPassword/>}></Route>
@@ -48,17 +54,18 @@ function App() {
       <Route path='/' element={<Layout/>}>
         <Route index element={<Home/>}></Route>
         <Route path="/blog/:id" element={<Blogs/>}></Route>
-        <Route path="/comment/:id" element={<CommentThread/>}></Route>
+        <Route path="/comment/:name/:blogId/:id" element={<CommentThread/>}></Route>
         <Route path='/dashboard' element={
             <PrivateRoute>
               <Dashboard/>
             </PrivateRoute>
         }></Route>
-        <Route path="/editComment/:commentId" element={<PrivateRoute><CommentEdit/></PrivateRoute>}></Route>
+        <Route path="/editComment/:name/:blogId/:commentId" element={<PrivateRoute><CommentEdit/></PrivateRoute>}></Route>
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>}></Route>
         <Route path="dashboard/stats/:blogID" element={<PrivateRoute><Stats/></PrivateRoute>}></Route>
       </Route>
     </Routes>
+    </ThemeProvider>
   </BrowserRouter> 
   </EditorStateContext>
   <ToastContainer 
@@ -67,6 +74,17 @@ function App() {
   </AuthProvider>
   </>
   )
+}
+
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
 }
 
 export default App;

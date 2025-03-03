@@ -108,7 +108,7 @@ Inspect
 
 .tiptap ol{
   list-style-type: disc;
-  margin: 1rem;
+  margin-left: 1rem;
 }
 
 .tiptap ul{
@@ -132,10 +132,10 @@ Inspect
 
 .tiptap code{
   display : block;
-  width:50%;
+  width:80%;
   white-space: pre-wrap;
-  background-color: black;
-  color: white;
+  background-color: rgb(207, 207, 207);
+  color: black;
   text-wrap: pretty;
   padding: 0.5rem;
   border-radius: 5px;

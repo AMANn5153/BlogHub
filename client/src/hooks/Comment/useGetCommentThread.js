@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import useCommentStore from "../../store/useCommentStore";
+import useLikeStore from "../../store/useLikeStore";
 
 const useGetCommentThread = ({id}) => {
     const [commentThreadLoading, setCommentThreadLoading] = useState(true);
     const {setComment} = useCommentStore();
+    const {initialCommentLikes} = useLikeStore();
 
     useEffect(()=>{
         const getComments = async ()=>{
@@ -18,6 +20,8 @@ const useGetCommentThread = ({id}) => {
                     throw new Error(responseData.message || "Failed to fetch the comments");
                 }
                 setComment(responseData.comments);
+                
+                initialCommentLikes(responseData.likes);
             }
             catch(error){
                 console.log(error);

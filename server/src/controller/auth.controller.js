@@ -167,17 +167,17 @@ const logout = async (req, res) =>{
 
 }
 
-const forgetPassword = async(req, res) =>{
+const forgetPassword = asyncHandler(async (req, res, next) =>{
     const {email} = req.body;
 
     if(!email){
-       return new ApiError("email is required", 401, "forgetPassword");
+        throw new ApiError("email is missing", 401, "forgetPassword");
     }
 
     const userExists = await User.findOne({email});
 
     if(!userExists){
-        return new ApiError("user does not exist", 404, "user not found");
+        throw new ApiError("user does not exist", 404, "forgetPassword");
     }
 
     const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn : "10m"});
@@ -220,7 +220,7 @@ const forgetPassword = async(req, res) =>{
             });
         }
     });
-}
+});
 
 const changePassword = asyncHandler(async(req, res, next)=>{
     const {token, password, confirmPassword} = req.body;

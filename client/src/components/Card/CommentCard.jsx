@@ -21,8 +21,7 @@ import { SlOptions } from "react-icons/sl";
 import { MdOutlineDelete } from "react-icons/md";
 import useDeleteComment from "../../hooks/Comment/useDeleteComment";
 
-
-const CommentCard = ({comment}) => {
+const CommentCard = ({comment , blog}) => {
   const [reply, setReply] = useState(false);
   const {likePostComment} = useLikePostComment();
   const {CommentLike} = useLikeStore();
@@ -30,6 +29,8 @@ const CommentCard = ({comment}) => {
   const {setEditorState} = useEditorStateContext();
   const {deleteCommentLoading, deleteComment} = useDeleteComment();
   const navigate = useNavigate();
+  const {heading, id} = blog;
+
   
   const changeLike = async () =>{
     await likePostComment(comment._id);
@@ -42,7 +43,7 @@ const CommentCard = ({comment}) => {
 
   const handleEdit = () =>{
     setEditorState(comment.comment);
-    navigate(`/editComment/${comment._id}`);
+    navigate(`/editComment/${heading}/${id}/${comment._id}`);
   }
 
   const handleDelete = async () => {
@@ -51,7 +52,9 @@ const CommentCard = ({comment}) => {
 
   const{ dateString} = timeDuration(comment?.createdAt);
 
-  const likedByUser = CommentLike.length > 0 ? CommentLike?.some((like)=>like.userId === auth._id && like.commentId === comment._id ) : false;
+  const likedByUser = CommentLike.length> 0 ? CommentLike?.some((like)=>like.userId === auth._id && like.commentId === comment._id ) : false;
+
+  
 
   return (
     <>
@@ -67,7 +70,7 @@ const CommentCard = ({comment}) => {
                 {comment?.author?.name}
               </div>
             </Link>
-            {comment.author._id === auth._id ?
+            {comment?.author?._id === auth?._id ?
             <div className="dropdown dropdown-bottom ">
               <button tabIndex={0} className=" m-2 btn btn-circle btn-sm btn-ghost">
                 <SlOptions />
@@ -81,8 +84,8 @@ const CommentCard = ({comment}) => {
             </div>: null}
             </div>
             <div className="ml-2 "><p className="text-sm">{dateString}</p></div>
-            <Link to={{pathname:`/comment/${comment._id}`}}>
-              <div>
+            <Link to={{pathname:`/comment/${heading}/${id}/${comment._id}`}}>
+              <div className="tooltip tooltip-bottom" data-tip="Open comment Thread">
                 <p className="tiptap">{parse(comment?.comment)}</p>
               </div>
             </Link>
@@ -94,7 +97,7 @@ const CommentCard = ({comment}) => {
               ?
               <>
               <EditorContextProvider purpose="reply">
-                <Reply removeReply={setReply} commentId={comment._id}/>
+                <Reply removeReply={setReply} commentId={comment._id} blog={blog}/>
               </EditorContextProvider>
               </>
               :
@@ -123,12 +126,13 @@ const CommentCard = ({comment}) => {
 };
 
 
-export const Reply = ({removeReply, commentId})=>{
+export const Reply = ({removeReply, commentId, blog})=>{
   const {postReply} = usePostReply();
   const { editor } = useEditorContext();
   const [reply, setReply] = useState(null);
   const {auth} = useAuthContext();
   const navigate = useNavigate();
+  const {heading, id} = blog;
 
   useEffect(()=>{
     setReply(editor.getHTML());
@@ -139,14 +143,14 @@ export const Reply = ({removeReply, commentId})=>{
     await postReply({reply, commentId});
     setReply("");
     editor.commands.clearContent();
-    navigate(`/comment/${commentId}`);
+    navigate(`/comment/${heading}/${id}/${commentId}`);
   }
   
   return(
     <>
       <div className="flex flex-col justify-center items-start gap-4">
       <div>
-            <div className="bg-transparent w-full border-2 border-cyan-300 h-56 rounded-xl overflow-y-auto">
+            <div className="bg-transparent w-full border-2 border-cyan-300 shadow-md h-56 rounded-xl overflow-y-auto">
               <EditorContent editor={editor} />
             </div>
             <div className="sticky bottom-0 w-full rounded-xl">

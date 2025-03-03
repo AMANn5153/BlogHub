@@ -1,7 +1,8 @@
 import useAuthContext from "../../context/authContext/useAuthContext";
-
+import {useState} from "react";
 import useGetStats from "../../hooks/analytics/useGetStats";
 import useAnalyticsStore from "../../store/useAnalyticsStore";
+import ProfileCard from "../../components/Card/ProfileCard";
 
 import { TfiStatsUp } from "react-icons/tfi";
 
@@ -15,6 +16,7 @@ import { Link } from "react-router-dom";
 import StatsCard from "../../components/Stats/StatsCard";
 import CreateBlog from "../createBlog/CreateBlog";
 import { useEditorStateContext } from "../../context/editorStateContext/EditorStateContext";
+import useSubscribedProfile from "../../hooks/subscribe/useSubscribedProfile";
 
 const Dashboard = () => {
   const { auth } = useAuthContext();
@@ -22,9 +24,10 @@ const Dashboard = () => {
   const { totalAnalytics } = useAnalyticsStore();
   const { isLoading: blogsLoading } = useGetAllBlogsOfUser(auth._id);
   const { blogs } = useBlogStore();
+  const [active, setActive] = useState("posts");
 
   return (
-    <div className="grid grid-rows-[2fr_2fr] gap-4">
+    <div className="m-4 grid grid-rows-[2fr_2fr] gap-4">
       <div className=" grid-rows-1 flex flex-row justify-start">
         <h1 className="text-6xl font-bold">Hello {auth.name}</h1>
       </div>
@@ -37,26 +40,76 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-
-      <div className="flex flex-col p-4 gap-4">
-        <h1 className="text-2xl font-bold">POSTS</h1>
-        {blogsLoading ? (
-          <div className="flex w-full h-full items-center justify-center">
-            <span className="loading loading-infinity loading-lg"></span>
+      
+      <div className="grid grid-cols-[4fr_12fr]">
+        <div className="flex flex-col sticky h-screen left-0 top-20 items-center justify-start gap-1">
+          <button onClick={()=>setActive("posts")} className={` ${active === 
+            "posts" ? "bg-blue-800 text-white" : ""
+          }  w-full text-xl btn btn-ghost  hover:text-white hover:bg-blue-800`}>Posts</button>
+          <button onClick={()=>setActive("following")} className=
+          {`${active === 
+            "following" ? "bg-blue-800 text-white" : ""
+          } w-full text-xl btn btn-ghost  hover:text-white hover:bg-blue-800 `}>Following</button>
+          <button onClick={()=>setActive("LikesandSaves")} 
+          className={` ${active === 
+            "LikesandSaves" ? "bg-blue-800 text-white" : ""
+          }  w-full text-xl btn btn-ghost  hover:text-white hover:bg-blue-800`}>Likes And Saved</button>
+        </div>
+        <div>
+          {
+            active === "posts" ? 
+            <>
+            <div className="flex flex-col p-4 gap-4">
+            <h1 className="text-2xl font-bold">POSTS</h1>
+            {blogsLoading ? (
+              <div className="flex w-full h-full items-center justify-center">
+                <span className="loading loading-infinity loading-lg"></span>
+              </div>
+            ) : blogs.length > 0 ? (
+              blogs.map((blog, index) => {
+                return <Accordion blog={blog} />;
+              })
+            ) : (
+              <div className="flex w-full h-full items-center justify-center">
+                <h1 className="text-2xl font-bold">No Blogs Yet</h1>
+              </div>
+            )}
           </div>
-        ) : blogs.length > 0 ? (
-          blogs.map((blog, index) => {
-            return <Accordion blog={blog} />;
-          })
-        ) : (
-          <div className="flex w-full h-full items-center justify-center">
-            <h1 className="text-2xl font-bold">No Blogs Yet</h1>
-          </div>
-        )}
+            </>
+            : <Following _id={auth._id}/>
+            
+          }
+        </div>
       </div>
+
+     
     </div>
   );
 };
+
+
+
+const Following = ({_id}) =>{
+  const  {subscribedProfile, isSubProfileLoading} = useSubscribedProfile(_id);
+  return(
+    <>
+    {
+      isSubProfileLoading ? <div className="w-full h-full flex justify-center items-center">  
+      <span className="loading-spinner"></span>
+      </div> :
+      <div className="flex flex-row w-full justify-around flex-wrap items-center">
+      {
+        subscribedProfile?.map((sub)=>{
+          return(
+            <ProfileCard author={sub}/>
+          )
+        })
+      }
+      </div>
+    }
+    </>
+  )
+}
 
 const Accordion = ({ blog }) => {
   const publishedAt = new Date(blog.createdAt).toLocaleDateString("en-US", {
@@ -66,7 +119,7 @@ const Accordion = ({ blog }) => {
   const {setEditorState} = useEditorStateContext();
 
   return (
-    <div className="grid p-10 grid-cols-[4fr_2fr_2fr] bg-white rounded-lg shadow-md ">
+    <div className="bg-gradient-br from-white to-stone-300 grid p-10 grid-cols-[4fr_2fr_2fr]  rounded-lg shadow-md ">
       <Link to={{ pathname: `/blog/${blog._id}` }} className="w-full">
         <div className="flex flex-col  ">
           <h1 className="text-blue-500 text-2xl font-bold ">{blog.heading}</h1>

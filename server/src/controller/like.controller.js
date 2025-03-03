@@ -2,6 +2,7 @@ const asyncHandler = require("../utils/asyncHandler.js");
 const Likes = require("../models/like.model.js");
 const mongoose = require("mongoose");
 const Comments = require("../models/comments.model.js");
+const ApiError = require("../utils/ApiErrors.js");
 
 const toggleBlogLike = asyncHandler(async (req, res, next) => { 
     const {blogId, authorID} = req.query;
@@ -89,9 +90,63 @@ const toggleCommentLike = asyncHandler(async (req, res, next)=>{
             data : []
         });
     }   
+});
+
+const getAllLikes = asyncHandler(async(req, res, next)=>{
+    const _id = req.query._id;
+    
+
+    if(!_id){
+        throw new ApiError("id is required", 400, "getAllLikes");
+    }
+
+    const likes = await Likes.aggregate([
+        {
+            $match : {
+                authorID : new mongoose.Types.ObjectId(`${_id}`)
+            }
+        },
+        {
+            $lookup : {
+                from : "users",
+                localField : "userId",
+                foreignField : "_id",
+                as : "user",
+                pipeline : [
+                    {
+                        $project : {
+                            "_id" : 1,
+                            "name" : 1,
+                            "profilePic" : 1,
+                        }
+                    }
+                ]
+
+            }
+        },{
+            $lookup : {
+                from : "blogs",
+                localField : "blogId",
+                foreignField : "_id",
+                as : "blog",
+                pipeline : [
+                    {
+                        $project : {
+                            "_id" : 1,
+                            "heading" : 1,
+                        }
+                    }
+                ]
+            }
+        }
+    ]);
+
+    console.log(likes)
 })
+
 
 module.exports = {
     toggleBlogLike,
-    toggleCommentLike
+    toggleCommentLike,
+    getAllLikes
 };

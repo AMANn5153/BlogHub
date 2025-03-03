@@ -18,7 +18,7 @@ const Dropdown = ({ author }) => {
         </div>
         <div
         tabIndex={0}
-        className="flex flex-col gap-4 dropdown-content bg-white  rounded-box z-[1] w-60 p-2 shadow shadow-md"
+        className="flex flex-col gap-4 overflow-auto dropdown-content bg-white  rounded-box z-[1] w-60 p-2 shadow shadow-md"
         >
         <div className="w-20 h-20 rounded-full">
           <img

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import useAuthFetch from "../../utils/authFetch";
+import {useNavigate} from "react-router-dom";
+import { toast } from "react-toastify";
+import useCommentStore from "../../store/useCommentStore";
+
 const useDeleteComment = () => {
     const [deleteCommentLoading, setDeleteCommentLoading] = useState(false);
     const {authFetch} = useAuthFetch();
-    const {de}
-
+    const navigate = useNavigate();
+    const {deleteCommentThread} = useCommentStore();
     const deleteComment = async (commentId) =>{
-        console.log(commentId);
         setDeleteCommentLoading(true);
         try{
             const response = await authFetch(`http://localhost:3001/api/v1/comment/deleteComment?commentId=${commentId}`, {
@@ -19,7 +22,9 @@ const useDeleteComment = () => {
             if(!response.ok){
                 throw new Error(responseData.message);
             }
-            deleteComment
+            deleteCommentThread(commentId);
+            navigate(`/blog/${responseData.data}`);
+
         }
         catch(err){
             console.log(err);

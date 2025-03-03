@@ -103,10 +103,6 @@ const getBlog = asyncHandler(async (req, res, next) => {
 
     const likeOnBlog = await Likes.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
     
-    if(!likeOnBlog){
-        throw new ApiError("Like not found", 404, "getBlog");
-    }
-
     const savesOnBlog = await Saves.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
 
     const blog = await Blogs.aggregate([
@@ -237,7 +233,6 @@ const uploadImages = async (req, res, next) =>{
     }
 }
 
-
 const deleteImage = async (req, res, next) =>{
     try{
         const {name, id} = req.query;
@@ -268,11 +263,8 @@ const deleteImage = async (req, res, next) =>{
     }
 }
 
-
 const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
     const _id = req.query._id;
-
-    
     const allBlogsOfUser = await Blogs.aggregate([
         {
             $match : {author : new mongoose.Types.ObjectId(`${_id}`) }  
@@ -282,11 +274,22 @@ const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
                 from : "users",
                 localField : "author",
                 foreignField : "_id",
-                as : "author"
+                as : "author",
+                pipeline : [
+                    {
+                        $project:{
+                            _id:1,
+                            name: 1,
+                            profilePic:1
+                        }
+                    }
+                ]
             }
         },
         {
-            $unwind : "$author"
+            $addFields:{
+                author : {$first : "$author"}
+            }
         },
         {
             $lookup: {
@@ -294,7 +297,6 @@ const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
               localField: "_id",
               foreignField: "blogId",
               as: "comments",
-        
             }
         },
         {
@@ -337,7 +339,6 @@ const getAllBlogOfUser = asyncHandler(async(req, res, next)=>{
     
 })
 
-
 const deleteBlog = asyncHandler(async (req, res, next)=>{
     const {blogId} = req.query;
 
@@ -359,6 +360,31 @@ const deleteBlog = asyncHandler(async (req, res, next)=>{
 
 });
 
+const editBlog = asyncHandler(async (req, res, next) => {
+    const {blogId} = req.query
+    const {title, content, coverImage, status} = req.body;
+
+    const blog = await Blogs.findOneAndUpdate(
+    {_id : req.params.id},{
+        $set :{
+            heading : title,
+            content : content,
+            coverImage : coverImage,
+            status : status
+        },
+    },
+    {
+        $new : true,
+    }
+);
+
+    res.status(200).json({
+        success : true,
+        message : "Blog updated successfully",
+        data : blog
+    })
+})
+
 module.exports = {
     getBlog,
     getAllBlog,
@@ -368,5 +394,6 @@ module.exports = {
     coverImage,
     removeCoverImage,
     getAllBlogOfUser,
-    deleteBlog
+    deleteBlog,
+    editBlog
 }

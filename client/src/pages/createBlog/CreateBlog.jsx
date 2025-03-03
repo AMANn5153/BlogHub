@@ -16,9 +16,8 @@ const CreateBlog = () => {
   const { editor } = useEditorContext();
   const { editorState } = useEditorStateContext();
 
-
-  // blog already exists in the local storage
-  const {title , html, cover, id} = editorState
+ // blog already exists in the local storage
+  const {title , html, cover, id, edit} = editorState ?editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`)) || {};
 
 
   const [convertedContent, setConvertedContent] = useState(
@@ -33,11 +32,17 @@ const CreateBlog = () => {
   useEffect(() => {
     localStorage.setItem(
       !blogId ? `user-${auth._id}-Blog-1` : `user-${auth._id}-${id}-edit`,
-      JSON.stringify({
+      JSON.stringify(!blogId ? {
         author: auth._id,
         title: heading,
         cover: coverImage,
         html: convertedContent,
+      } : {
+        author: auth._id,
+        title: heading,
+        cover: coverImage,
+        html: convertedContent,
+        edit: true,
       })
     );
   }, [heading, convertedContent, coverImage]);
@@ -67,6 +72,8 @@ const CreateBlog = () => {
       status: "draft",
     });
   };
+
+  const handleSaveChanges = async () => {}
 
   return (
     <>
@@ -115,7 +122,10 @@ const CreateBlog = () => {
             </div>
           </div>
           <div className="flex flex-row flex-shrink-0 m-5 justify-around items-center w-60 h-60">
-            <button
+           {edit ? <button 
+           onClick={handleSaveChanges}
+           className="btn  color-white  hover:btn-info hover:text-white bg-blue-500 rounded rounded-md  text-white font-bold py-2 px-4 rounded">
+            Save Changes</button> : <> <button
               className="btn  color-white  hover:btn-info hover:text-white bg-blue-500 rounded rounded-md  text-white font-bold py-2 px-4 rounded"
               onClick={handleSave}
             >
@@ -126,7 +136,7 @@ const CreateBlog = () => {
               onClick={handlePublish}
             >
               publish
-            </button>
+            </button> </>}
           </div>
         </div>
         <div className="flex m-5 flex-col justify-start items-center">

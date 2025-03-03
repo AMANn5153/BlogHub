@@ -6,16 +6,19 @@ import useEditComment from "../../hooks/Comment/useEditComment";
 import useEditorContext, {
   EditorContextProvider,
 } from "../../components/textEditor/EditorContext/EditorContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const CommentEdit = () => {
-  const { commentId } = useParams();
+  const { name, blogId, commentId } = useParams();
   return (
-    <div className=" flex flex-col items-start justify-between gap-4 w-full h-full  ">
-      <div className="flex flex-row items-start justify-start m-2 w-full ">
+    <div className=" flex flex-col items-start justify-between  w-full gap-4 w-full h-full  ">
+      <div className="flex flex-row items-start justify-start p-5 w-full  ">
+       <Link to={`/blog/${blogId}`}><h1 className="text-2xl font-bold text-cyan-400 ">{name}</h1></Link>
+      </div>
+      <div className="flex flex-row items-start w-full justify-center   w-full ">
         <h1 className="text-2xl font-bold  ">Edit Comment</h1>
       </div>
-      <div className="flex flex-col items-start flex-shrink-0  justify-start w-full h-full">
+      <div className="flex flex-col items-center  flex-shrink-0  justify-center w-full h-full">
         <EditorContextProvider purpose="commentEdit">
           <Edit commentId={commentId} />
         </EditorContextProvider>
@@ -42,11 +45,11 @@ const Edit = ({ commentId }) => {
 
   return (
     <>
-        <div className="flex flex-col items-start justify-between w-full">
+        <div className="flex flex-col items-start justify-between w-1/2">
           <div className="w-full">
             <ToolBar />
           </div>
-          <div className=" rounded-lg w-full  ">
+          <div className=" rounded-lg w-full border border-2  ">
             <EditorContent editor={editor} />
           </div>
           <div className="flex flex-row justify-between items-center w-full">

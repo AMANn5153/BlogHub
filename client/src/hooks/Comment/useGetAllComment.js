@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import useCommentStore from "../../store/useCommentStore";
 import {toast} from "react-toastify";
+import useLikeStore from "../../store/useLikeStore";
 
 const useGetAllComment = (blogId) =>{
     const  {setComment} = useCommentStore();
+    const  {initialCommentLikes} = useLikeStore();
     const [commentLoading, setCommentLoading] = useState(false);
     
     useEffect(()=>{
@@ -19,9 +21,10 @@ const useGetAllComment = (blogId) =>{
                 if(!response.ok){
                     throw new Error(responseData.message || "Failed to fetch the comments");
                 }
-                console.log(responseData);
-
                 setComment(responseData.data);
+                initialCommentLikes(responseData.likes);
+            
+                
             }
             catch(error){
                 console.log(error);

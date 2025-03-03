@@ -50,64 +50,101 @@ const toggleSaveBlog = asyncHandler(async (req, res, next) => {
 
 });
 
-const getAllSaves = asyncHandler(async(req, res, next)=>{
+const getAllSaves = asyncHandler(async (req, res, next) => {
+    const {id} = req.query;
     const saves = await Saves.aggregate([
         {
-            $match:{
-                userId : new mongoose.Types.ObjectId(`${req.user._id}`)
+            $match: {
+                userId : new mongoose.Types.ObjectId(`${id}`)
             }
         },
         {
-            $lookup:{
-                from : "blogs",
-                localField : "blogId",
-                foreignField : "_id",
-                as : "blog",
-                pipeline :[
+            $lookup: {
+                from: "blogs",
+                localField: "blogId",
+                foreignField: "_id",
+                as: "blog",
+                pipeline: [
                     {
-                        $lookup:{
-                            from : "users",
-                            localField : "author",
-                            foreignField : "_id",
-                            as : "author",
-                            pipeline : [
+                        $lookup: {
+                            from: "users",
+                            localField: "author",
+                            foreignField: "_id",
+                            as: "author",
+                            pipeline: [
                                 {
-                                    $project : {
-                                        _id : 1,
-                                        "name" : 1,
-                                        "profilePic" : 1,
+                                    $project: {
+                                        _id: 1,
+                                        name: 1,
+                                        profilePic: 1
                                     }
                                 }
                             ]
                         }
+                    },
+                    {
+                        $unwind: "$author" // Ensure author is a single object, not an array
+                    },
+                    {
+                        $lookup: {
+                            from: "comments",
+                            localField: "_id",
+                            foreignField: "blogId",
+                            as: "comments"
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "views",
+                            localField: "_id",
+                            foreignField: "blogId",
+                            as: "views"
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "likes",
+                            localField: "_id",
+                            foreignField: "blogId",
+                            as: "likes"
+                        }
+                    },
+                    {
+                        $addFields: {
+                            commentsCount: { $size: "$comments" },
+                            viewsCount: { $size: "$views" },
+                            likesCount: { $size: "$likes" }
+                        }
                     },{
-                        $addFields : {
-                            author : {
-                                $first : "$author"
-                            }
+                        $project : {
+                            comments : 0,
+                            views : 0,
+                            likes : 0
                         }
                     }
                 ]
             }
         },
         {
-            $unwind : "$blog"
-        },{
-            $project : {
-                _id:0,
-                userId :0,
-                blogId : 0
+            $unwind: "$blog" // Unwind the blog array to get individual blog objects
+        },
+        {
+            $project: {
+                _id: 0,
+                userId: 0,
+                blogId: 0
             }
         }
-    ])
+    ]);
 
     res.status(200).json({
-        success : true,
-        message : "saves fetched successfully",
-        data : saves
-    })
+        success: true,
+        message: "saves fetched successfully",
+        data: saves
+    });
+});
 
-})
+
 
 
 

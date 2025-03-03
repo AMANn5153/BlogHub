@@ -2,14 +2,14 @@ import { create } from "zustand";
 
 const useLikeStore = create((set) => ({
     likes : [],
-    CommentLike : [],
+    CommentLike :[],
 
     initialBlogLikes : (likes)=>{
         set((state)=>({likes : [...likes]}))
     },
 
     initialCommentLikes : (likes)=>{
-        set((state)=>({CommentLike : [...likes]}))
+        set((state)=>({CommentLike : [...state.CommentLike,...likes]}))
     },
     setLike:(likes)=>{
         set((state)=>({likes : [...likes, ...state.likes]}))

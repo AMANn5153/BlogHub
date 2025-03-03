@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import LineCharts from "../../components/LineChart/LineCharts";
 import useGetLineChartData from "../../hooks/analytics/useGetLineChartData";
 import useAnalyticsStore from "../../store/useAnalyticsStore";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import StatsCard from "../../components/Stats/StatsCard";
 
 import { FcLike } from "react-icons/fc";
@@ -30,10 +30,10 @@ const Stats = () => {
 
   return (
     <>
-      <div className="flex flex-col w-full justify-between items-start gap-5">
-        <h1 className="text-4xl text-blue-700 font-bold ">
+      <div className="flex p-5 flex-col w-full justify-between items-start gap-5">
+        <Link to={{ pathname: `/blog/${blog?._id}` }}><h1 className="text-4xl text-blue-700 font-bold ">
           {loading || !blog ? "" : blog?.heading}
-        </h1>
+        </h1></Link>
         <div role="tablist" className="tabs tabs-bordered">
           <input
             onClick={() => setPeriod(7)}

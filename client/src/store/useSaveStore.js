@@ -2,10 +2,15 @@ import {create} from 'zustand';
 
 const useSaveStore = create((set) => ({
     saveBlog : [],
+    savedBlogByUser : [],
 
+    saveBlogByUser : (savedBlog)=>{
+        set((state)=>({savedBlogByUser : savedBlog}))
+    },
     initialSaveBlog : (save)=>{
         set((state)=>({saveBlog : [...save]}))
     },
+
     setSaveBlog : (save)=>{
         set((state)=>({saveBlog : [...state.saveBlog, save]}))
     },

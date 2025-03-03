@@ -18,11 +18,9 @@ const useForgetPassword = () =>{
                 },
                 body : JSON.stringify({email})
             });
-
+            
             const responseData = await response.json();
-
             if(!response.ok){
-
                 throw new Error(responseData.message);
             }
             setIsSuccess(true);
@@ -37,7 +35,7 @@ const useForgetPassword = () =>{
             
         }
         catch(error){
-            console.log(error);
+            console.log(error.message);
             toast.error(error.message, {
                 position: "top-right",
                 autoClose: 2000,    

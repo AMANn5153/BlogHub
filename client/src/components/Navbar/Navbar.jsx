@@ -24,7 +24,6 @@ const Navbar = () => {
   };
 
   const handleClick = async () => {
-    console.log(JSON.parse( localStorage.getItem(`user-${auth._id}-Blog-1)`)));
     const blog = JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`)) || {
       title: "",
       content: "",
@@ -41,7 +40,9 @@ const Navbar = () => {
         <div className="navbar">
           <div className="flex-1">
             <NavLink to="/">
-              <button className="btn btn-ghost text-xl">Blog</button>
+              <button className="btn btn-ghost text-xl ">
+                <h1 className=" ">Blog</h1>
+              </button>
             </NavLink>
           </div>
           <div className="flex-none w-1/2 gap-2">

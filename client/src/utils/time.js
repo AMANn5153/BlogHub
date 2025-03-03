@@ -1,4 +1,5 @@
 const timeDuration = (createdAt) => {
+  if(!createdAt)return {duration: 0, time: 0, dateString: ""};
   const date = new Date(createdAt);
   const dateString = date.toLocaleDateString("en-US", {
     year: "numeric",

@@ -51,7 +51,6 @@ const addSubscriber = asyncHandler(async (req, res, next)=>{
 
 });
 
-
 const getSubscribed = asyncHandler(async(req, res, next)=>{
     const _id = req.query._id;
 

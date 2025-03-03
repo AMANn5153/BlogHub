@@ -10,15 +10,15 @@ const Settings = () => {
     <>
       <div className=" grid grid-cols-[2fr_5fr]">
         <div className="h-screen flex flex-col justify-center items-start rounded-xl">
-          <div className=" flex flex-col items-center justify-start h-1/2 w-4/5 m-5">
-            <div className="w-full">
+          <div className=" flex flex-col gap-1 items-center justify-start h-1/2 w-4/5 m-5">
+            <div className="w-full ">
               <button
                 onClick={() => setActivated("profile")}
                 className={`w-full btn btn-ghost hover:bg-indigo-600
                             hover:text-white text-xl rounded-lg 
                             ${
                               activated === "profile"
-                                ? "bg-slate-600 text-white"
+                                ? "bg-blue-600 text-white"
                                 : ""
                             }`}
               >
@@ -29,7 +29,7 @@ const Settings = () => {
               <button
                 onClick={() => setActivated("account")}
                 className={`${
-                  activated === "account" ? "bg-slate-600 text-white" : ""
+                  activated === "account" ? "bg-blue-600 text-white" : ""
                 } w-full btn btn-ghost hover:bg-indigo-600 hover:text-white text-xl rounded-lg`}
               >
                 Account
