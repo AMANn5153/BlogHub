@@ -95,34 +95,36 @@ Inspect
 .tiptap h1{
   font-size:3.1rem;
   font-weight:bolder;
-  margin: 1rem;
+  margin: 2rem;
 }
 
 .tiptap h2{
   font-size:1.5rem;
   font-weight:bolder;
-  margin: 1rem;
+  margin: 2rem;
 }
 
 
 
 .tiptap ol{
   list-style-type: disc;
-  margin-left: 1rem;
+  margin-left: 5rem;
 }
 
 .tiptap ul{
   list-style-type: decimal;
-  margin: 1rem;
+  margin-left: 5rem;
 }
 
 
 .tiptap p{
   word-wrap: break-word;
   word-break: break-all;
-  margin: 2rem;
+  margin-left: 2rem;
+  margin-top : 1rem;
+  margin-bottom: 1rem;
   font-size: 1.5rem;
-  line-height: 1.5;
+  line-height: 1.7;
   text-wrap:pretty;
 }
 
@@ -143,7 +145,7 @@ Inspect
 }
 
 .tiptap a{
-  color: rgb(7, 7, 132);
+  color: rgb(17, 17, 109);
   text-decoration: underline;
 }
 
@@ -159,6 +161,7 @@ Inspect
 }
 
 .tiptap hr{
+  border : 1px solid black;
   width:50%;
   margin : auto;
 }

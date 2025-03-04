@@ -42,7 +42,7 @@ const Comments = ({blogId, authorId}) => {
           </div>
 
           <div>
-            <div className="bg-transparent w-full border-2 border-cyan-300 h-56 rounded-xl overflow-y-auto">
+            <div className="bg-white w-full border-2 border-cyan-300 hover: cursor-text rounded-xl overflow-y-auto">
               <EditorContent editor={editor} />
             </div>
             <div className=" w-full rounded-xl">

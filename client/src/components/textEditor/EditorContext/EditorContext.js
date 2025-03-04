@@ -16,6 +16,7 @@ export const EditorContextProvider = ({children, purpose}) => {
 
     const {editorState} = useEditorStateContext();
 
+
     const content = useMemo(()=>{
         if(purpose === "blog"){
           return editorState?.html || JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`))?.html;
@@ -30,19 +31,17 @@ export const EditorContextProvider = ({children, purpose}) => {
         }
 
         else if(purpose === "commentEdit"){
-            return editorState || "";
+            return editorState|| "";
         }
 
     }, [purpose])
 
-
-     
     const editor = useEditor({
         extensions,
         content,
     });
 
-    return <context.Provider value={{editor}}>{children}</context.Provider>
+    return <context.Provider value={{editor}}>{children}</context.Provider>;
 
 }
 

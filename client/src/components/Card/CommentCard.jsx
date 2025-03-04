@@ -42,6 +42,7 @@ const CommentCard = ({comment , blog}) => {
   }
 
   const handleEdit = () =>{
+    localStorage.setItem(`comment-${comment._id}`, JSON.stringify(comment.comment));
     setEditorState(comment.comment);
     navigate(`/editComment/${heading}/${id}/${comment._id}`);
   }
@@ -52,9 +53,9 @@ const CommentCard = ({comment , blog}) => {
 
   const{ dateString} = timeDuration(comment?.createdAt);
 
-  const likedByUser = CommentLike.length> 0 ? CommentLike?.some((like)=>like.userId === auth._id && like.commentId === comment._id ) : false;
+  const likedByUser = CommentLike.length> 0 ? CommentLike?.some((like)=>like.userId === auth?._id && like.commentId === comment._id ) : false;
 
-  
+ 
 
   return (
     <>
@@ -91,7 +92,7 @@ const CommentCard = ({comment , blog}) => {
             </Link>
           </div>
         
-          <div className=" card-footer flex flex-row gap-2 items-start w-full">
+          <div className=" card-footer flex flex-row m-2 items-start w-full">
             {
               reply 
               ?
@@ -102,7 +103,7 @@ const CommentCard = ({comment , blog}) => {
               </>
               :
               <>
-              <button className="btn btn-ghost btn-sm btn-circle tooltip tooltip-bottom hover:cursor-pointer"
+              <button className="btn p-1 btn-ghost btn-sm btn-circle tooltip tooltip-bottom hover:cursor-pointer"
               onClick={changeLike}
               data-tip="like">
               {
@@ -110,7 +111,7 @@ const CommentCard = ({comment , blog}) => {
               <IoIosHeartEmpty size={20}/>
               } 
               </button>
-              <button className="btn btn-ghost btn-sm btn-circle tooltip tooltip-bottom hover:cursor-pointer"
+              <button className="btn p-1 btn-ghost btn-sm btn-circle tooltip tooltip-bottom hover:cursor-pointer"
                 onClick={changeReply}
                 data-tip="reply">
                   <GoComment size={20}/>
@@ -148,9 +149,9 @@ export const Reply = ({removeReply, commentId, blog})=>{
   
   return(
     <>
-      <div className="flex flex-col justify-center items-start gap-4">
+      <div className="flex flex-col justify-center hover:cursor-text items-start gap-4">
       <div>
-            <div className="bg-transparent w-full border-2 border-cyan-300 shadow-md h-56 rounded-xl overflow-y-auto">
+            <div className="bg-transparent w-full border-2 border-cyan-300 shadow-md  rounded-xl ">
               <EditorContent editor={editor} />
             </div>
             <div className="sticky bottom-0 w-full rounded-xl">

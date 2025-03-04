@@ -21,7 +21,11 @@ const getProfile = asyncHandler(async(req, res, next)=>{
 
 })
 
+const updateProfile = asyncHandler(async(req, res, next)=>{
+     
+})
 
 module.exports = {
-    getProfile
+    getProfile,
+    updateProfile
 }

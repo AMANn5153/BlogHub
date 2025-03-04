@@ -7,10 +7,10 @@ const ButtonGroup = ({ blog }) => {
   const { setEditorState } = useEditorStateContext();
 
   return (
-    <ul className="menu bg-stone-200 menu-horizontal  rounded-box">
+    <ul className="menu bg-white menu-horizontal  rounded-box">
       <li>
         <Link
-          className="btn flex items-center hover:bg-white btn-ghost tooltip tooltip-bottom w-full justify-center "
+          className="btn flex items-center hover:bg-stone-100 btn-ghost tooltip tooltip-bottom w-full justify-center "
           to={`/dashboard/stats/${blog._id}`}
           data-tip="Stats"
         >
@@ -19,7 +19,7 @@ const ButtonGroup = ({ blog }) => {
       </li>
       <li>
         <Link
-          className="btn btn-ghost flex hover:bg-white items-center tooltip tooltip-bottom w-full justify-center"
+          className="btn btn-ghost  flex hover:bg-stone-100 items-center tooltip tooltip-bottom w-full justify-center"
           data-tip="Edit"
           to={{
             pathname: `/createBlog/${blog._id}`,

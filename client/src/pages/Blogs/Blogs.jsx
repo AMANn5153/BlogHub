@@ -62,6 +62,7 @@ const Blogs = () => {
     likes.length > 0
       ? likes?.some((like) => like.userId === auth?._id && like.blogId === id)
       : false;
+
   const savedByUser =
     saveBlog.length > 0
       ? saveBlog?.some(
@@ -148,7 +149,7 @@ const Blogs = () => {
             </div>
           </div>
         </div>
-        <div className="bg-gradient-to-br from-white to-stone-100 overflow-hidden max-w-full rounded-2xl  ">
+        <div className="bg-gradient-to-br from-white to-rose-100 overflow-hidden max-w-full rounded-2xl  ">
           <div className="   overflow-hidden  w-full flex flex-col justify-center items-center">
             <img
               src={coverImage}
@@ -197,7 +198,7 @@ const Blogs = () => {
             <FollowButton authorID={author._id} />
           </div>
           <br />
-          <div ref={commentRef} className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-4 w-full">
             <EditorContextProvider purpose="comment">
               <Comment blogId={blog._id} authorId={blog?.author?._id} />
             </EditorContextProvider>

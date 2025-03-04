@@ -27,7 +27,6 @@ const useLikePost = () => {
                 throw new Error(responseData.message || "Error in posting comment");
             }
 
-
             if(responseData.data.length === 0){
                unSetLike({blogId, userId : auth._id});
             }else{

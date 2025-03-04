@@ -15,6 +15,11 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
 
     const blog = await Blogs.aggregate([
         {
+            $match : {
+                status : "published"
+            }
+        },
+        {
             $lookup: {
                 from : "users",
                 localField : "author",
@@ -101,14 +106,14 @@ const getBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError("blog not found", 404, "getBlog");
     }
 
-    const likeOnBlog = await Likes.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
+    const likeOnBlog = await Likes.find({blogId : new mongoose.Types.ObjectId(`${id}`), commentId : null});
     
     const savesOnBlog = await Saves.find({blogId : new mongoose.Types.ObjectId(`${id}`)});
 
     const blog = await Blogs.aggregate([
         {
             $match :{
-                _id : new mongoose.Types.ObjectId(`${id}`)
+                _id : new mongoose.Types.ObjectId(`${id}`),
             }
         },
         {

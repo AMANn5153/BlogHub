@@ -16,7 +16,8 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
       blogId : new mongoose.Types.ObjectId(`${blogId}`),
       authorID : new mongoose.Types.ObjectId(`${authorID}`),
   });
-
+   
+  
   if(!like){
       const toggleLike = await Likes.create(
         {
@@ -32,7 +33,7 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
             data : toggleLike
         });  
   }else{
-      const ToggleLike  = await Likes.deleteOne({
+        await Likes.deleteOne({
         blogId : new mongoose.Types.ObjectId(`${blogId}`),
         userId : new mongoose.Types.ObjectId(`${req.user._id}`),
         authorID : new mongoose.Types.ObjectId(`${authorID}`),

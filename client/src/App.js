@@ -39,7 +39,7 @@ function App() {
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/forgetPassword' element={<ForgetPassword/>}></Route>
       <Route path='/changePassword/:token' element={<ChangePassword/>}></Route>
-      <Route path='/profile/:id' element={<Profile/>}></Route>
+      {/* <Route path='/profile/:id' element={<Profile/>}></Route> */}
       <Route path='/signup' element={<><SignupProvider><Signup/></SignupProvider></>}></Route>
       <Route path='/upload' element={<><SignupProvider><UploadImage/></SignupProvider></>}></Route>
       <Route path='/createpassword' element={<><SignupProvider><CreatePassword/></SignupProvider></>}></Route>
@@ -63,6 +63,7 @@ function App() {
         <Route path="/editComment/:name/:blogId/:commentId" element={<PrivateRoute><CommentEdit/></PrivateRoute>}></Route>
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>}></Route>
         <Route path="dashboard/stats/:blogID" element={<PrivateRoute><Stats/></PrivateRoute>}></Route>
+        <Route path='/profile/:id' element={<Profile/>}></Route>
       </Route>
     </Routes>
     </ThemeProvider>

@@ -89,7 +89,7 @@ const TextEditor = ({
         <div className="sticky z-[1000] top-0">
           <ToolBar />
         </div>
-        <div className="border border-2 rounded-lg w-full h-full ">
+        <div className="border border-2 border-cyan-500 rounded-lg w-full h-full ">
           <EditorContent editor={editor} className="leading-relaxed " />
         </div>
       </div>
