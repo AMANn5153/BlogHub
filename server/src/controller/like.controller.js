@@ -10,6 +10,7 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
   if(!blogId){
     throw new ApiError("blogId is required", 400, "toggleBlogLike");
   }
+ 
   
   const like = await Likes.findOne({
       userId : new mongoose.Types.ObjectId(`${req.user._id}`),
@@ -50,6 +51,8 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
 
 const toggleCommentLike = asyncHandler(async (req, res, next)=>{
     const {commentId} = req.query;
+    console.log(req.user);
+
     if(!commentId){
         throw new ApiError("commentId is required", 400, "toggleCommentLike");
     }

@@ -6,7 +6,6 @@ const generateTokenAndSetCookie = require("../utils/generateTokenAndSetCookie");
 const asyncHandler = require("../utils/asyncHandler.js");
 const jwt = require("jsonwebtoken");
 const template = require("../views/email_forget_templateEngine");
-const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
 const passport = require('passport');
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
@@ -106,18 +105,18 @@ const loginUser = asyncHandler(async(req, res, next) => {
             throw new ApiError("Invalid credentials", 401, "loginUser");
         }
     
-    
-        const user = await User.findOne({_id : userExists._id}).select(-password);
+        const user = await User.findOne({_id : userExists._id}).select("-password -createdAt -updatedAt");
         
-        generateTokenAndSetCookie(userExists, res);
+        const {accessToken, refreshToken} = generateTokenAndSetCookie(userExists, res);
+        r
         
         return res.status(200).json(
                 {
                     success : true,
                     message : "Logged in",
-                    data:user,
+                    token,
                 }
-            );
+        );
 
 });
 
@@ -138,9 +137,10 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
     });
 
     if(!decoded){
-        res.clearCookie("refreshToken").clearCookie("accessToken");        return res.status(401).json({
+        res.clearCookie("refreshToken").clearCookie("accessToken");       
+         return res.status(401).json({
             status :  401,
-            message : "token is invalid",
+            message : "login again",
         })
     }
 
@@ -153,7 +153,6 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
         message : "token refreshed"
     })
 });
-
 
 const logout = async (req, res) =>{
     
@@ -284,13 +283,48 @@ const changePassword = asyncHandler(async(req, res, next)=>{
 
 });
 
+const refreshAccessToken = asyncHandler(async (req, res, next)=>{
+    
+    const refreshToken = req.cookies?.refreshToken;
+
+    if(!refreshToken){
+        return res.status(401).json({
+            status : 404,
+            message : "refresh token is missing"
+        })
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decode)=>{
+        if(err)return null;
+        return decode;
+    })
+
+    if(!decoded){
+        return res.status(401).json({
+            status : 401,
+            message : "refresh token is invalid"
+        });
+    }
+
+    const user = await User.findOne({_id : decoded._id}).select("-password -createdAt -updatedAt");
+
+    generateTokenAndSetCookie(user, res);
+
+    return res.status(200).json({
+        status : 200,
+        message : "tokens regenerated",
+        data : user
+    })
+
+})
+
 
 module.exports = {
     createUser,
     loginUser,
     logout,
-    refreshToken,
     forgetPassword,
-    changePassword
+    changePassword,
+    refreshAccessToken
 };
 

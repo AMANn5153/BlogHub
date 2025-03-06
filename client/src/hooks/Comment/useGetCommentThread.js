@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 import useCommentStore from "../../store/useCommentStore";
 import useLikeStore from "../../store/useLikeStore";
+import useAuthFetch from "../../utils/authFetch";
 
 const useGetCommentThread = ({id}) => {
     const [commentThreadLoading, setCommentThreadLoading] = useState(true);
     const {setComment} = useCommentStore();
     const {initialCommentLikes} = useLikeStore();
+    const {authFetch} = useAuthFetch();
 
     useEffect(()=>{
         const getComments = async ()=>{
             try{
                 setCommentThreadLoading(true);
-                const response = await fetch(`http://localhost:3001/api/v1/comment/getCommentThread?commentId=${id}`, {
+                const response = await authFetch(`http://localhost:3001/api/v1/comment/getCommentThread?commentId=${id}`, {
                     method: "GET",
                 });
                 

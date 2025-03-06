@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import useBlogStore from "../../store/useBlogStore";
 import { toast } from "react-toastify";
+import useAuthFetch from "../../utils/authFetch";
 
 const useGetAllBlog = (filter = null) => {
     const [loading, setLoading] = useState(false);
     const {blogs, setBlog} = useBlogStore();
+    const {authFetch} = useAuthFetch();
    
     
     useEffect(()=>{

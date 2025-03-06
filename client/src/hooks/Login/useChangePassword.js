@@ -2,11 +2,14 @@ import {useState} from "react";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import useAuthFetch from "../../utils/authFetch";
 
 const useChangePassword = () =>{
     const [isLoading, setIsLoading] = useState(false);
     const {setAuth} = useAuthContext();
     const Navigate = useNavigate();
+    const {authFetch} = useAuthFetch();
+
     const changePassword = async (password, confirmPassword, token) => {
         
         try{

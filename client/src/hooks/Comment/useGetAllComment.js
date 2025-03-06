@@ -2,17 +2,19 @@ import { useEffect, useState } from "react";
 import useCommentStore from "../../store/useCommentStore";
 import {toast} from "react-toastify";
 import useLikeStore from "../../store/useLikeStore";
+import useAuthFetch from "../../utils/authFetch";
 
 const useGetAllComment = (blogId) =>{
     const  {setComment} = useCommentStore();
     const  {initialCommentLikes} = useLikeStore();
     const [commentLoading, setCommentLoading] = useState(false);
+    const {authFetch} = useAuthFetch();
     
     useEffect(()=>{
         const getComments = async () => {
             try{
                 setCommentLoading(true);
-                const response = await fetch(`http://localhost:3001/api/v1/comment/getComments?blogId=${blogId}`, {
+                const response = await authFetch(`http://localhost:3001/api/v1/comment/getComments?blogId=${blogId}`, {
                     method: "GET",
                 });
                 

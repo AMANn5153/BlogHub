@@ -9,13 +9,15 @@ const useGetSubscribed = (_id) =>{
     const {setSubscribed} = useSubscriberStore();
     const [isGetSubscribed, setIsGetSubscribed] = useState(false);
     const {auth} = useAuthContext();
+    
 
 
     useEffect(()=>{
+        if(!_id)return;
         const getSubscribed = async()=>{
             try{
                 setIsGetSubscribed(true);
-                const response = await fetch(`http://localhost:3001/api/v1/subscribe/getSubscribed?_id=${_id}`,{
+                const response = await authFetch(`http://localhost:3001/api/v1/subscribe/getSubscribed?_id=${_id}`,{
                     method: "GET",
                     Credentials : "include",
                 });

@@ -3,6 +3,7 @@ import useLikeStore from "../../store/useLikeStore";
 import useSaveStore from "../../store/useSaveStore";
 import { toast } from "react-toastify";
 import useBlogStore from "../../store/useBlogStore";
+import useAuthFetch from "../../utils/authFetch";
 
 const useGetBlog = (id) => {
 
@@ -10,12 +11,13 @@ const useGetBlog = (id) => {
     const {initialBlogLikes} = useLikeStore();
     const {initialSaveBlog} = useSaveStore();
     const {setSingleBlog} = useBlogStore();
+    const {authFetch} = useAuthFetch();
 
     useEffect(() => {
         const getBlog = async () => {
             try {
                 setLoading(true);
-                const response = await fetch(`http://localhost:3001/api/v1/blog/getBlog?id=${id}`, {
+                const response = await authFetch(`http://localhost:3001/api/v1/blog/getBlog?id=${id}`, {
                     method: "GET",
                 });
                 const responseData = await response.json();

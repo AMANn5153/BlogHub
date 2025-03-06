@@ -2,10 +2,11 @@ import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import {toast} from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useAuthFetch from "../../utils/authFetch";
 
 const useLogin = () => {
     const[loading, setLoading] = useState(false);
-    const {setAuth} = useAuthContext();
+    const {setAuth, setUserAuth} = useAuthContext();
     const navigate = useNavigate();
 
 
@@ -34,8 +35,9 @@ const useLogin = () => {
 
                 throw new Error(res.message);
             }
-            setAuth(res.data);
-            localStorage.setItem("user", JSON.stringify(res.data));
+            setAuth(res.token);
+            setUserAuth(res.data);
+            localStorage.setItem("user", JSON.stringify(res.token));
             navigate("/");
 
         }catch(error){

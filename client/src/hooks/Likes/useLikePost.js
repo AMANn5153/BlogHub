@@ -15,7 +15,7 @@ const useLikePost = () => {
             setLikePostLoading(true);
             const response = await authFetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}&&authorID=${authorID}`, {
                 method: "POST",
-                Credentials: "include",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },

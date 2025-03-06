@@ -1,9 +1,10 @@
 import {useState} from "react";
 import { toast } from "react-toastify";
-
+import useAuthFetch from "../../utils/authFetch";
 const useForgetPassword = () =>{
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const {authFetch} = useAuthFetch();
 
     const forgetPassword = async(email) =>{
         try{

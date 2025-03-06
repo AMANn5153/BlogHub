@@ -2,11 +2,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import useAuthFetch from "../../utils/authFetch";
 
 const useLogout = ()=>{
     const [loading, setLoading] = useState(false);
     const {setAuth} = useAuthContext();
     const navigate = useNavigate();
+    const {authFetch} = useAuthFetch();
 
     const logout = async()=>{
         try{

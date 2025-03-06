@@ -1,16 +1,12 @@
 const jwt = require("jsonwebtoken");
-const ApiError = require("../utils/ApiErrors");
 const User = require("../models/user.model.js");
 
 const authenticate = async (req, res, next) =>{
     
     const accessToken = req.cookies?.accessToken;
     
-    if (!accessToken){
-        return res.status(401).json({
-            status : 401,
-            message : "session expired Login again"
-        })
+    if(!accessToken){
+       return next();
     }
     
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
@@ -19,12 +15,8 @@ const authenticate = async (req, res, next) =>{
     });
 
     if(!decoded){
-        return res.status(401).json({
-            status : 401,
-            message : "token is invalid"
-        })
+       return next();
     }
-
 
     const user = await User.findOne({_id : decoded._id});
 
@@ -36,8 +28,6 @@ const authenticate = async (req, res, next) =>{
     }
 
     req.user = user;
-
-
     next();
 }
 
