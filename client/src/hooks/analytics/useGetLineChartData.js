@@ -14,6 +14,7 @@ const useGetLineChartData = (blogID, period) => {
             try{
                 const response = await authFetch(`http://localhost:3001/api/v1/analytics/stats?blogID=${blogID}&period=${period}`, {
                     method : "GET",
+                    credentials: "include",
                     headers:{
                         "content-type" : "application/json",
                     }

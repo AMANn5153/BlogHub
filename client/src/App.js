@@ -25,10 +25,11 @@ import EditorStateContext from './context/editorStateContext/EditorStateContext.
 import CommentEdit from './pages/Comment/CommentEdit.jsx';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
+import {TokenContextProvider} from "./context/tokenContext.js/useTokenContext";
 function App() {
   return (
     <>
+    <TokenContextProvider>
     <AuthProvider>
     <SocketProvider>
     <EditorStateContext >
@@ -73,6 +74,7 @@ function App() {
   />
   </SocketProvider>
   </AuthProvider>
+  </TokenContextProvider>
   </>
   )
 }

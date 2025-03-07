@@ -3,10 +3,13 @@ const User = require("../models/user.model.js");
 
 const authenticate = async (req, res, next) =>{
     
-    const accessToken = req.cookies?.accessToken;
+    const accessToken = req.cookies?.at;
     
     if(!accessToken){
-       return next();
+        return res.status(401).json({
+            success : false,
+            message : "access token is required"
+        });
     }
     
     const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
@@ -15,7 +18,10 @@ const authenticate = async (req, res, next) =>{
     });
 
     if(!decoded){
-       return next();
+        return res.status(401).json({
+            success : false,
+            message : "access token is invalid"
+        });
     }
 
     const user = await User.findOne({_id : decoded._id});

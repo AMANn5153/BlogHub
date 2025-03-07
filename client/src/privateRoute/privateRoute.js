@@ -1,12 +1,12 @@
 import { Navigate } from "react-router-dom";
-import useAuthContext from "../context/authContext/useAuthContext";
+import useTokenContext from "../context/tokenContext.js/useTokenContext";
 
 const PrivateRoute = ({children})=>{
+    const {token} = useTokenContext();
 
-    const {auth} = useAuthContext();
     return (
         <>
-            {auth ? children :<> <Navigate to="/"/></>}
+            {token ? children :<> <Navigate to="/"/></>}
         </>
     )
 }

@@ -1,5 +1,4 @@
 import useAuthContext from "../context/authContext/useAuthContext";
-
 const useAuthFetch = () => {
 
     const {setAuth} = useAuthContext();
@@ -12,13 +11,13 @@ const useAuthFetch = () => {
         });
 
         if(!accessTokenResponse.ok){
-            localStorage.removeItem("user");
+            sessionStorage.removeItem("user");
             setAuth(null);
-            return;
+           
         }else{
             const responseData = await accessTokenResponse.json();
-            localStorage.setItem("user", JSON.stringify(responseData.data));
-            setAuth(responseData.data);
+            sessionStorage.setItem("user", JSON.stringify(responseData.user));
+            setAuth(responseData.user);
         }
 
         let response = await fetch(apiUrl, options);        

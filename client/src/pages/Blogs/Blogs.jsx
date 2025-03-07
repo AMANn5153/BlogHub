@@ -34,7 +34,6 @@ const Blogs = () => {
   const { commentLoading } = useGetAllComment(id);
   const { loading } = useGetBlog(id);
   const { comments } = useCommentStore();
-
   const { auth } = useAuthContext();
   const { likePost } = useLikePost();
   const { likes } = useLikeStore();
@@ -170,8 +169,8 @@ const Blogs = () => {
                   <FollowButton authorID={author._id} type="link" />
                 </div>
                 <h1>
-                  {dateString} &nbsp; {time > 0 ? time : duration}{" "}
-                  {time > 0 ? "hours" : duration > 1 ? "days" : "day"} ago
+                  {dateString} &nbsp; {time >=0 && time < 1  ? `0 hrs` : duration}{" "}
+                  {time >= 1 ? "hours" : duration > 1 ? "days" : "day"} ago
                 </h1>
               </div>
             </div>

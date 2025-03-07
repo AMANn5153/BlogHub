@@ -20,7 +20,7 @@ const useCreateBlog = ()=>{
         try {
             const response = await authFetch(`http://localhost:3001/api/v1/blog/newBlog`,{
                 method : "POST",
-                Credentials : "include",
+                credentials : "include",
                 headers:{
                     "Content-Type": "application/json",
                 },

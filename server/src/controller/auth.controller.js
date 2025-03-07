@@ -107,14 +107,14 @@ const loginUser = asyncHandler(async(req, res, next) => {
     
         const user = await User.findOne({_id : userExists._id}).select("-password -createdAt -updatedAt");
         
-        const {accessToken, refreshToken} = generateTokenAndSetCookie(userExists, res);
-        r
+        generateTokenAndSetCookie(userExists, res);
+
         
         return res.status(200).json(
                 {
                     success : true,
                     message : "Logged in",
-                    token,
+                    user,
                 }
         );
 
@@ -284,15 +284,34 @@ const changePassword = asyncHandler(async(req, res, next)=>{
 });
 
 const refreshAccessToken = asyncHandler(async (req, res, next)=>{
-    
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies?.rt;
+    const accessToken = req.cookies?.at;
+
+    if(accessToken){
+        const decodedAccessToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
+            if(err)return null;
+            return decoded;
+        })
+        const user = await User.findOne({_id : decodedAccessToken._id}).select("-password -createdAt -updatedAt");
+        
+        // const token = jwt.sign({_id : user._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
+
+        if(accessToken){
+            return res.status(200).json({
+            sucess : true,
+            message : "valid access token",
+            user,
+            });
+        }
+    }
 
     if(!refreshToken){
         return res.status(401).json({
-            status : 404,
-            message : "refresh token is missing"
+            status : 401,
+            message : "user is not logged in"
         })
     }
+
 
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decode)=>{
         if(err)return null;
@@ -302,22 +321,73 @@ const refreshAccessToken = asyncHandler(async (req, res, next)=>{
     if(!decoded){
         return res.status(401).json({
             status : 401,
-            message : "refresh token is invalid"
+            message : "refresh token is invalid Login in again"
         });
     }
 
-    const user = await User.findOne({_id : decoded._id}).select("-password -createdAt -updatedAt");
+    const userWithNewTokens = await User.findOne({_id : decoded._id}).select("-password -createdAt -updatedAt");
 
-    generateTokenAndSetCookie(user, res);
+    // const token = jwt.sign({_id : userWithNewTokens._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
+    generateTokenAndSetCookie(userWithNewTokens, res);
 
     return res.status(200).json({
         status : 200,
         message : "tokens regenerated",
-        data : user
+        user : userWithNewTokens,
     })
 
 })
 
+createSessionToken = asyncHandler(async (req, res, next)=>{
+
+    const at = req.cookies?.at;
+    const rt = req.cookies?.rt;
+
+    if(at){
+        const decodedAccessToken = jwt.verify(at, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
+            if(err)return null;
+            else return decoded;
+        });
+
+        if(!decodedAccessToken){
+            throw new ApiError("access token is invalid", 401, "createSessionToken");
+        }
+
+        const user = await User.findOne({_id : decodedAccessToken._id});
+        
+        const 
+
+    }
+    
+
+})
+
+const getTokenDetails = asyncHandler(async (req, res, next)=>{
+
+    const token = req.headers.authorization.split(" ")[1];
+
+    if(!token){
+        throw new ApiError("token is required", 401, "getTokenDetails");
+    }
+
+    const decoded = jwt.decode(token, process.env.AUTH_TOKEN_SECRET,(err, decode)=>{
+        if(err)return null;
+        else return decode;
+    });
+
+
+    if(!decoded){
+        throw new ApiError("token is invalid", 401, "getTokenDetails");
+    }
+
+    const user = await User.findOne({_id : decoded._id}).select("-password -createdAt -updatedAt");
+
+    res.status(200).json({
+        success : true,
+        message : "token details fetched successfully",
+        data : user
+    })
+})
 
 module.exports = {
     createUser,
@@ -325,6 +395,7 @@ module.exports = {
     logout,
     forgetPassword,
     changePassword,
-    refreshAccessToken
+    refreshAccessToken,
+    getTokenDetails
 };
 

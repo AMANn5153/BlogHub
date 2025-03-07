@@ -24,8 +24,8 @@ const generateTokenAndSetCookie = (userExists, res)=>{
     res.setHeader("Access-Control-Allow-Credentials", "true");              // Allow credentials (cookies)
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
 
-    res.cookie("accessToken", accessToken, ACCESS_COOKIE_OPTIONS)
-    .cookie("refreshToken", refreshToken, REFRESH_COOKIE_OPTIONS);
+    res.cookie("at", accessToken, ACCESS_COOKIE_OPTIONS)
+    .cookie("rt", refreshToken, REFRESH_COOKIE_OPTIONS);
 
     return {accessToken, refreshToken};
 }

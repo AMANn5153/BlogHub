@@ -13,7 +13,7 @@ const useGetAllBlog = (filter = null) => {
         const getBlog = async ()=>{
             try{
                 setLoading(true);
-                const response = await fetch(`http://localhost:3001/api/v1/blog/getAllBlog?filter=${filter}`);
+                const response = await authFetch(`http://localhost:3001/api/v1/blog/getAllBlog?filter=${filter}`);
                 const responseData = await response.json();
                 if(!response.ok){
                     throw new Error(responseData.message);
