@@ -3,12 +3,14 @@ import {toast} from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import useAuthFetch from "../../utils/authFetch";
+import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const useSignup = () => {
     const [loading, setLoading] = useState(false);
     const {setAuth} = useAuthContext();
     const navigate = useNavigate();
     const {authFetch} = useAuthFetch();
+    const {setToken} = useTokenContext();
 
     const signup = async({username, email, fullname, image, password, confirmPassword})=>{
         try{
@@ -45,8 +47,9 @@ const useSignup = () => {
                 throw new Error(responseData.message);
             }
 
-            localStorage.setItem("user", JSON.stringify(responseData.data));
             setAuth(responseData.data);
+            sessionStorage.setItem("token", JSON.stringify({token : responseData.token}));
+            setToken(responseData.token);
             navigate("/");
 
         }catch(error){

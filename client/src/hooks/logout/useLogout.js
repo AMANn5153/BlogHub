@@ -3,12 +3,14 @@ import { toast } from "react-toastify";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { useNavigate } from "react-router-dom";
 import useAuthFetch from "../../utils/authFetch";
+import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const useLogout = ()=>{
     const [loading, setLoading] = useState(false);
     const {setAuth} = useAuthContext();
     const navigate = useNavigate();
     const {authFetch} = useAuthFetch();
+    const {setToken} = useTokenContext();
 
     const logout = async()=>{
         try{
@@ -27,7 +29,8 @@ const useLogout = ()=>{
             }
 
             setAuth(null);
-            localStorage.removeItem("user");
+            sessionStorage.removeItem("token");
+            setToken(null);
             navigate("/");
 
         }catch(error){

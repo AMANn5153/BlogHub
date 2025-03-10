@@ -19,7 +19,7 @@ export const EditorContextProvider = ({children, purpose}) => {
 
     const content = useMemo(()=>{
         if(purpose === "blog"){
-          return editorState?.html || JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`))?.html;
+          return editorState?.html || JSON.parse(localStorage.getItem(`user-${auth?._id}-Blog-1`))?.html;
         }
 
         else if(purpose === "comment"){

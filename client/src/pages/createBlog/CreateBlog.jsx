@@ -17,14 +17,14 @@ const CreateBlog = () => {
   const { editorState } = useEditorStateContext();
 
  // blog already exists in the local storage
-  const {title , html, cover, id, edit} = editorState ?editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`)) || {};
+  const {title , html, cover, id, edit} = editorState ?editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth?._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-${auth?._id}-Blog-1`)) || {};
 
 
   const [convertedContent, setConvertedContent] = useState(
    html 
   );
 
-  const [heading, setHeading] = useState(title );
+  const [heading, setHeading] = useState(title);
 
   const [coverImage, setCoverImage] = useState(cover);
 
@@ -56,7 +56,7 @@ const CreateBlog = () => {
       status: "published",
     });
 
-    localStorage.removeItem(`user-${auth._id}-Blog-1`);
+    localStorage.removeItem(`user-${auth?._id}-Blog-1`);
     setHeading("");
     setConvertedContent("");
     setCoverImage("");

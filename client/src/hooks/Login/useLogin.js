@@ -3,7 +3,7 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 import {toast} from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useAuthFetch from "../../utils/authFetch";
-import useTokenContext from "../../context/tokenContext.js/useTokenContext";
+import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const useLogin = () => {
     const[loading, setLoading] = useState(false);
@@ -37,9 +37,8 @@ const useLogin = () => {
 
                 throw new Error(res.message);
             }
-            sessionStorage.setItem("user", JSON.stringify(res.user));
             setAuth(res.user);
-            sessionStorage.setItem("token", JSON.stringify(res.token));
+            sessionStorage.setItem("token", JSON.stringify({token : res.token}));
             setToken(res.token);
             navigate("/");
             

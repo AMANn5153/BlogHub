@@ -25,12 +25,12 @@ import EditorStateContext from './context/editorStateContext/EditorStateContext.
 import CommentEdit from './pages/Comment/CommentEdit.jsx';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import {TokenContextProvider} from "./context/tokenContext.js/useTokenContext";
+import {TokenContextProvider} from './context/tokenContext/useTokenContext.js';
 function App() {
   return (
     <>
-    <TokenContextProvider>
     <AuthProvider>
+    <TokenContextProvider>
     <SocketProvider>
     <EditorStateContext >
     <BrowserRouter>
@@ -73,8 +73,8 @@ function App() {
   <ToastContainer 
   />
   </SocketProvider>
-  </AuthProvider>
   </TokenContextProvider>
+  </AuthProvider>
   </>
   )
 }

@@ -9,9 +9,10 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { CiEdit } from "react-icons/ci";
 import {useEditorStateContext} from "../../context/editorStateContext/EditorStateContext";
+import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const Navbar = () => {
-  const { auth } = useAuthContext();
+  const { auth, token } = useAuthContext();
   const { logout } = useLogout();
   const navigate = useNavigate();
 
@@ -47,7 +48,7 @@ const Navbar = () => {
           </div>
           <div className="flex-none w-1/2 gap-2">
             <div className="flex w-full flex-row items-end justify-evenly form-control">
-              {auth ? (
+              {token ? (
                   <button className="btn btn-ghost text-black text-xl  hover:cursor-pointer " onClick={handleClick}>
                     Create Blog <CiEdit />
                   </button>
@@ -59,7 +60,7 @@ const Navbar = () => {
                 </NavLink>
               )}
 
-              {!auth ? (
+              {!token ? (
                 <NavLink to="/signup">
                   <button className="btn btn-ghost text-black text-xl hover:bg-red-200 hover:text-black hover:cursor-pointer">
                     Signup
@@ -69,7 +70,7 @@ const Navbar = () => {
                 ""
               )}
             </div>
-            {auth ? (
+            {token ? (
               <div className="dropdown rounded-full dropdown-end">
                 <div
                   tabIndex={0}

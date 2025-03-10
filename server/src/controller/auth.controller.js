@@ -65,10 +65,13 @@ const createUser = async (req, res, next) => {
 
        generateTokenAndSetCookie(user, res);
 
+       const token = jwt.sign({_id : user._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
+
        return res.status(201).json({
            success : true,
            message : "user created",
-           data :data,
+           data,
+           token
        });
 
  } catch (err){
@@ -109,12 +112,14 @@ const loginUser = asyncHandler(async(req, res, next) => {
         
         generateTokenAndSetCookie(userExists, res);
 
+        const token = jwt.sign({_id : userExists._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
         
         return res.status(200).json(
                 {
                     success : true,
                     message : "Logged in",
                     user,
+                    token
                 }
         );
 
@@ -157,8 +162,8 @@ const refreshToken = asyncHandler(async (req, res, next)=>{
 const logout = async (req, res) =>{
     
     return res.status(200)
-    .clearCookie("accessToken", COOKIE_OPTIONS)
-    .clearCookie("refreshToken", COOKIE_OPTIONS)
+    .clearCookie("at", COOKIE_OPTIONS)
+    .clearCookie("rt", COOKIE_OPTIONS)
     .json({
         success : true,
         message : "Logged out"
@@ -292,15 +297,11 @@ const refreshAccessToken = asyncHandler(async (req, res, next)=>{
             if(err)return null;
             return decoded;
         })
-        const user = await User.findOne({_id : decodedAccessToken._id}).select("-password -createdAt -updatedAt");
         
-        // const token = jwt.sign({_id : user._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
-
         if(accessToken){
             return res.status(200).json({
             sucess : true,
             message : "valid access token",
-            user,
             });
         }
     }
@@ -327,67 +328,92 @@ const refreshAccessToken = asyncHandler(async (req, res, next)=>{
 
     const userWithNewTokens = await User.findOne({_id : decoded._id}).select("-password -createdAt -updatedAt");
 
-    // const token = jwt.sign({_id : userWithNewTokens._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
     generateTokenAndSetCookie(userWithNewTokens, res);
 
     return res.status(200).json({
         status : 200,
         message : "tokens regenerated",
-        user : userWithNewTokens,
     })
 
 })
 
-createSessionToken = asyncHandler(async (req, res, next)=>{
+const newToken = asyncHandler(async (req, res, next)=>{
+    const accessToken = req.cookies?.at;
+    const refreshToken = req.cookies?.rt;
 
-    const at = req.cookies?.at;
-    const rt = req.cookies?.rt;
-
-    if(at){
-        const decodedAccessToken = jwt.verify(at, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
-            if(err)return null;
-            else return decoded;
-        });
-
-        if(!decodedAccessToken){
-            throw new ApiError("access token is invalid", 401, "createSessionToken");
-        }
-
-        const user = await User.findOne({_id : decodedAccessToken._id});
-        
-        const 
-
+    if(!accessToken && !refreshToken){
+        return res.status(401).json({
+            status : 401,
+            message : "user is not logged in"
+        })
     }
-    
 
-})
+    let decodedToken = null;
+    if(accessToken){
+        decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
+            if(err)return null;
+            return decoded;
+        });
+    }else if(refreshToken){
+        decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded)=>{
+            if(err)return null;
+            return decoded;
+        });
+    }
 
-const getTokenDetails = asyncHandler(async (req, res, next)=>{
 
-    const token = req.headers.authorization.split(" ")[1];
+    if(!decodedToken){
+        return res.status(401).json({
+            status : 401,
+            message : "invalid tokens"
+        })
+    }
+
+    const user = await User.findOne({_id : decodedToken._id}).select("-password -createdAt -updatedAt");
+
+    const token = jwt.sign({_id : user._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
+
+    return res.status(200).json({
+        success : true,
+        message : "token generated",
+        token,
+        user
+    })
+
+});
+
+const getUserInfo = asyncHandler(async (req, res, next)=>{
+
+    const token = req.headers?.authorization.split(" ")[1];
 
     if(!token){
-        throw new ApiError("token is required", 401, "getTokenDetails");
+        return res.status(401).json({
+            status : 401,
+            message : "token is missing"
+        })
     }
 
-    const decoded = jwt.decode(token, process.env.AUTH_TOKEN_SECRET,(err, decode)=>{
+    const decodedToken = jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, decoded)=>{
         if(err)return null;
-        else return decode;
+        return decoded;
     });
-
-
-    if(!decoded){
-        throw new ApiError("token is invalid", 401, "getTokenDetails");
+    
+    if(!decodedToken){
+        return res.status(401).json({
+            status : 401,
+            message : "token is invalid"
+        })
     }
 
-    const user = await User.findOne({_id : decoded._id}).select("-password -createdAt -updatedAt");
+    const user = await User.findOne({_id : decodedToken._id}).select("-password -createdAt -updatedAt");
 
-    res.status(200).json({
+    return res.status(200).json({
         success : true,
-        message : "token details fetched successfully",
-        data : user
-    })
-})
+        message : "user info fetched",
+        user
+    });
+});
+
 
 module.exports = {
     createUser,
@@ -396,6 +422,7 @@ module.exports = {
     forgetPassword,
     changePassword,
     refreshAccessToken,
-    getTokenDetails
+    newToken,
+    getUserInfo, 
 };
 

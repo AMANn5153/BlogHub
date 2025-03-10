@@ -4,7 +4,7 @@ const authenticate = require("../middleware/authenticate.middleware");
 
 const {uploadProfilePic} = require("../middleware/multer.middleware");
 
-const {createUser, getTokenDetails,
+const {createUser, newToken, getUserInfo,
          loginUser, logout, forgetPassword, changePassword, refreshAccessToken} = require("../controller/auth.controller.js");
 
 const authRouter = Router();
@@ -26,6 +26,8 @@ authRouter.route("/changePassword").put(changePassword);
 
 authRouter.route("/checkAccessToken").get(refreshAccessToken);
 
-authRouter.route("/getTokenDetails").get(getTokenDetails);
+authRouter.route("/newToken").get(newToken);
+
+authRouter.route("/getUserInfo").get(getUserInfo);
 
 module.exports = authRouter;

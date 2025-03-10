@@ -1,7 +1,7 @@
 import useAuthContext from "../context/authContext/useAuthContext";
-const useAuthFetch = () => {
 
-    const {setAuth} = useAuthContext();
+const useAuthFetch = () => {
+    const {setAuth, setToken} = useAuthContext();
 
     const authFetch = async(apiUrl, options={}) =>{
         
@@ -11,13 +11,13 @@ const useAuthFetch = () => {
         });
 
         if(!accessTokenResponse.ok){
-            sessionStorage.removeItem("user");
-            setAuth(null);
-           
+            sessionStorage.removeItem("token");
+            setAuth(null);  
+            setToken(undefined);          
         }else{
             const responseData = await accessTokenResponse.json();
-            sessionStorage.setItem("user", JSON.stringify(responseData.user));
-            setAuth(responseData.user);
+            // sessionStorage.setItem("user", JSON.stringify(responseData.user));
+            // setAuth(responseData.user);
         }
 
         let response = await fetch(apiUrl, options);        
