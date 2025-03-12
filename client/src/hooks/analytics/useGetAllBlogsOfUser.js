@@ -14,7 +14,6 @@ const useGetAllBlogsOfUser = (_id = null) => {
                 setLoading(true);
                 const response = await authFetch(`http://localhost:3001/api/v1/blog/blogOfUser?_id=${_id}`, {
                     method : "GET",
-                    credentials : "include",
                     headers:{
                         "content-type" : "application/json",
                     }

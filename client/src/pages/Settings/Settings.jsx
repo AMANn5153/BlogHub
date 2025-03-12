@@ -38,12 +38,12 @@ const Settings = () => {
           </div>
         </div>
         <div className="">
-          <Link to={`/profile/${auth._id}`}>
+          <Link to={`/profile/${auth?._id}`}>
             <div
               role="button"
               className="btn btn-link  text-xl underline font-bold text-blue-700 "
             >
-              {auth.username}
+              {auth?.username}
             </div>
           </Link>
           {activated === "profile" ? <ProfileSettings /> : <AccountSettings />}
@@ -57,14 +57,14 @@ const ProfileSettings = () => {
   const { auth } = useAuthContext();
   const [isChange, setIsChange] = useState(false);
   const [profile, setProfile] = useState({
-    username: auth.username,
-    email: auth.email,
-    name: auth.name,
-    bio: auth.bio || "write something about yourself",
-    website: auth.website || `e.g. https://${auth.name}.com`,
-    work: auth.workingAt || "e.g. Software Engineer",
-    location: auth.location || "e.g. New Delhi, KolKata",
-    education : auth.education || "e.g. B.Tech in Computer Science",
+    username: auth?.username,
+    email: auth?.email,
+    name: auth?.name,
+    bio: auth?.bio || "write something about yourself",
+    website: auth?.website || `e.g. https://${auth?.name}.com`,
+    work: auth?.workingAt || "e.g. Software Engineer",
+    location: auth?.location || "e.g. New Delhi, KolKata",
+    education : auth?.education || "e.g. B.Tech in Computer Science",
   });
 
   const changeValues = (e) => {
@@ -111,7 +111,7 @@ const ProfileSettings = () => {
             <div className="w-1/2 m-1 flex flex-row items-start justify-between">
               <div className="avatar">
                 <div className="ring-primary ring-offset-base-100 w-14 rounded-full ring ring-offset-2">
-                  <img src={auth.profilePic} />
+                  <img src={auth?.profilePic} />
                 </div>
               </div>
               <input

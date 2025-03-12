@@ -385,6 +385,7 @@ const newToken = asyncHandler(async (req, res, next)=>{
 const getUserInfo = asyncHandler(async (req, res, next)=>{
 
     const token = req.headers?.authorization.split(" ")[1];
+    const accesstoken = req.cookies?.at;
 
     if(!token){
         return res.status(401).json({
@@ -393,12 +394,25 @@ const getUserInfo = asyncHandler(async (req, res, next)=>{
         })
     }
 
+
     const decodedToken = jwt.verify(token, process.env.AUTH_TOKEN_SECRET, (err, decoded)=>{
         if(err)return null;
         return decoded;
     });
     
     if(!decodedToken){
+        return res.status(401).json({
+            status : 401,
+            message : "token is invalid"
+        })
+    }
+
+    const decodedAccessToken = jwt.verify(accesstoken, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
+        if(err)return null;
+        return decoded;
+    });
+
+    if(decodedAccessToken._id !== decodedToken._id){
         return res.status(401).json({
             status : 401,
             message : "token is invalid"

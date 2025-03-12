@@ -1,5 +1,6 @@
 .ProseMirror{
   height:auto;
+  resize : both;
   outline:none;
   position:inherit;
 }

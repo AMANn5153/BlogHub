@@ -169,7 +169,7 @@ const Blogs = () => {
                   <FollowButton authorID={author._id} type="link" />
                 </div>
                 <h1>
-                  {dateString} &nbsp; {time >=0 && time < 1  ? `0 hrs` : duration}{" "}
+                  {dateString} &nbsp; {duration}
                   {time >= 1 ? "hours" : duration > 1 ? "days" : "day"} ago
                 </h1>
               </div>
@@ -178,8 +178,8 @@ const Blogs = () => {
               <ButtonGroup blog={blog} />
             </div> : null} 
           </div>
-          <div className="m-6 w-full flex flex-col flex-wrap overflow-auto justify-center items-start">
-            <h1 className="text-6xl break-words font-bold">{heading}</h1>
+          <div className="m-6 w-full flex flex-col flex-wrap justify-center items-start">
+            <h1 className="text-6xl break-words text-wrap font-bold ">{heading}</h1>
           </div>
           <br />
           <div className="flex justify-center items-center">

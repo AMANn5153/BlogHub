@@ -36,7 +36,6 @@ export const TokenContextProvider = ({ children }) => {
 
   useEffect(() => {
     const checkToken = async () => {
-      console.log(token);
       if (token === null) {
         await generateNewToken();
       }
@@ -73,7 +72,7 @@ export const TokenContextProvider = ({ children }) => {
   }, [auth]);
 
   return (
-    <TokenContext.Provider value={{ token, setToken, generateNewToken }}>
+    <TokenContext.Provider value={{  generateNewToken }}>
       {children}
     </TokenContext.Provider>
   );

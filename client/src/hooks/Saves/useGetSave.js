@@ -14,7 +14,6 @@ const useGetSave = (_id) => {
                 setSaveLoading(true);
                 const response = await authFetch(`http://localhost:3001/api/v1/save/getSaveBlog?id=${_id}`, {
                     method : "GET",
-                    credentials : "include",
                     headers : {
                         "Content-Type" : "application/json"
                     }

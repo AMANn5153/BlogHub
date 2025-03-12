@@ -2,15 +2,11 @@ import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import {toast} from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import useAuthFetch from "../../utils/authFetch";
-import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const useLogin = () => {
     const[loading, setLoading] = useState(false);
-    const {setAuth} = useAuthContext();
-    const {setToken} = useTokenContext();
+    const {setAuth, setToken} = useAuthContext();
     const navigate = useNavigate();
-
 
     const Login = async({usernameOrEmail, password}) =>{
         
@@ -20,7 +16,6 @@ const useLogin = () => {
             setLoading(false);
             return false;
         }
-
         try{
             const response = await fetch("http://localhost:3001/api/v1/auth/loginUser",{
                 method:"POST",

@@ -31,7 +31,7 @@ const Home = () => {
               placeholder="what are you looking for?"
               className="input text-black bg-white placeholder:text-black input-bordered w-full max-w-xs"
             />
-            <div className="tooltip tooltip-left dropdown dropdown-bottom hover:cursor-pointer" data-tip="Filter">
+            <div className="tooltip tooltip-left dropdown dropdown-bottom btn btn-circle btn-md hover:bg-stone-400 flex items-center justify-center hover:cursor-pointer" data-tip="Filter">
               <div tabIndex={0} className="text-black"><VscListFilter size={30} color="darkblue"/></div>
               <div tabIndex={0} className="dropdown-content menu w-58  z-[100] rounded-box p-2  shadow-lg">
                   <li>

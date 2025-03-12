@@ -28,6 +28,6 @@ authRouter.route("/checkAccessToken").get(refreshAccessToken);
 
 authRouter.route("/newToken").get(newToken);
 
-authRouter.route("/getUserInfo").get(getUserInfo);
+authRouter.route("/getUserInfo").get(authenticate, getUserInfo);
 
 module.exports = authRouter;

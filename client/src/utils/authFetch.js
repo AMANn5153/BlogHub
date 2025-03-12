@@ -13,7 +13,7 @@ const useAuthFetch = () => {
         if(!accessTokenResponse.ok){
             sessionStorage.removeItem("token");
             setAuth(null);  
-            setToken(undefined);          
+            setToken(undefined);      
         }else{
             const responseData = await accessTokenResponse.json();
             // sessionStorage.setItem("user", JSON.stringify(responseData.user));

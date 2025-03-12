@@ -4,7 +4,6 @@ const Like = require("../models/like.model");
 const mongoose = require("mongoose");
 const Comments = require("../models/comments.model");
 const moment = require("moment-timezone");
-const { listenerCount } = require("../models/user.model");
 
 
 const mappingLikesAndDates = (stats, startDay, endDay, statsType) => {
@@ -67,7 +66,6 @@ const statsLineChart = asyncHandler(async (req, res, next) => {
 
     const endDay = moment.tz(timezone).endOf("day")
     const startDay = moment.tz(timezone).subtract(period, "days").startOf("day")
-
     const timePassed = new Date();
     timePassed.setDate(timePassed.getDate() - period);
 
@@ -145,7 +143,7 @@ const statsLineChart = asyncHandler(async (req, res, next) => {
         }
     ]);
 
-
+    
 
     const likes = await mappingLikesAndDates(likeStats, startDay, endDay, "likes");
     const views = await mappingLikesAndDates(viewStats, startDay, endDay, "views");

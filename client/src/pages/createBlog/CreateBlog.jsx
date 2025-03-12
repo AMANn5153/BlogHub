@@ -31,14 +31,14 @@ const CreateBlog = () => {
   // create and save blog to local storage
   useEffect(() => {
     localStorage.setItem(
-      !blogId ? `user-${auth._id}-Blog-1` : `user-${auth._id}-${id}-edit`,
+      !blogId ? `user-${auth?._id}-Blog-1` : `user-${auth?._id}-${id}-edit`,
       JSON.stringify(!blogId ? {
-        author: auth._id,
+        author: auth?._id,
         title: heading,
         cover: coverImage,
         html: convertedContent,
       } : {
-        author: auth._id,
+        author: auth?._id,
         title: heading,
         cover: coverImage,
         html: convertedContent,
@@ -132,7 +132,7 @@ const CreateBlog = () => {
               Save
             </button>
             <button
-              className=" btn color-white btn bg-green-400 hover:btn-success hover:text-white rounded rounded-md text-white font-bold py-2 px-4 rounded"
+              className=" btn color-white  bg-green-400 hover:btn-success hover:text-white rounded rounded-md text-white font-bold py-2 px-4 rounded"
               onClick={handlePublish}
             >
               publish

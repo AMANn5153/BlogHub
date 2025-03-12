@@ -4,6 +4,6 @@ const authenticate = require("../middleware/authenticate.middleware.js");
 
 saveRouter.route("/toggleSaveBlog").post(authenticate, toggleSaveBlog);
 
-saveRouter.route("/getSaveBlog").get(authenticate, getAllSaves );
+saveRouter.route("/getSaveBlog").get( getAllSaves );
 
 module.exports = saveRouter;

@@ -3,11 +3,10 @@ import useTokenContext from "../context/tokenContext/useTokenContext";
 import useAuthContext from "../context/authContext/useAuthContext";
 
 const PrivateRoute = ({children})=>{
-    const {auth} = useAuthContext();
-    const {token} = useTokenContext();
+    const {auth, token} = useAuthContext();
     return (
         <>
-            {token ? children :<> <Navigate to="/"/></>}
+            {token && token!==undefined ? children :<> <Navigate to="/"/></>}
         </>
     )
 }

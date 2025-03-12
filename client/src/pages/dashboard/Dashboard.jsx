@@ -22,14 +22,14 @@ const Dashboard = () => {
   const { auth } = useAuthContext();
   const { isLoading } = useGetStats();
   const { totalAnalytics } = useAnalyticsStore();
-  const { isLoading: blogsLoading } = useGetAllBlogsOfUser(auth._id);
+  const { isLoading: blogsLoading } = useGetAllBlogsOfUser(auth?._id);
   const { blogs } = useBlogStore();
   const [active, setActive] = useState("posts");
 
   return (
     <div className="m-4 grid grid-rows-[2fr_2fr] gap-4">
       <div className=" grid-rows-1 flex flex-row justify-start">
-        <h1 className="text-6xl font-bold">Hello {auth.name}</h1>
+        <h1 className="text-6xl font-bold">Hello {auth?.name}</h1>
       </div>
       <div className="w-full">
         {!isLoading ? (
@@ -76,7 +76,7 @@ const Dashboard = () => {
             )}
           </div>
             </>
-            : <Following _id={auth._id}/>
+            : <Following _id={auth?._id}/>
             
           }
         </div>

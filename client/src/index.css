@@ -25,6 +25,9 @@ code {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
 }
 
+.editor-resizer{
+  resize: both;
+}
 
 .Toastify__toast-container {
   z-index: 200000;

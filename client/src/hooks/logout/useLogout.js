@@ -7,10 +7,9 @@ import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const useLogout = ()=>{
     const [loading, setLoading] = useState(false);
-    const {setAuth} = useAuthContext();
+    const {setAuth, setToken} = useAuthContext();
     const navigate = useNavigate();
     const {authFetch} = useAuthFetch();
-    const {setToken} = useTokenContext();
 
     const logout = async()=>{
         try{

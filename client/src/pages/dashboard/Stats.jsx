@@ -25,8 +25,10 @@ const Stats = () => {
 
   const { blog } = useBlogStore();
 
-  const {duration} = timeDuration(auth?.createdAt);
-
+  const infinityHandler = () => {
+    const {duration} = timeDuration(blog?.createdAt);
+    setPeriod(duration);
+  }
 
   return (
     <>
@@ -82,7 +84,7 @@ const Stats = () => {
             )}
           </div>
           <input
-            onClick={() => setPeriod(duration)}
+            onClick={infinityHandler}
             type="radio"
             name="my_tabs_1"
             role="tab"

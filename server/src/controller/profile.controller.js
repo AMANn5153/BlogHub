@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 
 const getProfile = asyncHandler(async(req, res, next)=>{
     const {_id} = req.query;
-    const user = await User.findOne({_id : new mongoose.Types.ObjectId(`${_id}`)});
+    console.log(_id);
+    const user = await User.findOne({_id : new mongoose.Types.ObjectId(`${_id}`)}).select("-password -createdAt -updatedAt");
     
     if(!user){
         return res.status(409).json({
