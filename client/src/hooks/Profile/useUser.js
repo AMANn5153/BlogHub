@@ -14,11 +14,11 @@ const useUser = (_id) => {
                 const response = await authFetch(`http://localhost:3001/api/v1/profile/getProfile?_id=${_id}`,{
                     method: "GET",
                 });
-                const data = await response.json();
+                const {user, subscriber, message} = await response.json();
                 if(!response.ok){
-                    throw new Error(data.message);
+                    throw new Error(message);
                 }
-                setProfile(data.data);
+                setProfile({user, subscriber});
             } catch (error) {
                 console.log(error);
                 toast.error(error.message);

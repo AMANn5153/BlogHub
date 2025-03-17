@@ -1,12 +1,11 @@
+const  {updateUserInfo} = require("../controller/settings.controller.js")
+const authenticate = require("../middleware/authenticate.middleware.js")
 const express = require("express");
+const { uploadProfilePic } = require("../middleware/multer.middleware.js");
 const settingRouter = express.Router();
 
-const {setNewInfo} = require("../controller/settings.controller.js");
+
+settingRouter.route("/updateUserInfo").put(authenticate, uploadProfilePic.single("profilePic"), updateUserInfo);
 
 
-settingRouter.route("/setNewInfo").post(setNewInfo);
-
-
-module.exports = {
-    settingRouter
-}
+module.exports = settingRouter

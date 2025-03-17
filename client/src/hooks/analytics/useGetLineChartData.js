@@ -12,7 +12,7 @@ const useGetLineChartData = (blogID, period) => {
         const getWeeklyStats = async() => {
             setWeeklyLoading(true);
             try{
-                const response = await authFetch(`http://localhost:3001/api/v1/analytics/stats?blogID=${blogID}&period=${period}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/analytics/stats?blogID=${blogID}&period=${period}`, {
                     method : "GET",
                     credentials: "include",
                     headers:{

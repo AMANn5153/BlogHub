@@ -10,7 +10,7 @@ const useGetStats = () =>{
     const getStats = async()=>{
         try{
             setIsLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/analytics/getLikesAndViewsAndSaves`,{
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/analytics/getLikesAndViewsAndSaves`,{
                 method : "GET",
                 credentials : "include",
             });

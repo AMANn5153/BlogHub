@@ -75,6 +75,7 @@ const statsLineChart = asyncHandler(async (req, res, next) => {
         {
             $match : {
                 blogId : new mongoose.Types.ObjectId(`${blogID}`),
+                commentId : null,
                 createdAt : {
                     $gte : timePassed
                 }

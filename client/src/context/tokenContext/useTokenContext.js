@@ -5,14 +5,14 @@ import useAuthFetch from "../../utils/authFetch";
 const TokenContext = createContext();
 
 export const TokenContextProvider = ({ children }) => {
-  const { auth, setAuth, token, setToken } = useAuthContext();
+  const { auth, setAuth, token, setToken, userLoading, setUserLoading } = useAuthContext();
   const { authFetch } = useAuthFetch();
   const [isFetching, setIsFetching] = useState(false);
 
   const generateNewToken = useCallback(async () => {
     if (isFetching) return;
     setIsFetching(true);
-
+    
     try {
       const response = await fetch(`http://localhost:3001/api/v1/auth/newToken`, {
         method: "GET",
@@ -48,6 +48,7 @@ export const TokenContextProvider = ({ children }) => {
     const fetchUserInfo = async () => {
       if (!token) return;
       if(auth)return;
+      setUserLoading(true)
       try {
         const response = await authFetch(`http://localhost:3001/api/v1/auth/getUserInfo`, {
           method: "GET",
@@ -65,6 +66,9 @@ export const TokenContextProvider = ({ children }) => {
         console.error("User info fetch error:", error);
         sessionStorage.removeItem("token");
         setToken(null);
+      }
+      finally {
+        setUserLoading(false);
       }
     };
 

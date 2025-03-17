@@ -12,7 +12,7 @@ const useGetAllBlogsOfUser = (_id = null) => {
         const getAllBlogsOfUser = async()=>{
             try{
                 setLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/blog/blogOfUser?_id=${_id}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/blogOfUser?_id=${_id}`, {
                     method : "GET",
                     headers:{
                         "content-type" : "application/json",

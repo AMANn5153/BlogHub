@@ -83,7 +83,6 @@ const UploadImage = () => {
     const {registerUser, setRegisterUser} = useSignupContext();
 
     const handleChange = (e) => {
-        
         const blob = new Blob([e.target?.files[0]], {type: "image/png"});
         const profileImage = URL.parse(URL.createObjectURL(blob));
         setImage(profileImage);

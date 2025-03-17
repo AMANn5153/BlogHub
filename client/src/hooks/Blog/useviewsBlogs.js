@@ -3,7 +3,7 @@ import useAuthFetch from "../../utils/authFetch";
 const useViewsBlogs = () => {
     const views = async ({id, userId}) =>{
         try{
-            await fetch(`http://localhost:3001/api/v1/views/updateViews?blogId=${id}&userId=${userId}`, {
+            await fetch(`${process.env.REACT_APP_API_URL}/views/updateViews?blogId=${id}&userId=${userId}`, {
                 method : "POST",
             });
         }

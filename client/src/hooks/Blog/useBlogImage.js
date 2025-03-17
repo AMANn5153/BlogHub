@@ -16,7 +16,7 @@ const useBlogImage = (image) => {
         formData.append("image", image);
         try {
             setLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/blog/uploadImage?userId=${auth._id}`,{
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/uploadImage?userId=${auth._id}`,{
                 method : "POST",
                 credentials : "include",
                 body: formData

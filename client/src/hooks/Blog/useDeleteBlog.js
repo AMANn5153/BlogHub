@@ -11,7 +11,7 @@ const useDeleteBlog = () => {
     const deleteBlog = async (blogId) => {
         try {
             setDeleteBlogLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/blog/${blogId}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/${blogId}`, {
                 method : "DELETE",
                 headers:{
                     "content-type" : "application/json",

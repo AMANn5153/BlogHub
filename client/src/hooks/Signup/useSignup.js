@@ -22,8 +22,6 @@ const useSignup = () => {
                 return;
             }
 
-            console.log(image, username, email, fullname, password, confirmPassword);
-
             const formData = new FormData();
 
             formData.append("username", username);

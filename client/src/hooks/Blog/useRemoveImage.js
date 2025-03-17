@@ -15,7 +15,7 @@ const useRemoveImage = () =>{
         }
         try{
             setLoading(true);
-            await authFetch(`http://localhost:3001/api/v1/blog/deleteImage?name=${name}`,{
+            await authFetch(`${process.env.REACT_APP_API_URL}/blog/deleteImage?name=${name}`,{
                 method : "DELETE",
                 credentials:"include"
             });

@@ -16,7 +16,7 @@ const useRemoveCoverImage = () =>{
                 setLoading(false);
                 return;
             }
-            await authFetch(`http://localhost:3001/api/v1/blog/deleteCoverImage?name=${name}`,{
+            await authFetch(`${process.env.REACT_APP_API_URL}/blog/deleteCoverImage?name=${name}`,{
                 method : "DELETE",
                 credentials : "include",
             });

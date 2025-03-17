@@ -20,7 +20,7 @@ const useCoverImage = () =>{
 
             fm.append("image", image);
 
-            const response = await authFetch("http://localhost:3001/api/v1/blog/uploadCoverImage",{
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/uploadCoverImage`,{
                 method : "POST",
                 credentials : "include",
                 body : fm

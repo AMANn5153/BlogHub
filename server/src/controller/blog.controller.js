@@ -33,7 +33,6 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
               localField: "_id",
               foreignField: "blogId",
               as: "comments",
-        
             }
         },
         {
@@ -50,6 +49,13 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
                 localField : "_id",
                 foreignField : "blogId",
                 as : "likes",
+                pipeline : [  
+                    {
+                        $match : {
+                            commentId : null
+                        }
+                    }
+                ]
             }
         },
         {

@@ -17,7 +17,7 @@ const useGetBlog = (id) => {
         const getBlog = async () => {
             try {
                 setLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/blog/getBlog?id=${id}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/getBlog?id=${id}`, {
                     method: "GET",
                 });
                 const responseData = await response.json();

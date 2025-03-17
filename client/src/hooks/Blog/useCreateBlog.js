@@ -18,7 +18,7 @@ const useCreateBlog = ()=>{
             return false;
         }
         try {
-            const response = await authFetch(`http://localhost:3001/api/v1/blog/newBlog`,{
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/newBlog`,{
                 method : "POST",
                 credentials : "include",
                 headers:{

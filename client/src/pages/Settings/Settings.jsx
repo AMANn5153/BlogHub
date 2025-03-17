@@ -1,10 +1,19 @@
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { Link } from "react-router-dom";
+import useUpdateUser from "../../hooks/Settings/useUpdateUser";
 
 const Settings = () => {
   const [activated, setActivated] = useState("profile");
-  const { auth } = useAuthContext();
+  const { auth, userLoading } = useAuthContext();
+  
+  if(userLoading){
+    return(
+      <div className="flex w-full h-full items-center justify-center">
+        <span className="loading loading-bars loading-lg"></span>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -57,20 +66,39 @@ const ProfileSettings = () => {
   const { auth } = useAuthContext();
   const [isChange, setIsChange] = useState(false);
   const [profile, setProfile] = useState({
-    username: auth?.username,
-    email: auth?.email,
-    name: auth?.name,
-    bio: auth?.bio || "write something about yourself",
-    website: auth?.website || `e.g. https://${auth?.name}.com`,
-    work: auth?.workingAt || "e.g. Software Engineer",
-    location: auth?.location || "e.g. New Delhi, KolKata",
-    education : auth?.education || "e.g. B.Tech in Computer Science",
+    username: auth?.username ,
+    email: auth?.email ,
+    name: auth?.name ,
+    bio: auth?.bio || "",
+    website: auth?.website || "",
+    work: auth?.workingAt || "",
+    location: auth?.location || "",
+    education : auth?.education || "",
+    profilePic : auth?.profilePic || "",
   });
+
+  const [image, setProfileImage] = useState(auth?.profilePic||
+  ""
+  );
+
+  const {updateUser} =useUpdateUser();
+
+  const save = async()=>{
+    await updateUser(profile);
+  }
 
   const changeValues = (e) => {
     setIsChange(true);
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
+
+  const changeProfilePic = (e)=>{
+    const blob = new Blob([e.target?.files[0]], {type: "image/png"});
+    const profileImage = URL.parse(URL.createObjectURL(blob));
+    setProfileImage(profileImage);
+    setProfile({...profile, profilePic : e.target?.files[0]});
+  }
+
 
   return (
     <>
@@ -99,7 +127,7 @@ const ProfileSettings = () => {
           <div className="w-full flex flex-col items-start justify-between">
             <label className="font-semibold">Email</label>
             <input
-              name="username"
+              name="email"
               onChange={changeValues}
               value={profile.email}
               className="border-2 input placeholder-black bg-white
@@ -111,12 +139,13 @@ const ProfileSettings = () => {
             <div className="w-1/2 m-1 flex flex-row items-start justify-between">
               <div className="avatar">
                 <div className="ring-primary ring-offset-base-100 w-14 rounded-full ring ring-offset-2">
-                  <img src={auth?.profilePic} />
+                  <img src={image} />
                 </div>
               </div>
               <input
                 type="file"
                 className="file-input file-input-ghost w-full max-w-xs"
+                onChange={changeProfilePic}
               />
             </div>
           </div>
@@ -127,6 +156,9 @@ const ProfileSettings = () => {
             <label className="font-semibold">Bio</label>
             <textarea
               name="bio"
+              maxLength={200}
+              minLength={5}
+              placeholder="write something about yourself"
               onChange={changeValues}
               value={profile.bio}
               className="border-2 input placeholder-black bg-white
@@ -138,6 +170,7 @@ const ProfileSettings = () => {
             <label className="font-semibold">Website</label>
             <input
               name="website"
+              placeholder={`eg. https://www.${auth?.name}.com`}
               onChange={changeValues}
               value={profile.website}
               className="border-2 input placeholder-black bg-white
@@ -149,6 +182,7 @@ const ProfileSettings = () => {
             <label className="font-semibold">Location</label>
             <input
               name="location"
+              placeholder="eg. New Delhi, Kolkata"
               onChange={changeValues}
               value={profile.location}
               className="border-2 input placeholder-black bg-white
@@ -162,6 +196,7 @@ const ProfileSettings = () => {
             <label className="font-semibold">Work</label>
             <input
               name="work"
+              placeholder="eg. Software Engineer"
               onChange={changeValues}
               value={profile.work}
               className="border-2 input placeholder-black bg-white
@@ -173,6 +208,7 @@ const ProfileSettings = () => {
             <label className="font-semibold">Education</label>
             <input
               name="education"
+              placeholder="eg. B.Tech in Computer Science"
               onChange={changeValues}
               value={profile.education}
               className="border-2 input placeholder-black bg-white
@@ -182,7 +218,7 @@ const ProfileSettings = () => {
         </div>
 
         <div className={`${isChange ? "sticky bottom-0": ""} flex flex-col w-full gap-5 p-10 rounded-md `}>
-            <button className ="w-full btn btn-primary ">Save</button>
+            <button onClick={save} className ="w-full btn btn-primary ">Save</button>
         </div>
       </div>
     </>
@@ -214,6 +250,8 @@ const AccountSettings = () => {
           className="border-2 input placeholder-black bg-white
                     text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
         />
+
+        <button className="btn btn-primary text-white" >Change Password</button>
       </div>
     </div>
 
@@ -230,7 +268,7 @@ const AccountSettings = () => {
         </div>
     </div>
 
-     
+
     
   </div>
   )

@@ -61,6 +61,11 @@ const userSchema = new mongoose.Schema({
     location : {
         type : String,
         trim : true
+    },
+
+    education : {
+        type : String,
+        trim : true
     }
 
 }, {timestamps:true});
