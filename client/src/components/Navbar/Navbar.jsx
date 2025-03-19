@@ -9,7 +9,6 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
 import { CiEdit } from "react-icons/ci";
 import {useEditorStateContext} from "../../context/editorStateContext/EditorStateContext";
-import useTokenContext from "../../context/tokenContext/useTokenContext";
 
 const Navbar = () => {
   const { auth, token } = useAuthContext();
@@ -37,8 +36,8 @@ const Navbar = () => {
 
   return (
     <>
-      <div className=" h-full w-3/4 flex align-center justify-center  border border-cyan-300  rounded-2xl  glass-effect">
-        <div className="navbar">
+      <div className=" h-full w-3/4 flex align-center justify-center  border border-cyan-300  rounded-2xl ">
+        <div className="navbar glass">
           <div className="flex-1">
             <NavLink to="/">
               <button className="btn btn-ghost text-xl ">
@@ -71,7 +70,7 @@ const Navbar = () => {
               )}
             </div>
             {token ? (
-              <div className="dropdown rounded-full dropdown-end">
+              <div className="dropdown bg-green-200 rounded-full dropdown-end">
                 <div
                   tabIndex={0}
                   role="button"
@@ -83,12 +82,12 @@ const Navbar = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="  menu menu-sm bg-white dropdown-content rounded-box mt-3 w-52 p-2 shadow-md"
+                  className="  menu menu-sm bg-white  dropdown-content rounded-box mt-3 w-52 p-2 shadow-md"
                 >
                   <li>
                     <NavLink
                       to={`/profile/${auth?._id}`}
-                      className="hover:bg-blue-700 hover:text-white justify-between underline"
+                      className="hover:bg-blue-700  hover:text-white justify-between underline"
                     >
                       {auth?.username}
                       <CgProfile />

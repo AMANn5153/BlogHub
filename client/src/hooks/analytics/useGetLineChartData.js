@@ -3,7 +3,7 @@ import useAuthFetch from "../../utils/authFetch";
 import useAnalyticsStore from "../../store/useAnalyticsStore";
 import { toast } from "react-toastify";
 
-const useGetLineChartData = (blogID, period) => {
+const useGetLineChartData = (slug, period) => {
     const [isWeeklyLoading, setWeeklyLoading] = useState(false);
     const {setLike, setView, setComments} = useAnalyticsStore();
     
@@ -12,7 +12,7 @@ const useGetLineChartData = (blogID, period) => {
         const getWeeklyStats = async() => {
             setWeeklyLoading(true);
             try{
-                const response = await authFetch(`${process.env.REACT_APP_API_URL}/analytics/stats?blogID=${blogID}&period=${period}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/analytics/stats?slug=${slug}&period=${period}`, {
                     method : "GET",
                     credentials: "include",
                     headers:{
@@ -48,7 +48,7 @@ const useGetLineChartData = (blogID, period) => {
             }
         }
         getWeeklyStats();
-    },[blogID, period]);
+    },[slug, period]);
 
     return {isWeeklyLoading};
 }

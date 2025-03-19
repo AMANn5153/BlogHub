@@ -13,6 +13,7 @@ const  authenticate  = require("../middleware/authenticate.middleware.js");
 const {uploadBlogImage, uploadCoverImage} = require("../middleware/multer.middleware.js");
 
 
+
 const blogRouter = express.Router();
 
 blogRouter.route("/getAllBlog").get(getAllBlog);

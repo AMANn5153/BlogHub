@@ -14,6 +14,7 @@ const useDeleteComment = () => {
         try{
             const response = await authFetch(`http://localhost:3001/api/v1/comment/deleteComment?commentId=${commentId}`, {
                 method : "DELETE",
+                credentials : "include",
                 headers : {
                     "content-type" : "application/json"
                 }

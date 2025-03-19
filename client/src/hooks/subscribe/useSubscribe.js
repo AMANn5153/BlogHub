@@ -8,7 +8,7 @@ const useSubscribe = () => {
     const [subscribeLoading, setSubscribeLoading] = useState(false);
     const {addSubscriber, removeSubscriber} = useSubscriberStore();
 
-    const subscribe = async (authorID) => {
+    const subscribe =async (authorID) => {
        try {
          setSubscribeLoading(true);     
          const response = await authFetch(`http://localhost:3001/api/v1/subscribe/addSubscriber?authorID=${authorID}`, {
@@ -24,8 +24,6 @@ const useSubscribe = () => {
          if(!response.ok){
             throw new Error(responseData.message);
          }
-
-         console.log(responseData.data);
          
          if(responseData.data.length === 0){
             removeSubscriber(authorID);
@@ -46,7 +44,7 @@ const useSubscribe = () => {
        }
        finally{
         setSubscribeLoading(false);}
-    }
+    };
 
     return {subscribeLoading, subscribe};
 }   

@@ -43,6 +43,7 @@ const ImageComponent = (props) => {
   const {loading} = useBlogImage();
   const {removeImage} = useRemoveImage();
 
+
 /**
  * Asynchronously handles the deletion of an image node.
  * 
@@ -59,13 +60,20 @@ const ImageComponent = (props) => {
 
   return (
     <NodeViewWrapper>
-      {loading ?<h1 className="">uploading...</h1>  : 
-    <div className="m-10 indicator"> 
-      <button className="tooltip tooltip-bottom indicator-item indicator-top indicator-end badge badge-secondary" data-tip="cancel" onClick={deleteHandler}> X </button>
-      <div className=" bg-base-300 grid h-32 w-32 place-items-center">
-        <img src={src} alt={alt} />
+    {loading ?
+      <div>
+        <span className="loading loading-spinner"></span>
+      </div>  
+      : 
+      <div className="m-10 indicator"> 
+        <button className="tooltip tooltip-bottom indicator-item indicator-top indicator-end badge badge-secondary" data-tip="cancel" onClick={deleteHandler}> 
+          X 
+        </button>
+        <div className=" bg-base-300 grid h-32 w-32 place-items-center">
+          <img src={src} alt={alt} />
+        </div>
       </div>
-    </div>}
+    }
     </NodeViewWrapper>
   );
 };

@@ -23,6 +23,11 @@ const blogSchema = new mongoose.Schema({
         type:String,
         enum:["draft", "published"],
         default:"draft",
+    },
+    slug : {
+        type : String,
+        unique : true,
+        trim : true,
     }
 }, {timestamps:true});
 

@@ -120,7 +120,7 @@ const Accordion = ({ blog }) => {
 
   return (
     <div className="bg-gradient-br from-white to-stone-300 grid p-10 grid-cols-[4fr_2fr_2fr]  rounded-lg shadow-md ">
-      <Link to={{ pathname: `/blog/${blog._id}` }} className="w-full">
+      <Link to={{ pathname: `/blog/${blog.slug}` }} className="w-full">
         <div className="flex flex-col  ">
           <h1 className="text-blue-500 text-2xl font-bold ">{blog.heading}</h1>
           <div className="flex flex-row">
@@ -163,7 +163,7 @@ const Accordion = ({ blog }) => {
             <li className="flex flex-col justify-between items-center">
               <Link
                 className="w-full justify-center "
-                to={{ pathname: `stats/${blog._id}` }}
+                to={{ pathname: `stats/${blog.slug}` }}
               >
                 Stats <TfiStatsUp />
               </Link>

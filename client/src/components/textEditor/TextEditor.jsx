@@ -1,10 +1,8 @@
-import { useEffect, useCallback, useRef } from "react";
+import {useEffect} from "react";
 import "./TextEditor.css";
 import useEditorContext from "./EditorContext/EditorContext";
 import { EditorContent } from "@tiptap/react";
-
 // hoooks
-
 import useRemoveCoverImage from "../../hooks/Blog/useRemoveCoverImage";
 import useCoverImage from "../../hooks/Blog/useCoverImage";
 import ToolBar from "./ToolBar";
@@ -32,7 +30,6 @@ const TextEditor = ({
 
   const handleCoverImage = async (e) => {
     const image = e.target.files[0];
-    
     const { url, name } = await uploadCoverImage(image);
     setCoverImage(`${url}`);
   };

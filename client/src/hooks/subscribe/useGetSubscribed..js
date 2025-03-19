@@ -19,7 +19,7 @@ const useGetSubscribed = (_id) =>{
                 setIsGetSubscribed(true);
                 const response = await authFetch(`http://localhost:3001/api/v1/subscribe/getSubscribed?_id=${_id}`,{
                     method: "GET",
-                    Credentials : "include",
+                    credentials : "include",
                 });
 
                 const responseData = await response.json();
@@ -47,7 +47,7 @@ const useGetSubscribed = (_id) =>{
 
             getSubscribed();
         
-    },[auth?._id]);
+    },[_id]);
     return {isGetSubscribed};
 }
 

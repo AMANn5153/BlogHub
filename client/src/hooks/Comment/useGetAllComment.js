@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 import useLikeStore from "../../store/useLikeStore";
 import useAuthFetch from "../../utils/authFetch";
 
-const useGetAllComment = (blogId) =>{
+const useGetAllComment = (slug) =>{
     const  {setComment} = useCommentStore();
     const  {initialCommentLikes} = useLikeStore();
     const [commentLoading, setCommentLoading] = useState(false);
@@ -14,7 +14,7 @@ const useGetAllComment = (blogId) =>{
         const getComments = async () => {
             try{
                 setCommentLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/comment/getComments?blogId=${blogId}`, {
+                const response = await authFetch(`http://localhost:3001/api/v1/comment/getComments?slug=${slug}`, {
                     method: "GET",
                 });
                 
@@ -25,8 +25,6 @@ const useGetAllComment = (blogId) =>{
                 }
                 setComment(responseData.data);
                 initialCommentLikes(responseData.likes);
-            
-                
             }
             catch(error){
                 console.log(error);
@@ -46,7 +44,7 @@ const useGetAllComment = (blogId) =>{
         }
         getComments();
     }
-    ,[blogId]);
+    ,[slug]);
     
     return { commentLoading};
 }

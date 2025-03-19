@@ -7,16 +7,16 @@ const ApiError = require("../utils/ApiErrors.js");
 const toggleBlogLike = asyncHandler(async (req, res, next) => { 
     const {blogId, authorID} = req.query;
     
-  if(!blogId){
-    throw new ApiError("blogId is required", 400, "toggleBlogLike");
-  }
+    if(!blogId){
+        throw new ApiError("blogId is required", 400, "toggleBlogLike");
+    }
  
   
-  const like = await Likes.findOne({
-      userId : new mongoose.Types.ObjectId(`${req.user._id}`),
-      blogId : new mongoose.Types.ObjectId(`${blogId}`),
-      authorID : new mongoose.Types.ObjectId(`${authorID}`),
-  });
+    const like = await Likes.findOne({
+        userId : new mongoose.Types.ObjectId(`${req.user._id}`),
+        blogId : new mongoose.Types.ObjectId(`${blogId}`),
+        authorID : new mongoose.Types.ObjectId(`${authorID}`),
+    });
    
   
   if(!like){

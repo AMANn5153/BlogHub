@@ -40,10 +40,11 @@ export const Signin = () => {
                     type="text" placeholder="username" />
                 </div>
                 <div className="w-full" >
-                    <input className="w-1/2 bg-slate-50 placeholder-black text-black rounded-md p-5 h-12" 
+                    <input className="w-1/2 input validator placeholder-black " 
                     onChange={handleChange}
                     name="email"
                     value={registerUser.email}
+                    required
                     type="text" placeholder="email" />
                 </div>
                 <div className="w-full">

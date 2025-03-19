@@ -15,6 +15,7 @@ const Card = ({
   content,
   coverImage,
   blogId,
+  slug,
   likes,
   views,
   comments,
@@ -41,7 +42,7 @@ const Card = ({
                 </span>
             </div>
             </div>
-            <Link to={{ pathname: `/blog/${blogId}` }}>
+            <Link to={{ pathname: `/blog/${slug}` }}>
             <div className="flex flex-col m-10 gap-3 justify-between items-start">
               <h2 className="text-2xl text-cyan-500 hover:text-cyan-500 font-bold">
                 {title}

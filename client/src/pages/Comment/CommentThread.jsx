@@ -5,7 +5,7 @@ import CommentCard from "../../components/Card/CommentCard";
 import { Link } from "react-router-dom";
 
 const CommentThread = () => {
-    const {name, blogId, id} = useParams();
+    const {name, slug, id} = useParams();
 
     const {commentThreadLoading} = useGetCommentThread({id});
     const {comments} = useCommentStore();
@@ -21,7 +21,7 @@ const CommentThread = () => {
             </div>:
             <>
             <div className= "text-6xl bg-gradient-to-br from-white to-stone-100 text-cyan-400 m-10">
-                <Link to={`/blog/${blogId}`}><h1 className="text-4xl font-bold">{name}</h1></Link> 
+                <Link to={`/blog/${slug}`}><h1 className="text-4xl font-bold">{name}</h1></Link> 
                 <h1 className="text-xl font-bold">Comment Threads ({comments[0]?.replies.length})</h1>
                 <hr className=" m-10"/>
             </div>

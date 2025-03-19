@@ -141,15 +141,15 @@ const newReply = asyncHandler(async(req, res, next)=>{
 });
 
 const getComments = asyncHandler(async(req, res) => {
-    const {blogId, page} = req.query;
+    const {slug, page} = req.query;
 
-    if(!blogId){
+    if(!slug){
         throw new ApiError("blogId is missing", 401, "getComments");
     }
 
-    const Blog = await Blogs.findOne({_id : new mongoose.Types.ObjectId(`${blogId}`)});
+    const blog = await Blogs.findOne({slug} );
 
-    if(!Blog){
+    if(!blog){
         throw new ApiError("blog not found", 404, "getComments");
     }
 
@@ -158,7 +158,7 @@ const getComments = asyncHandler(async(req, res) => {
         {
         $match :
             {
-                blogId : new mongoose.Types.ObjectId(`${blogId}`), 
+                blogId : new mongoose.Types.ObjectId(`${blog._id}`), 
                 parentId : null
             }
         },
@@ -171,9 +171,9 @@ const getComments = asyncHandler(async(req, res) => {
                 pipeline : [
                     {
                         $project : {
-                            "_id" : 1,
-                            "name" : 1,
-                            "profilePic" : 1,
+                            "createdAt" : 0,
+                            "updatedAt" : 0,
+                            "password" : 0,
                         }
                     },
                 ]
@@ -189,7 +189,7 @@ const getComments = asyncHandler(async(req, res) => {
 ])
 
     const likes = await Likes.find({
-        blogId : new mongoose.Types.ObjectId(`${blogId}`),
+        blogId : new mongoose.Types.ObjectId(`${blog._id}`),
         parentId : null
     })
 

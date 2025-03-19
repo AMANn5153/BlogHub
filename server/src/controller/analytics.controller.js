@@ -4,6 +4,7 @@ const Like = require("../models/like.model");
 const mongoose = require("mongoose");
 const Comments = require("../models/comments.model");
 const moment = require("moment-timezone");
+const Blogs = require("../models/Blog.model");
 
 
 const mappingLikesAndDates = (stats, startDay, endDay, statsType) => {
@@ -60,7 +61,7 @@ const analytics = asyncHandler(async (req, res, next) => {
 
 
 const statsLineChart = asyncHandler(async (req, res, next) => {
-    const {blogID} = req.query;
+    const {slug} = req.query;
     let {period} = req.query;
     const timezone = "Asia/Kolkata";
 
@@ -70,11 +71,12 @@ const statsLineChart = asyncHandler(async (req, res, next) => {
     timePassed.setDate(timePassed.getDate() - period);
 
     
+    const blog = await Blogs.findOne({slug});
 
     const likeStats = await Like.aggregate([
         {
             $match : {
-                blogId : new mongoose.Types.ObjectId(`${blogID}`),
+                blogId : blog._id,
                 commentId : null,
                 createdAt : {
                     $gte : timePassed
@@ -99,7 +101,7 @@ const statsLineChart = asyncHandler(async (req, res, next) => {
     const viewStats = await Views.aggregate([
         {
             $match : {
-                blogId : new mongoose.Types.ObjectId(`${blogID}`),
+                blogId : blog._id,
                 createdAt : {
                     $gte : timePassed
                 }
@@ -123,7 +125,7 @@ const statsLineChart = asyncHandler(async (req, res, next) => {
     const commentStats = await Comments.aggregate([
         {
             $match : {
-                blogId : new mongoose.Types.ObjectId(`${blogID}`),
+                blogId : blog._id,
                 createdAt : {
                     $gte : timePassed
                 }

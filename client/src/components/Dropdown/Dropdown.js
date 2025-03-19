@@ -7,8 +7,7 @@ import EditButton from "../Button/EditButton";
 
 const Dropdown = ({ author }) => {
   const { auth } = useAuthContext();
-
-
+  
   return (
     <div className="dropdown dropdown-hover">
         <div tabIndex={0} className=" avatar">
@@ -35,7 +34,7 @@ const Dropdown = ({ author }) => {
           </Link>
         </div>
         <div>
-          <p className="text-black">Creative Developer, Generative AI| JavaScript, HTML, CSS</p>
+          <p className="text-black">{author.bio}</p>
         </div>
         <div>
           {auth?._id !== author?._id ? (

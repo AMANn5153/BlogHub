@@ -30,9 +30,9 @@ import ButtonGroup from "../../components/Button/ButtonGroup";
 
 const Blogs = () => {
   const commentRef = useRef();
-  const { id } = useParams();
-  const { commentLoading } = useGetAllComment(id);
-  const { loading } = useGetBlog(id);
+  const { slug } = useParams();
+  const { commentLoading } = useGetAllComment(slug);
+  const { loading } = useGetBlog(slug);
   const { comments } = useCommentStore();
   const { auth } = useAuthContext();
   const { likePost } = useLikePost();
@@ -42,24 +42,23 @@ const Blogs = () => {
   const { views } = useViewsBlogs();
   const { blog } = useBlogStore();
 
-
   useEffect(() => {
     if (!blog) return;
 
-    const getViewCount = sessionStorage.getItem(`viewCount_${id}`);
+    const getViewCount = sessionStorage.getItem(`viewCount_${slug}`);
 
     if (!getViewCount) {
       const increaseViews = async () => {
-        await views({ id, userId: blog?.author?._id });
+        await views({ id : blog?._id, userId: blog?.author?._id });
       };
       increaseViews();
-      sessionStorage.setItem(`viewCount_${id}`, true);
+      sessionStorage.setItem(`viewCount_${blog?._id}`, true);
     }
-  }, [id, blog?.author]);
+  }, [blog?._id, blog?.author]);
 
   const likedByUser =
     likes.length > 0
-      ? likes?.some((like) => like.userId === auth?._id && like.blogId === id)
+      ? likes?.some((like) => like.userId === auth?._id && like.blogId === blog?._id)
       : false;
 
 
@@ -67,7 +66,7 @@ const Blogs = () => {
   const savedByUser =
     saveBlog.length > 0
       ? saveBlog?.some(
-          (save) => save.userId === auth?._id && save.blogId === id
+          (save) => save.userId === auth?._id && save.blogId === blog?._id
         )
       : false;
 
@@ -80,7 +79,6 @@ const Blogs = () => {
   }
 
   const { heading, author, createdAt, content, coverImage } = blog;
-
   const { duration, time, dateString } = timeDuration(createdAt);
 
   const handleCommentView = () => {
@@ -88,11 +86,11 @@ const Blogs = () => {
   };
 
   const handleLike = async () => {
-    await likePost(id, author?._id);
+    await likePost(blog?._id, author?._id);
   };
 
   const handleSave = async () => {
-    await postSaveBlog(id);
+    await postSaveBlog(blog?._id);
   };
 
   return (
@@ -210,7 +208,7 @@ const Blogs = () => {
                 return (
                   <>
                     <div className="hover:cursor-pointer">
-                      <CommentCard key={index} comment={comment} blog={{heading,  id}}/>
+                      <CommentCard key={index} comment={comment} blog={{heading, id :blog?.id}}/>
                     </div>
                   </>
                 );

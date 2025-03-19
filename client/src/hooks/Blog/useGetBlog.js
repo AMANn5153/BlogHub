@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import useBlogStore from "../../store/useBlogStore";
 import useAuthFetch from "../../utils/authFetch";
 
-const useGetBlog = (id) => {
+const useGetBlog = (slug) => {
 
     const [loading, setLoading] = useState(false);
     const {initialBlogLikes} = useLikeStore();
@@ -17,7 +17,7 @@ const useGetBlog = (id) => {
         const getBlog = async () => {
             try {
                 setLoading(true);
-                const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/getBlog?id=${id}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/getBlog?slug=${slug}`, {
                     method: "GET",
                 });
                 const responseData = await response.json();
@@ -47,7 +47,7 @@ const useGetBlog = (id) => {
         
         getBlog();
 
-    }, [id, setSingleBlog]); 
+    }, [slug, setSingleBlog]); 
 
     return {loading };
 

@@ -4,7 +4,7 @@ import { create } from "zustand";
 const useBlogStore = create((set) => ({
     blogs : [],
     blog : null,
-
+   
     setSingleBlog : (blog)=>{
         set((state)=>({
              blog 

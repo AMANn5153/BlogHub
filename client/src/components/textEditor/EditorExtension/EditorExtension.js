@@ -1,8 +1,5 @@
 import { StarterKit } from "@tiptap/starter-kit";
 
-
-
-
 // tiptap extensions
 import FileHandler from "@tiptap-pro/extension-file-handler";
 import { Image } from "@tiptap/extension-image";
@@ -22,7 +19,6 @@ import rust from "highlight.js/lib/languages/rust";
 
 //custom extensions
 import { ImageDeletion } from "../custom-extension/ImageComponent";
-import NewlineExtension from '../custom-extension/NewLineExtension';
 
 //lowlight configurations
 const lowlight = createLowlight(all);
@@ -52,7 +48,6 @@ const extensions = [
   Heading.configure({
     levels: [1, 2, 3],
   }),
-  NewlineExtension,
   Link.configure({
     openOnClick: true,
     autolink: true,

@@ -14,10 +14,10 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 
 const Stats = () => {
   const {auth} = useAuthContext();
-  const { blogID } = useParams();
-  const { loading } = useGetBlog(blogID);
+  const { slug } = useParams();
+  const { loading } = useGetBlog(slug);
   const [period, setPeriod] = useState(7);
-  const { isWeeklyLoading } = useGetLineChartData(blogID, period);
+  const { isWeeklyLoading } = useGetLineChartData(slug, period);
   const { like, view, comment } = useAnalyticsStore();
   const likes = like[like.length - 1];
   const views = view[view.length - 1];
@@ -33,7 +33,7 @@ const Stats = () => {
   return (
     <>
       <div className="flex p-5 flex-col w-full justify-between items-start gap-5">
-        <Link to={{ pathname: `/blog/${blog?._id}` }}><h1 className="text-4xl text-blue-700 font-bold ">
+        <Link to={{ pathname: `/blog/${blog?.slug}` }}><h1 className="text-4xl text-blue-700 font-bold ">
           {loading || !blog ? "" : blog?.heading}
         </h1></Link>
         <div role="tablist" className="tabs tabs-bordered">

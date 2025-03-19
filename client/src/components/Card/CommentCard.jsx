@@ -29,7 +29,7 @@ const CommentCard = ({comment , blog}) => {
   const {setEditorState} = useEditorStateContext();
   const {deleteCommentLoading, deleteComment} = useDeleteComment();
   const navigate = useNavigate();
-  const {heading, id} = blog;
+  const {heading, id, slug} = blog;
 
   
   const changeLike = async () =>{
@@ -71,6 +71,7 @@ const CommentCard = ({comment , blog}) => {
                 {comment?.author?.name}
               </div>
             </Link>
+            
             {comment?.author?._id === auth?._id ?
             <div className="dropdown dropdown-bottom ">
               <button tabIndex={0} className=" m-2 btn btn-circle btn-sm btn-ghost">
@@ -85,7 +86,7 @@ const CommentCard = ({comment , blog}) => {
             </div>: null}
             </div>
             <div className="ml-2 "><p className="text-sm">{dateString}</p></div>
-            <Link to={{pathname:`/comment/${heading}/${id}/${comment._id}`}}>
+            <Link to={{pathname:`/comment/${heading}/${slug}/${comment._id}`}}>
               <div className="tooltip tooltip-bottom" data-tip="Open comment Thread">
                 <p className="tiptap">{parse(comment?.comment)}</p>
               </div>

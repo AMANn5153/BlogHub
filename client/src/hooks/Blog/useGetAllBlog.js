@@ -3,8 +3,9 @@ import useBlogStore from "../../store/useBlogStore";
 import { toast } from "react-toastify";
 import useAuthFetch from "../../utils/authFetch";
 
-const useGetAllBlog = (filter = null) => {
+const useGetAllBlog = (filter = null, page) => {
     const [loading, setLoading] = useState(false);
+    const [totalDocuments, setTotalDocuments] = useState(0);
     const {blogs, setBlog} = useBlogStore();
     const {authFetch} = useAuthFetch();
    
@@ -13,12 +14,13 @@ const useGetAllBlog = (filter = null) => {
         const getBlog = async ()=>{
             try{
                 setLoading(true);
-                const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/getAllBlog?filter=${filter}`);
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/getAllBlog?filter=${filter}&page=${page}`);
                 const responseData = await response.json();
                 if(!response.ok){
                     throw new Error(responseData.message);
                 }
                 setBlog(responseData.data);
+                setTotalDocuments(responseData.totalDocuments);
             }catch(error){
                 console.log(error);
                 toast.error(error.message, {
@@ -35,9 +37,9 @@ const useGetAllBlog = (filter = null) => {
         }
         getBlog();
     }, 
-    [setBlog, filter]);
+    [setBlog, filter, page]);
 
-    return {blogs, loading};
+    return {blogs, loading, totalDocuments};
 
 }
 

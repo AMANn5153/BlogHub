@@ -14,7 +14,7 @@ const usePostComment = () => {
     const {auth} = useAuthContext();
     const {authFetch} = useAuthFetch();
 
-    const postComment = async ({ comment, blogId, authorId }) => {
+    const postComment = async ({ comment, slug, authorId }) => {
         try {
             if(comment === "<p></p>"){
                 throw new Error("empty comment is not allowed");
@@ -22,7 +22,7 @@ const usePostComment = () => {
 
             commentPostSetLoading(true);
 
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/newComment?id=${blogId}&authorId=${authorId}`, {
+            const response = await authFetch(`http://localhost:3001/api/v1/comment/newComment?slug=${slug}&authorId=${authorId}`, {
                 method: "POST", 
                 credentials: "include",
                 headers: {

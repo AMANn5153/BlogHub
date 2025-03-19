@@ -108,21 +108,31 @@ const ProfileSettings = () => {
             <label className="font-semibold">Name</label>
             <input
               name="name"
+              maxLength={20}
+              minLength={2}
               onChange={changeValues}
               value={profile.name}
               className="border-2 input placeholder-black bg-white
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
+            <div className="flex w-1/2 flex-row justify-end">
+              <span className="text-gray-800">{profile.name.length}/20</span>
+            </div>
           </div>
           <div className="w-full flex flex-col items-start justify-between">
             <label className="font-semibold">Username</label>
             <input
               name="username"
+              maxLength={20}
+              minLength={2}
               onChange={changeValues}
               value={profile.username}
               className="border-2 input placeholder-black bg-white
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
+            <div className="flex w-1/2 flex-row justify-end">
+              <span className="text-gray-800">{profile.username.length}/20</span>
+            </div>
           </div>
           <div className="w-full flex flex-col items-start justify-between">
             <label className="font-semibold">Email</label>
@@ -161,9 +171,12 @@ const ProfileSettings = () => {
               placeholder="write something about yourself"
               onChange={changeValues}
               value={profile.bio}
-              className="border-2 input placeholder-black bg-white
+              className="border-2 input h-24 placeholder-black bg-white
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
+            <div className="flex w-1/2 flex-row justify-end">
+              <span className="text-gray-800">{profile.bio.length}/200</span>
+            </div>
           </div>
 
           <div className="w-full flex flex-col h-auto items-start justify-between">
@@ -185,9 +198,14 @@ const ProfileSettings = () => {
               placeholder="eg. New Delhi, Kolkata"
               onChange={changeValues}
               value={profile.location}
+              maxLength={20}
+              minLength={2}
               className="border-2 input placeholder-black bg-white
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
+            <div className="flex w-1/2 flex-row justify-end">
+              <span className="text-gray-800">{profile.location.length}/20</span>
+            </div>
           </div>
         </div>
 
@@ -199,9 +217,14 @@ const ProfileSettings = () => {
               placeholder="eg. Software Engineer"
               onChange={changeValues}
               value={profile.work}
+              maxLength={20}
+              minLength={2}
               className="border-2 input placeholder-black bg-white
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
+            <div className="flex w-1/2 flex-row justify-end">
+              <span className="text-gray-800">{profile.work.length}/20</span>
+            </div>
           </div>
 
           <div className="w-full flex flex-col h-auto items-start justify-between">
@@ -211,9 +234,14 @@ const ProfileSettings = () => {
               placeholder="eg. B.Tech in Computer Science"
               onChange={changeValues}
               value={profile.education}
+              maxLength={20}
+              minLength={2}
               className="border-2 input placeholder-black bg-white
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
+            <div className="flex w-1/2 flex-row justify-end">
+              <span className="text-gray-800">{profile.education.length}/20</span>
+            </div>
           </div>
         </div>
 

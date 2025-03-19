@@ -33,7 +33,7 @@ const useCreateBlog = ()=>{
                 throw new Error(responseData.message);
             }
 
-            navigate(`/blog/${responseData.data._id}`);
+            navigate(`/blog/${responseData.data.slug}`);
 
         } catch (error) {
             console.log(`error in initialization of blog`,error.message);

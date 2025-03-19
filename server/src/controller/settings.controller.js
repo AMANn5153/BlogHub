@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const asyncHandler = require("../utils/asyncHandler");
 const User = require("../models/user.model.js");
+const ApiError = require("../utils/ApiErrors");
 const fs = require("fs");
 
 const updateUserInfo = asyncHandler(async(req, res, next)=>{
@@ -18,6 +19,13 @@ const updateUserInfo = asyncHandler(async(req, res, next)=>{
             _id : req.user._id
         }).select("-password -createdAt -updatedAt");
 
+        if(username){
+            const usernameExists = await User.findOne({username});
+            if(usernameExists){
+                throw new ApiError("username already exists", 409, "updateUserInfo");
+            }
+        }
+
         let profilePicPath = req.file?.path;
 
         if(profilePicPath){
@@ -25,7 +33,7 @@ const updateUserInfo = asyncHandler(async(req, res, next)=>{
 
             if(user.profilePic.includes("http://localhost:3001/")){
                 const oldProfilePic = user.profilePic.replace("http://localhost:3001/", "");
-                fs.unlinkSync(oldProfilePic);
+                await fs.unlink(oldProfilePic);
             }
 
             profilePicPath = "http://localhost:3001/" + profilePicPath;

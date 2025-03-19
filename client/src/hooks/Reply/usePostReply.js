@@ -11,10 +11,15 @@ const usePostReply = () => {
     const {authFetch} = useAuthFetch();
 
     const postReply = async ({reply, commentId})=>{
+        if(reply === "<p></p>"){
+            toast.error("empty reply is not allowed");
+            return;
+        }
         try{
-            if(!commentId || !reply){
+            if(!commentId){
                 return;
-            }        
+            }   
+            
             replyPostSetLoading(true);
             
             const response = await authFetch(`http://localhost:3001/api/v1/comment/newReply?id=${commentId}`, {

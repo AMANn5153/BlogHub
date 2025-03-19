@@ -1,23 +1,31 @@
+import {useState} from "react";
 import Card from "../../components/Card/Card";
 import useGetAllBlog from "../../hooks/Blog/useGetAllBlog";
-import { useState } from "react";
 import { VscListFilter } from "react-icons/vsc";
 const Home = () => {
   const [filter, setFilter] = useState("mostLiked");
-  const { blogs, loading } = useGetAllBlog(filter);
+  const [page, setPage] = useState(1);
+  const { blogs, loading, totalDocuments } = useGetAllBlog(filter,page);
+  
 
   const handleFilter = (e)=>{
     setFilter(e.target.name);
   }
- 
+  
+  const handlePrevPage = ()=>{
+    setPage(page-1);
+  }
+
+  const handleNextPage = ()=>{
+    setPage(page+1);
+  }
+
   if(!blogs || loading){
     return (<div className="flex w-full h-full items-center justify-center">
     <span className="loading loading-infinity loading-lg"></span>
   </div>)
   }
   
-  
-
   return (
     <>
       <div className="flex flex-row m-10 rounded-xl h-full justify-around items-center flex-wrap">
@@ -65,6 +73,7 @@ const Home = () => {
                     likes={blog.likesCount}
                     views={blog.viewsCount}
                     comments={blog.commentsCount}
+                    slug = {blog.slug}
                   />
                 );
               })
@@ -72,9 +81,9 @@ const Home = () => {
           </div>
         </div>
         <div className="join bg-white">
-          <button className="join-item btn bg-white">«</button>
-          <button className="join-item btn bg-white">Page 1</button>
-          <button className="join-item btn bg-white">»</button>
+          <button onClick={handlePrevPage} disabled={page === 1} className="join-item btn bg-white">«</button>
+          <button className="join-item btn tooltip tooltip-bottom bg-white" data-tip={`maxPage ${Math.ceil(totalDocuments/10)}`}>{`page ${page}`}</button>
+          <button onClick={handleNextPage} disabled={page === Math.ceil(totalDocuments/10)} className="join-item btn bg-white">»</button>
         </div>
       </div>
     </>
