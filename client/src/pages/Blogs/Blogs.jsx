@@ -52,7 +52,7 @@ const Blogs = () => {
         await views({ id : blog?._id, userId: blog?.author?._id });
       };
       increaseViews();
-      sessionStorage.setItem(`viewCount_${blog?._id}`, true);
+      sessionStorage.setItem(`viewCount_${slug}`, true);
     }
   }, [blog?._id, blog?.author]);
 
@@ -78,7 +78,7 @@ const Blogs = () => {
     );
   }
 
-  const { heading, author, createdAt, content, coverImage } = blog;
+  const { heading, author, slug : blogSlug , name, createdAt, content, coverImage } = blog;
   const { duration, time, dateString } = timeDuration(createdAt);
 
   const handleCommentView = () => {
@@ -199,7 +199,7 @@ const Blogs = () => {
           <br />
           <div className="flex flex-col gap-4 w-full">
             <EditorContextProvider purpose="comment">
-              <Comment blogId={blog._id} authorId={blog?.author?._id} />
+              <Comment slug={blogSlug} authorId={blog?.author?._id} />
             </EditorContextProvider>
             {commentLoading ? (
               <span className="loading loading-infinity loading-lg"></span>
@@ -208,7 +208,7 @@ const Blogs = () => {
                 return (
                   <>
                     <div className="hover:cursor-pointer">
-                      <CommentCard key={index} comment={comment} blog={{heading, id :blog?.id}}/>
+                      <CommentCard key={index} comment={comment} blog={{heading, blogSlug : slug }}/>
                     </div>
                   </>
                 );

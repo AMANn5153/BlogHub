@@ -14,7 +14,7 @@ const usePostComment = () => {
     const {auth} = useAuthContext();
     const {authFetch} = useAuthFetch();
 
-    const postComment = async ({ comment, slug, authorId }) => {
+    const postComment = async ({ comment, commentInText, slug, authorId }) => {
         try {
             if(comment === "<p></p>"){
                 throw new Error("empty comment is not allowed");
@@ -22,13 +22,14 @@ const usePostComment = () => {
 
             commentPostSetLoading(true);
 
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/newComment?slug=${slug}&authorId=${authorId}`, {
+            const response = await authFetch(`http://localhost:3001/api/v1/comment/newComment?slug=${slug}&authorId=${authorId}`, 
+            {
                 method: "POST", 
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json", 
                 },
-                body: JSON.stringify({ comment }) 
+                body: JSON.stringify({ comment , commentInText}) 
             });
 
             const responseData = await response.json();
@@ -36,11 +37,8 @@ const usePostComment = () => {
             if (!response.ok) {
                 throw new Error(responseData.message || "Error in posting comment");
             }
-
-            // Functional update to avoid stale state issues
             setNewComment([responseData.data]);
-            initialCommentLikes(responseData.likes || []);
-
+            console.log(responseData.data);
         } catch (err) {
             console.log(err.message);
             toast.error(err.message, {

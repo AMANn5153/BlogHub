@@ -52,6 +52,7 @@ const Tabs = ({id}) => {
           likes={blog?.likesCount}
           views={blog?.viewsCount}
           comments={blog?.commentsCount}
+          slug={blog?.slug}
         
         /></>)}) : <div className="flex flex-col h-screen items-center justify-center">
             <h1 className = "text-2xl  text-gray-600 font-bold text-center">No Blogs Yet</h1>
@@ -84,6 +85,7 @@ const Tabs = ({id}) => {
                 likes={save?.blog?.likesCount}
                 views={save?.blog?.viewsCount}
                 comments={save?.blog?.commentsCount}
+                slug={save?.blog?.slug}
               />
             </>
           );

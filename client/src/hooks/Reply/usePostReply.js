@@ -10,25 +10,25 @@ const usePostReply = () => {
     const {auth} = useAuthContext();
     const {authFetch} = useAuthFetch();
 
-    const postReply = async ({reply, commentId})=>{
+    const postReply = async ({reply, replyInText, commentSlug}) => {
         if(reply === "<p></p>"){
             toast.error("empty reply is not allowed");
             return;
         }
         try{
-            if(!commentId){
+            if(!commentSlug){
                 return;
             }   
             
             replyPostSetLoading(true);
             
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/newReply?id=${commentId}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/comment/newReply?commentSlug=${commentSlug}`, {
                 method : "POST",
-                credentials : "include",
                 headers : {
                     "Content-Type" : "application/json"
                 },
-                body : JSON.stringify({reply})
+                credentials: "include",
+                body : JSON.stringify({reply, replyInText})
             });
             
             const responseData = await response.json();

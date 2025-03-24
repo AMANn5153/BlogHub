@@ -11,7 +11,7 @@ const ButtonGroup = ({ blog }) => {
       <li>
         <Link
           className="btn flex items-center hover:bg-stone-100 btn-ghost tooltip tooltip-bottom w-full justify-center "
-          to={`/dashboard/stats/${blog._id}`}
+          to={`/dashboard/stats/${blog.slug}`}
           data-tip="Stats"
         >
           Stats <TfiStatsUp color="black"/>

@@ -24,7 +24,16 @@ const adminLogin = asyncHandler(async (req, res, next) => {
         throw new ApiError("user does not exist", 404, "adminLogin");
     }
 
-    generateTokenAndSetCookie(user, res);
+    const accessToken =  userExists.generateAccessToken();
+    const refreshToken = userExists.generateRefreshToken();
+
+    res.setHeader("Access-Control-Allow-Origin", `procees.env.CLIENT_URL`);  
+    res.setHeader("Access-Control-Allow-Credentials", "true");              
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+
+    res.cookie("at", accessToken, ACCESS_COOKIE_OPTIONS)
+    .cookie("rt", refreshToken, REFRESH_COOKIE_OPTIONS);
+
     const token = jwt.sign({_id : userExists._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
     
     res.status(200).json({

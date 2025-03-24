@@ -8,6 +8,7 @@ const Likes = require("../models/like.model");
 const Saves = require("../models/save.model");
 const Views = require("../models/views.model");
 const slugify  = require("slugify");
+const crypto = require("crypto");
 
 const getAllBlog = asyncHandler(async (req, res, next)=>{
 

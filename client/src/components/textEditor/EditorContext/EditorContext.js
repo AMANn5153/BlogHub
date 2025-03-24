@@ -31,6 +31,7 @@ export const EditorContextProvider = ({children, purpose}) => {
         }
 
         else if(purpose === "commentEdit"){
+            console.log(editorState);
             return editorState|| "";
         }
 

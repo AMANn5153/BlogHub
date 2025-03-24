@@ -22,7 +22,7 @@ const Login = () => {
     return (
         <div className = "bg-gradient-to-br from-white to-green-200 flex flex-col items-center justify-center h-screen">
             <div className=" flex flex-col  items-center justify-around h-4/5 w-2/3">
-            <div className="text-6xl text-slate-950 font-bold">
+            <div className=" text-6xl text-slate-950 font-bold">
                 <h1>Login</h1>
             </div>
             <div className="flex flex-col items-start justify-around h-1/2 w-2/3">

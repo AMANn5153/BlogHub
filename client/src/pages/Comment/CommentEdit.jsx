@@ -8,38 +8,38 @@ import useEditorContext, {
 } from "../../components/textEditor/EditorContext/EditorContext";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import useCommentStore from "../../store/useCommentStore";
 
 const CommentEdit = () => {
-  const { name, blogId, commentId } = useParams();
-
-  
+  const { name, blogSlug, commentSlug } = useParams();
 
   return (
     <div className=" flex flex-col items-start justify-between  w-full gap-4 w-full h-full  ">
       <div className="flex flex-row items-start justify-start p-5 w-full  ">
-       <Link to={`/blog/${blogId}`}><h1 className="text-2xl font-bold text-cyan-400 ">{name}</h1></Link>
+       <Link to={`/blog/${blogSlug}`}><h1 className="text-2xl font-bold text-cyan-400 ">{name}</h1></Link>
       </div>
       <div className="flex flex-row items-start w-full justify-center   w-full ">
         <h1 className="text-2xl font-bold  ">Edit Comment</h1>
       </div>
       <div className="flex flex-col items-center  flex-shrink-0  justify-center w-full h-full">
         <EditorContextProvider purpose="commentEdit">
-          <Edit commentId={commentId}  name={name} blogId={blogId}/>
+          <Edit commentSlug={commentSlug}  name={name} blogId={blogSlug}/>
         </EditorContextProvider>
       </div>
     </div>
   );
 };
 
-const Edit = ({ commentId, name, blogId }) => {
+const Edit = ({ commentSlug, name, blogSlug }) => {
   const navigate = useNavigate();
   const { editor } = useEditorContext();
   const [edit, setEdit] = useState("");
   const { editCommentLoading, updateComment } = useEditComment();
 
+
   useEffect(()=>{
-    editor.commands.setContent(JSON.parse(localStorage.getItem(`comment-${commentId}`)));
-  },[commentId])
+    editor.commands.setContent(JSON.parse(localStorage.getItem(`comment-${commentSlug}`)));
+  },[commentSlug])
   
 
   useEffect(() => {
@@ -52,10 +52,10 @@ const Edit = ({ commentId, name, blogId }) => {
       toast.error("empty comment");
       return;
     }
-    await updateComment(commentId, edit);
+    const editSlug =  await updateComment(commentSlug, editor.getText(), edit);
     setEdit("");
-    localStorage.removeItem(`comment-${commentId}`);
-    navigate(`/comment/${name}/${blogId}/${commentId}`);
+    localStorage.removeItem(`comment-${commentSlug}`);
+    navigate(`/comment/${name}/${blogSlug}/${editSlug}`);
   };
 
   return (

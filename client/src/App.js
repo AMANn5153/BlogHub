@@ -26,7 +26,8 @@ import CommentEdit from './pages/Comment/CommentEdit.jsx';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TokenContextProvider } from './context/tokenContext/useTokenContext.js';
-import Admin from './pages/Admin/Admin';
+import AdminLogin from './pages/Admin/AdminLogin.jsx';
+import AdminLayout from './pages/Admin/AdminLayout.jsx';
 
 function App() {
   return (
@@ -39,8 +40,9 @@ function App() {
     <ThemeProvider>
     <ScrollToTop/>
     <Routes>
-      <Route path='/admin' element={<Admin/>}></Route>
+      <Route path='/admin' element={<AdminLayout/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
+      <Route path='admin/login' element={<AdminLogin/>}></Route>
       <Route path='/forgetPassword' element={<ForgetPassword/>}></Route>
       <Route path='/changePassword/:token' element={<ChangePassword/>}></Route>
       {/* <Route path='/profile/:id' element={<Profile/>}></Route> */}
@@ -58,13 +60,13 @@ function App() {
       <Route path='/' element={<Layout/>}>
         <Route index element={<Home/>}></Route>
         <Route path="/blog/:slug" element={<Blogs/>}></Route>
-        <Route path="/comment/:name/:blogId/:id" element={<CommentThread/>}></Route>
+        <Route path="/comment/:name/:blogSlug/:commentSlug" element={<CommentThread/>}></Route>
         <Route path='/dashboard' element={
             <PrivateRoute>
               <Dashboard/>
             </PrivateRoute>
         }></Route>
-        <Route path="/editComment/:name/:slug/:commentId" element={<PrivateRoute><CommentEdit/></PrivateRoute>}></Route>
+        <Route path="/editComment/:name/:blogSlug/:commentSlug" element={<PrivateRoute><CommentEdit/></PrivateRoute>}></Route>
         <Route path="/settings" element={<PrivateRoute><Settings/></PrivateRoute>}></Route>
         <Route path="dashboard/stats/:slug" element={<PrivateRoute><Stats/></PrivateRoute>}></Route>
         <Route path='/profile/:id' element={<Profile/>}></Route>

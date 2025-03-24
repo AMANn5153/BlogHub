@@ -3,7 +3,7 @@ import useCommentStore from "../../store/useCommentStore";
 import useLikeStore from "../../store/useLikeStore";
 import useAuthFetch from "../../utils/authFetch";
 
-const useGetCommentThread = ({id}) => {
+const useGetCommentThread = ({commentSlug}) => {
     const [commentThreadLoading, setCommentThreadLoading] = useState(true);
     const {setComment} = useCommentStore();
     const {initialCommentLikes} = useLikeStore();
@@ -13,7 +13,7 @@ const useGetCommentThread = ({id}) => {
         const getComments = async ()=>{
             try{
                 setCommentThreadLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/comment/getCommentThread?commentId=${id}`, {
+                const response = await authFetch(`http://localhost:3001/api/v1/comment/getCommentThread?commentSlug=${commentSlug}`, {
                     method: "GET",
                 });
                 
@@ -35,7 +35,7 @@ const useGetCommentThread = ({id}) => {
         }    
         
         getComments();
-    }, [id]);
+    }, [commentSlug]);
 
     return {commentThreadLoading}
 }

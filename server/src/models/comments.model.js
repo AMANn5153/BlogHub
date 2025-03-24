@@ -27,6 +27,11 @@ const commentSchema = new mongoose.Schema({
         ref:"Comment",
         default:null,
         index:true,
+    },
+    slug:{
+        type:String,
+        trim:true,
+        unique:true,
     }
 }, {timestamps:true});
 

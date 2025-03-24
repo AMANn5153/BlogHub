@@ -2,21 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 body {
   margin: 0;
   font-family: "comic-neue", cursive;
   font-size: normal;
-
 } 
-
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }  */
-
 
 .glass-effect {
   background-color: rgba(255, 255, 255, alpha); 

@@ -6,7 +6,7 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 import { useState, useEffect } from "react";
 import LoginModal from "../Modal/LoginModal";
 
-const Comments = ({blogId, authorId}) => {
+const Comments = ({slug, authorId}) => {
   const [comment, setComment] = useState("");
   const { postComment } = usePostComment();
   const { auth } = useAuthContext();
@@ -21,7 +21,7 @@ const Comments = ({blogId, authorId}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postComment({ comment, blogId, authorId });
+    await postComment({ comment, commentInText : editor.getText(), slug, authorId });
     setComment("");
     editor.commands.clearContent();
   };

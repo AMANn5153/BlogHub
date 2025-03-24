@@ -8,16 +8,18 @@ const useEditComment = () => {
     const {setComment} = useCommentStore();
     const {authFetch} = useAuthFetch();
 
-    const updateComment = async (commentId, comment) => {
+    const updateComment = async (commentSlug, commentInText, comment) => {
         try{
             setEditCommentLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/editComment?commentId=${commentId}`,{
+            const response = await authFetch(`http://localhost:3001/api/v1/comment/editComment?commentSlug=${commentSlug}`,{
                 method : "PUT",
+                credentials : "include",
                 headers : {
                     "content-type" : "application/json"
                 },
                 body : JSON.stringify({
-                    comment
+                    comment,
+                    commentInText
                 })
             });
 
@@ -27,6 +29,7 @@ const useEditComment = () => {
             }
 
             setComment(responseData.data);
+            return responseData.data[0].slug
         }
         catch(error){
             toast.error(error.message, {

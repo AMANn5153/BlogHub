@@ -29,9 +29,9 @@ const CommentCard = ({comment , blog}) => {
   const {setEditorState} = useEditorStateContext();
   const {deleteCommentLoading, deleteComment} = useDeleteComment();
   const navigate = useNavigate();
-  const {heading, id, slug} = blog;
+  const {blogSlug, heading} = blog;
+  console.log(blog)
 
-  
   const changeLike = async () =>{
     await likePostComment(comment._id);
   }
@@ -42,9 +42,9 @@ const CommentCard = ({comment , blog}) => {
   }
 
   const handleEdit = () =>{
-    localStorage.setItem(`comment-${comment._id}`, JSON.stringify(comment.comment));
+    localStorage.setItem(`comment-${comment.slug}`, JSON.stringify(comment.comment));
     setEditorState(comment.comment);
-    navigate(`/editComment/${heading}/${id}/${comment._id}`);
+    navigate(`/editComment/${heading}/${blogSlug}/${comment.slug}`);
   }
 
   const handleDelete = async () => {
@@ -86,7 +86,7 @@ const CommentCard = ({comment , blog}) => {
             </div>: null}
             </div>
             <div className="ml-2 "><p className="text-sm">{dateString}</p></div>
-            <Link to={{pathname:`/comment/${heading}/${slug}/${comment._id}`}}>
+            <Link to={{pathname:`/comment/${heading}/${blogSlug}/${comment.slug}`}}>
               <div className="tooltip tooltip-bottom" data-tip="Open comment Thread">
                 <p className="tiptap">{parse(comment?.comment)}</p>
               </div>
@@ -99,7 +99,7 @@ const CommentCard = ({comment , blog}) => {
               ?
               <>
               <EditorContextProvider purpose="reply">
-                <Reply removeReply={setReply} commentId={comment._id} blog={blog}/>
+                <Reply removeReply={setReply} commentSlug={comment.slug} blog={blog}/>
               </EditorContextProvider>
               </>
               :
@@ -128,13 +128,13 @@ const CommentCard = ({comment , blog}) => {
 };
 
 
-export const Reply = ({removeReply, commentId, blog})=>{
+export const Reply = ({removeReply, commentSlug, blog})=>{
   const {postReply} = usePostReply();
   const { editor } = useEditorContext();
   const [reply, setReply] = useState(null);
   const {auth} = useAuthContext();
   const navigate = useNavigate();
-  const {heading, id} = blog;
+  const {heading, slug, name} = blog;
 
   useEffect(()=>{
     setReply(editor.getHTML());
@@ -142,10 +142,10 @@ export const Reply = ({removeReply, commentId, blog})=>{
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await postReply({reply, commentId});
+    await postReply({reply, replyInText: editor.getText(), commentSlug});
     setReply("");
     editor.commands.clearContent();
-    navigate(`/comment/${heading}/${id}/${commentId}`);
+    navigate(`/comment/${heading}/${slug}/${commentSlug}`);
   }
   
   return(

@@ -5,19 +5,20 @@ const { default: mongoose } = require("mongoose");
 const {io} = require("../socket/socket");
 const ApiError = require("../utils/ApiErrors");
 const Likes = require("../models/like.model");
+const slugify = require("slugify");
 
 
 const newComment = asyncHandler(async(req, res, next) => {
    
-    const {comment} = req.body;
-    const {id, authorId} = req.query;
+    const {comment, commentInText} = req.body;
+    const {slug, authorId} = req.query;
 
     if(!comment || comment === ""){
         throw new ApiError("empty comment is not allowed", 401, "newComment");
     }
 
-    if(!id ){
-        throw new ApiError("blogId is missing", 401, "newComment");
+    if(!slug ){
+        throw new ApiError("can't find blog", 401, "newComment");
     }
 
     if(!authorId){
@@ -26,7 +27,7 @@ const newComment = asyncHandler(async(req, res, next) => {
 
 
     const blogExists = await Blogs.findOne({
-        _id :  new mongoose.Types.ObjectId(`${id}`),
+        slug 
     });
 
     if(!blogExists){
@@ -36,7 +37,7 @@ const newComment = asyncHandler(async(req, res, next) => {
 
     const createdComment = await Comments.create({
         blogAuthor: authorId,
-        blogId : new mongoose.Types.ObjectId(`${id}`),
+        blogId : blogExists._id,
         author : req.user._id,
         comment
     })
@@ -46,35 +47,77 @@ const newComment = asyncHandler(async(req, res, next) => {
         throw new ApiError("comment not created", 401, "newComment");
     }
 
-    io.to(id).emit("newComment", createdComment);
+    const lastEndOfId = createdComment._id.toString().slice(-5);
+    const blogSlug = slugify(commentInText+" "+lastEndOfId, {lower:true});
 
-    const populatedComment = await Comments.findOne({_id : createdComment._id}).populate("author").sort({createdAt : -1});
+    const updateWithSlug = await Comments.findOneAndUpdate(
+    {
+        _id : createdComment._id
+    },
+    {
+        $set : {
+            slug : blogSlug
+        }
+    });
+
+
+    const populatedComment = await Comments.aggregate([
+        {
+            $match : {
+                _id : createdComment._id
+            }
+        },
+        {
+            $lookup : {
+                from : "users",
+                localField : "author",
+                foreignField : "_id",
+                as : "author",
+                pipeline : [
+                    {
+                        $project : {
+                            "_password" : 0,
+                            "createdAt" : 0,
+                            "updatedAt" : 0,
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            $addFields : {
+                author : {
+                    $first : "$author"
+                }
+            }
+        }
+    ])
 
     res.status(201).json({
         success : true,
         message : "comment created successfully",
-        data : populatedComment
+        data : populatedComment[0]
     });
 
 });
 
 const newReply = asyncHandler(async(req, res, next)=>{
 
-    const {reply} = req.body;
-    const {id} = req.query;
+    const {reply, replyInText} = req.body;
+    const {commentSlug} = req.query;
 
 
     if(!reply){
         throw new ApiError("empty reply is not allowed", 401, "newReply");
     }
 
-    if(!id){
-        throw new ApiError("commentId id missing", 401, "newReply");
+    if(!commentSlug){
+        throw new ApiError("commentSlug id missing", 401, "newReply");
     }
 
 
     const commentExists = await Comments.findOne({
-        _id : new mongoose.Types.ObjectId(`${id}`),
+        slug : commentSlug
     });
 
     if(!commentExists){
@@ -88,6 +131,20 @@ const newReply = asyncHandler(async(req, res, next)=>{
         comment : reply,
         parentId : commentExists._id
     });
+
+    const lastEndOfId = createdReply._id.toString().slice(-5);
+    const slug = slugify(replyInText+" "+lastEndOfId, {lower:true});
+
+    const updateWithSlug = await Comments.findOneAndUpdate(
+    {
+        _id : createdReply._id
+    },
+    {
+        $set : {
+            slug : slug
+        }
+    });
+
 
     const populatedReply = await Comments.aggregate([
         {
@@ -203,16 +260,16 @@ const getComments = asyncHandler(async(req, res) => {
 });
 
 const getCommentThread = asyncHandler(async(req, res, next) => {
-    const {commentId} = req.query;    
+    const {commentSlug} = req.query;    
 
-    if(!commentId){ 
-        throw new ApiError("commentId is required", 400, "getCommentThread");
+    if(!commentSlug){
+        throw new ApiError("cannot find missing commentSlug", 400, "getCommentThread");
     }
 
     const comment = await Comments.aggregate([
         {
             $match : {
-                _id : new mongoose.Types.ObjectId(`${commentId}`),
+                slug : commentSlug
             }
         },
         {
@@ -292,11 +349,11 @@ const getCommentThread = asyncHandler(async(req, res, next) => {
 });
 
 const editComment = asyncHandler(async(req, res, next)=>{
-    const {commentId} = req.query;
-    const {comment} = req.body;
+    const {commentSlug} = req.query;
+    const {comment, commentInText} = req.body;
 
-    if(!commentId){
-        throw new ApiError("commentId is required", 400, "editComment");
+    if(!commentSlug){
+        throw new ApiError("comment Slug is required", 400, "editComment");
     }
 
     if(!comment){
@@ -304,19 +361,23 @@ const editComment = asyncHandler(async(req, res, next)=>{
     }
 
     const commentExists = await Comments.findOne({
-        _id : new mongoose.Types.ObjectId(`${commentId}`)
-    })
+        slug : commentSlug
+    });
 
     if(!commentExists){
         throw new ApiError("comment not found", 404, "editComment");
     }
 
+    const lastEndOfId = commentExists._id.toString().slice(-5);
+    const slug = slugify(commentInText+" "+lastEndOfId, {lower:true});
+
     const updatedComment = await Comments.findOneAndUpdate({
-        _id : new mongoose.Types.ObjectId(`${commentId}`)
+        _id : commentExists._id
 
     },{
         $set : {
-            comment : comment
+            comment : comment,
+            slug : slug
         }
     },{
         new:true
@@ -390,10 +451,12 @@ const deleteComment = asyncHandler(async(req, res, next)=>{
     const deletedThread =await Comments.deleteMany({parentId : new mongoose.Types.ObjectId(`${commentId}`)});
     const deletedComment = await Comments.findOneAndDelete({_id : new mongoose.Types.ObjectId(`${commentId}`)});
 
+    const blog = await Blogs.findOne({_id : deletedComment.blogId});
+
     res.status(200).json({
         success : true,
         message : "Comment deleted successfully",
-        data : deletedComment.blogId,
+        data : blog.slug
     });
 
 })
