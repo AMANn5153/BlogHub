@@ -3,6 +3,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const User = require("../models/user.model.js");
 const ApiError = require("../utils/ApiErrors");
 const fs = require("fs");
+const bcrypt = require("bcryptjs");
 
 const updateUserInfo = asyncHandler(async(req, res, next)=>{
     const {
@@ -67,9 +68,9 @@ const updateUserInfo = asyncHandler(async(req, res, next)=>{
 });
 
 const changePassword = asyncHandler(async(req, res, next)=>{
-    const {currentPassword, newPassword, confirmPassword} = req.body;
+    const {currentPassword, newPassword} = req.body;
 
-    if(!currentPassword || !newPassword || !confirmPassword){
+    if(!currentPassword || !newPassword ){
         throw new ApiError("some fields are missing", 401, "changePassword");
     }
 
@@ -80,18 +81,16 @@ const changePassword = asyncHandler(async(req, res, next)=>{
     }
 
     if(!user.isPassword(currentPassword)){
-        throw new ApiError("current password is invalid", 401, "changePassword");
+        throw new ApiError("wrong current password", 401, "changePassword");
     }
 
-    if(newPassword !== confirmPassword){
-        throw new ApiError("new password and confirm password does not match", 401, "changePassword");
-    }
-
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    
     const updatePassword = await User.findOneAndUpdate({
         _id : req.user._id
     },{
         $set : {
-            password : newPassword
+            password : hashedPassword
         }
     });
 

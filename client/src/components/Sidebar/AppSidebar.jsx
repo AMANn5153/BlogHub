@@ -40,9 +40,9 @@ const items = [
   },
 ]
 
-export default function AppSidebar() {
+ function AppSidebar() {
   return (
-    <Sidebar variant="sidebar" collapsible="offcanvas" className="glass-effect">
+    <Sidebar>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -65,3 +65,5 @@ export default function AppSidebar() {
     </Sidebar>
   )
 }
+
+export default AppSidebar

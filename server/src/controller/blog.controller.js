@@ -8,7 +8,8 @@ const Likes = require("../models/like.model");
 const Saves = require("../models/save.model");
 const Views = require("../models/views.model");
 const slugify  = require("slugify");
-const crypto = require("crypto");
+const {parse} = require("node-html-parser");
+
 
 const getAllBlog = asyncHandler(async (req, res, next)=>{
 
@@ -114,9 +115,22 @@ const getAllBlog = asyncHandler(async (req, res, next)=>{
 const getBlog = asyncHandler(async (req, res, next) => {
     const {slug} = req.query;
 
+
     if(!slug){
         throw new ApiError("blog is missing", 401, "getBlog");
     }
+
+    const cachedBlog = await req.redisClient.get(slug);
+
+    if(cachedBlog){
+        return res.status(200).json({
+            success : true,
+            status : 200,
+            message : "blog fetched successfully",
+            data : JSON.parse(cachedBlog)
+        })
+    }
+    
 
     const blogExists = await Blogs.findOne({slug });
 
@@ -153,7 +167,7 @@ const getBlog = asyncHandler(async (req, res, next) => {
         }
     ]);
 
-
+    await req.redisClient.set(slug, JSON.stringify(blog[0]), 'EX', 300);
 
     res.status(200).json({
         success : true,
@@ -382,10 +396,15 @@ const deleteBlog = asyncHandler(async (req, res, next)=>{
     if(!blog){
         return new ApiError("blog not found", 401, "deleteBlog");
     }
-    
-    const deleteBlog = await Blogs.deleteOne({_id : blog._id});
 
-    return getAllBlogOfUser(req, res, next);
+    const root = await parse(blog.content);
+    console.log(root);
+
+    
+    
+    // const deleteBlog = await Blogs.deleteOne({_id : blog._id});
+
+    // return getAllBlogOfUser(req, res, next);
 
 });
 

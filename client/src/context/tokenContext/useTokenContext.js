@@ -5,7 +5,7 @@ import useAuthFetch from "../../utils/authFetch";
 const TokenContext = createContext();
 
 export const TokenContextProvider = ({ children }) => {
-  const { auth, setAuth, token, setToken, userLoading, setUserLoading } = useAuthContext();
+  const { auth, setAuth, token, setToken, setUserLoading } = useAuthContext();
   const { authFetch } = useAuthFetch();
   const [isFetching, setIsFetching] = useState(false);
 

@@ -2,12 +2,15 @@ import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
 import { Link } from "react-router-dom";
 import useUpdateUser from "../../hooks/Settings/useUpdateUser";
+import useUpdatePassword from "../../hooks/Settings/useUpdatePassword";
+import Alert from "../../components/Alert/Alert";
 
 const Settings = () => {
   const [activated, setActivated] = useState("profile");
   const { auth, userLoading } = useAuthContext();
+
   
-  if(userLoading){
+  if(userLoading && !auth){
     return(
       <div className="flex w-full h-full items-center justify-center">
         <span className="loading loading-bars loading-lg"></span>
@@ -63,7 +66,7 @@ const Settings = () => {
 };
 
 const ProfileSettings = () => {
-  const { auth } = useAuthContext();
+  const { auth, userLoading } = useAuthContext();
   const [isChange, setIsChange] = useState(false);
   const [profile, setProfile] = useState({
     username: auth?.username ,
@@ -77,9 +80,7 @@ const ProfileSettings = () => {
     profilePic : auth?.profilePic || "",
   });
 
-  const [image, setProfileImage] = useState(auth?.profilePic||
-  ""
-  );
+  const [image, setProfileImage] = useState( auth?.profilePic || "");
 
   const {updateUser} =useUpdateUser();
 
@@ -116,7 +117,7 @@ const ProfileSettings = () => {
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
             <div className="flex w-1/2 flex-row justify-end">
-              <span className="text-gray-800">{profile.name.length}/20</span>
+              <span className="text-gray-800">{profile.name?.length}/20</span>
             </div>
           </div>
           <div className="w-full flex flex-col items-start justify-between">
@@ -131,7 +132,7 @@ const ProfileSettings = () => {
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
             <div className="flex w-1/2 flex-row justify-end">
-              <span className="text-gray-800">{profile.username.length}/20</span>
+              <span className="text-gray-800">{profile.username?.length}/20</span>
             </div>
           </div>
           <div className="w-full flex flex-col items-start justify-between">
@@ -175,7 +176,7 @@ const ProfileSettings = () => {
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
             <div className="flex w-1/2 flex-row justify-end">
-              <span className="text-gray-800">{profile.bio.length}/200</span>
+              <span className="text-gray-800">{profile.bio?.length}/200</span>
             </div>
           </div>
 
@@ -204,7 +205,7 @@ const ProfileSettings = () => {
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
             <div className="flex w-1/2 flex-row justify-end">
-              <span className="text-gray-800">{profile.location.length}/20</span>
+              <span className="text-gray-800">{profile.location?.length}/20</span>
             </div>
           </div>
         </div>
@@ -223,7 +224,7 @@ const ProfileSettings = () => {
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
             <div className="flex w-1/2 flex-row justify-end">
-              <span className="text-gray-800">{profile.work.length}/20</span>
+              <span className="text-gray-800">{profile.work?.length}/20</span>
             </div>
           </div>
 
@@ -240,7 +241,7 @@ const ProfileSettings = () => {
                         text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
             />
             <div className="flex w-1/2 flex-row justify-end">
-              <span className="text-gray-800">{profile.education.length}/20</span>
+              <span className="text-gray-800">{profile.education?.length}/20</span>
             </div>
           </div>
         </div>
@@ -254,6 +255,31 @@ const ProfileSettings = () => {
 };
 
 const AccountSettings = () => {
+  const {loadingState, updatePassword} = useUpdatePassword();
+  const [passwordChangeState, setPasswordChangeState] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [alertMessage, setAlertMessage] = useState(null);
+
+  const changeValues = (e)=>{
+    setPasswordChangeState({...passwordChangeState, [e.target.name] : e.target.value});
+  }
+
+  const handleChangePassword = async()=>{
+    const message = await updatePassword(passwordChangeState);
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 1000);
+    setPasswordChangeState({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  }
+
   return (
 
     <div className="flex flex-col justify-around gap-10 w-full">
@@ -261,25 +287,34 @@ const AccountSettings = () => {
       <div className="w-full flex flex-col items-start justify-between gap-5">
         <label className="font-semibold">Password Reset</label>
         <input
-          name="current Password"
+          name="currentPassword"
           placeholder="current Password"
           className="border-2 input placeholder-black bg-white
                     text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
+          value={passwordChangeState.currentPassword}
+          onChange={changeValues}
         />
          <input
-          name="new password"
+          name="newPassword"
           placeholder="new password"
           className="border-2 input placeholder-black bg-white
                     text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
+          value={passwordChangeState.newPassword}
+          onChange={changeValues}
         />
          <input
-          name="confirm password"
+          name="confirmPassword"
           placeholder="confirm password"
           className="border-2 input placeholder-black bg-white
                     text-black border-gray-300 rounded-md p-2 outline-none w-1/2"
+          value={passwordChangeState.confirmPassword}
+          onChange={changeValues}
         />
 
-        <button className="btn btn-primary text-white" >Change Password</button>
+        <button className="btn btn-primary text-white" onClick={handleChangePassword}>
+          Change Password
+        </button>
+        {alertMessage ? <Alert msg={alertMessage} /> : null}
       </div>
     </div>
 

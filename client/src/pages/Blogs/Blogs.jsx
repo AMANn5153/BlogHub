@@ -197,7 +197,7 @@ const Blogs = () => {
             <FollowButton authorID={author._id} />
           </div>
           <br />
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-4 m-5 w-full">
             <EditorContextProvider purpose="comment">
               <Comment slug={blogSlug} authorId={blog?.author?._id} />
             </EditorContextProvider>

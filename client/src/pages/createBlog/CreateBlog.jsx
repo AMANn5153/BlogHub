@@ -15,10 +15,8 @@ const CreateBlog = () => {
   const {blogId} = useParams();
   const { editor } = useEditorContext();
   const { editorState } = useEditorStateContext();
-
  // blog already exists in the local storage
-  const {title , html, cover, id, edit} = editorState ?editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth?._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-${auth?._id}-Blog-1`)) || {};
-
+  const {title , html, cover, id, edit} = editorState ?editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth?._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-Blog-1`)) || {};
 
   const [convertedContent, setConvertedContent] = useState(
    html 
@@ -31,7 +29,7 @@ const CreateBlog = () => {
   // create and save blog to local storage
   useEffect(() => {
     localStorage.setItem(
-      !blogId ? `user-${auth?._id}-Blog-1` : `user-${auth?._id}-${id}-edit`,
+      !blogId ? `user-Blog-1` : `user-${auth?._id}-${id}-edit`,
       JSON.stringify(!blogId ? {
         author: auth?._id,
         title: heading,

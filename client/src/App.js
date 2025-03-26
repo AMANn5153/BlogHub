@@ -26,7 +26,6 @@ import CommentEdit from './pages/Comment/CommentEdit.jsx';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TokenContextProvider } from './context/tokenContext/useTokenContext.js';
-import AdminLogin from './pages/Admin/AdminLogin.jsx';
 import AdminLayout from './pages/Admin/AdminLayout.jsx';
 
 function App() {
@@ -42,7 +41,6 @@ function App() {
     <Routes>
       <Route path='/admin' element={<AdminLayout/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
-      <Route path='admin/login' element={<AdminLogin/>}></Route>
       <Route path='/forgetPassword' element={<ForgetPassword/>}></Route>
       <Route path='/changePassword/:token' element={<ChangePassword/>}></Route>
       {/* <Route path='/profile/:id' element={<Profile/>}></Route> */}
@@ -75,8 +73,7 @@ function App() {
     </ThemeProvider>
   </BrowserRouter> 
   </EditorStateContext>
-  <ToastContainer 
-  />
+  {/* <ToastContainer /> */}
   </SocketProvider>
   </TokenContextProvider>
   </AuthProvider>

@@ -80,7 +80,9 @@ const createUser = async (req, res, next) => {
 }
 
 const loginUser = asyncHandler(async(req, res, next) => {
+        
         const {usernameOrEmail, password} = req.body;
+        
         if(!usernameOrEmail || !password){
             throw new ApiError("Invalid credentials or some field is missing", 401, "loginUser");
         }
@@ -102,7 +104,6 @@ const loginUser = asyncHandler(async(req, res, next) => {
         }
 
         const checkPassword = await bcrypt.compare(password, userExists.password);
-        
         
         if(!checkPassword){
             throw new ApiError("Invalid credentials", 401, "loginUser");
@@ -237,15 +238,10 @@ const changePassword = asyncHandler(async(req, res, next)=>{
         throw new ApiError("password is required", 401, "changePassword");
     }
 
-    const verifyExipry = await jwt.decode(token);
-    
-    const time = verifyExipry.exp*1000;
-
-    if(time < Date.now()){
-        throw new ApiError("token expired", 401, "changePassword");
-    }
-
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded)=>{
+        if(err)return err;
+        return decoded;
+    });
 
     if(!decodedToken){
         return res.status(401).json({
@@ -266,7 +262,11 @@ const changePassword = asyncHandler(async(req, res, next)=>{
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const updatePassword = await User.findOneAndUpdate({_id : user._id}, {$set :{password : hashedPassword}}, {new : true} );
+    const updatePassword = await User.findOneAndUpdate(
+        {_id : user._id},
+        {$set :{password : hashedPassword}}, 
+        {new : true}
+    );
 
     if(!updatePassword){
         res.status(409).json({
@@ -279,11 +279,13 @@ const changePassword = asyncHandler(async(req, res, next)=>{
     
     generateTokenAndSetCookie(user, res);
 
+    const authToken = jwt.sign({_id : user._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
 
     return res.status(200).json({
         success : true,
         message : "password updated",
-        data : updatedUser
+        data : updatedUser,
+        authToken
     });
 
 });

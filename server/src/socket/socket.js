@@ -21,6 +21,8 @@ const io = new Server(server , {
 
 io.on("connection", (socket)=>{
     const user = socket.handshake.query.user;
+
+    socket.emit("userConnected", user);
     
     socket.on("disconnect", ()=>{
         // saving data while disconnecting...

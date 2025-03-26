@@ -20,6 +20,7 @@ const TextEditor = ({
   const { removeCoverImage } = useRemoveCoverImage();
   const { uploadCoverImage } = useCoverImage();
   const { editor } = useEditorContext();
+  
 
   // html content handler
   useEffect(() => {

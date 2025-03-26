@@ -2,6 +2,7 @@ require('dotenv').config();
 const connectToDB = require('./db/db');
 const {PORT} = require('./constant');
 const {app, server} = require('./socket/socket');
+const {connectToRedis,getRedisClient} = require('./redis/cached.middleware');
 
 const express = require("express");
 const cors = require('cors');
@@ -34,6 +35,7 @@ const corsOptions = {
     }
 };
 
+
 app.use(cors(corsOptions));
 
 app.use(cookieParser());
@@ -55,6 +57,11 @@ app.use(`/public/coverImage/:userId`, (req, res, next)=>{
     express.static(path.join(__dirname, `../public/coverImage/${userId}`))(req, res, next);
 });
 
+app.use((req, res, next)=>{
+    req.redisClient = getRedisClient();
+    next();
+})
+
 app.use('/api/v1/auth', authRouter);
 app.use("/api/v1/blog", blogRouter);
 app.use("/api/v1/comment", commentRouter);
@@ -70,7 +77,8 @@ app.use("/api/v1/setting", settingRouter);
 app.use(errorHandler);
 
 
-connectToDB().then(()=>{
+
+Promise.all([connectToDB(), connectToRedis()]).then(()=>{
     server.listen(PORT, ()=>{
         console.log(`server is running on port ${PORT}`);
     })

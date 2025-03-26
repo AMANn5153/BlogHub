@@ -6,7 +6,7 @@ import useAuthFetch from "../../utils/authFetch";
 
 const useChangePassword = () =>{
     const [isLoading, setIsLoading] = useState(false);
-    const {setAuth} = useAuthContext();
+    const {setAuth, setToken} = useAuthContext();
     const Navigate = useNavigate();
     const {authFetch} = useAuthFetch();
 
@@ -37,7 +37,8 @@ const useChangePassword = () =>{
             }
 
             setAuth(responseData.data);
-            localStorage.setItem("user", JSON.stringify(responseData.data));
+            setToken(responseData.authToken);
+            sessionStorage.setItem("token", JSON.stringify(responseData.authToken));
             Navigate("/");
         }
         catch(error){
