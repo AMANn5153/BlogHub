@@ -54,7 +54,7 @@ const CreateBlog = () => {
       status: "published",
     });
 
-    localStorage.removeItem(`user-${auth?._id}-Blog-1`);
+    localStorage.removeItem(`user-Blog-1`);
     setHeading("");
     setConvertedContent("");
     setCoverImage("");

@@ -79,9 +79,11 @@ const createUser = async (req, res, next) => {
  }
 }
 
-const loginUser = asyncHandler(async(req, res, next) => {
-        
+const loginUser = asyncHandler(async(req, res, next) => {    
+
         const {usernameOrEmail, password} = req.body;
+
+        const cachedBlogs = await req.redisClient.get(_id);
         
         if(!usernameOrEmail || !password){
             throw new ApiError("Invalid credentials or some field is missing", 401, "loginUser");

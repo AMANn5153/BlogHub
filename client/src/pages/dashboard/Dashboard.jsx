@@ -17,6 +17,7 @@ import StatsCard from "../../components/Stats/StatsCard";
 import CreateBlog from "../createBlog/CreateBlog";
 import { useEditorStateContext } from "../../context/editorStateContext/EditorStateContext";
 import useSubscribedProfile from "../../hooks/subscribe/useSubscribedProfile";
+import CheckModal from "../../components/Modal/CheckModal";
 
 const Dashboard = () => {
   const { auth } = useAuthContext();
@@ -67,7 +68,11 @@ const Dashboard = () => {
               </div>
             ) : blogs.length > 0 ? (
               blogs.map((blog, index) => {
-                return <Accordion blog={blog} />;
+                return (
+                <>
+                  <Accordion key={index} blog={blog} />
+                </>
+              )
               })
             ) : (
               <div className="flex w-full h-full items-center justify-center">
@@ -188,11 +193,12 @@ const Accordion = ({ blog }) => {
               </Link>
             </li>
             <li>
-              <button className="btn text-red-500 btn-ghost">DELETE</button>
+              <button className="btn text-red-500 btn-ghost" onClick={()=>document.getElementById(blog._id).showModal()}>DELETE</button>
             </li>
           </ul>
         </div>
       </div>
+      <CheckModal name={blog.heading} _id={blog._id}/>
     </div>
   );
 };

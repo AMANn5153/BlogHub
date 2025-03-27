@@ -5,14 +5,15 @@ import useBlogStore from "../../store/useBlogStore";
 
 const useDeleteBlog = () => {
     const {authFetch} = useAuthFetch();
-    const {setAllBlogs} = useBlogStore();
+    const {removeSingleBlog} = useBlogStore();
     const [isDeleteBlogLoading, setDeleteBlogLoading] = useState(false);
 
     const deleteBlog = async (blogId) => {
         try {
             setDeleteBlogLoading(true);
-            const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/${blogId}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/blog/deleteBlog?blogId=${blogId}`, {
                 method : "DELETE",
+                credentials : "include",
                 headers:{
                     "content-type" : "application/json",
                 }
@@ -23,7 +24,8 @@ const useDeleteBlog = () => {
                 throw new Error(response.message);
             }
 
-            setAllBlogs(responseData.data);
+            removeSingleBlog(blogId);
+            toast.success(responseData.message);
 
         } catch (error) {
             toast.error(error.message, {

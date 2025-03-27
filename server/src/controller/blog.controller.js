@@ -9,6 +9,7 @@ const Saves = require("../models/save.model");
 const Views = require("../models/views.model");
 const slugify  = require("slugify");
 const {parse} = require("node-html-parser");
+const {uploadImageToCloudinary, deleteImageFromCloudinary} = require("../utils/Cloudinary.util");
 
 
 const getAllBlog = asyncHandler(async (req, res, next)=>{
@@ -221,18 +222,24 @@ const newBlog = async (req, res, next) =>{
 }
 
 const coverImage = asyncHandler(async (req, res, next)=>{
-    const path = req.file?.filename;
+    const imgPath = req.file?.filename;
 
-    if(!path){
+    if(!imgPath){
         throw new ApiError("image is missing", 401, "uploadCoverImage");
     }
 
-    const Image = `${process.env.SERVER}public/coverImage/${req.user._id}/${path}`;
+    const response = await uploadImageToCloudinary(req.file.path, req.user._id);
+
+    await fs.unlink(path.join(__dirname, `../../public/coverImage/${req.user._id}/${imgPath}`), (err)=>{
+            if(err)console.log(err);
+        }
+    );
+
 
     res.status(201).json({
         success : true,
-        url: Image,
-        name : path,
+        url: response.secure_url,
+        name : response.display_name,
     })
 });
 
@@ -243,9 +250,7 @@ const removeCoverImage = asyncHandler(async (req, res, next)=>{
         throw new ApiError("name is missing", 401, "removeCoverImage");
     }
 
-    const imagePath = path.join(__dirname, `../../public/coverImage/${req.user._id}/${name}`);
-    
-    fs.unlinkSync(imagePath);
+    await deleteImageFromCloudinary(name.split(".")[0]);
 
     res.status(200).json({
         success: true,
@@ -255,18 +260,23 @@ const removeCoverImage = asyncHandler(async (req, res, next)=>{
 
 const uploadImages = async (req, res, next) =>{
     try{
-        const path = req.file?.filename;
+        const imgPath = req.file?.filename;
         
-        if(!path){
+        if(!imgPath){
             throw new ApiError("image is missing", 401, "uploadBlogImages");
         }
 
-        const Image = `${process.env.SERVER}public/blog/${req.user._id}/${path}`;
+        const response = await uploadImageToCloudinary(req.file.path, req.user._id);
+        
+        await fs.unlink(path.join(__dirname, `../../public/blog/${req.user._id}/${imgPath}`), (err)=>{
+            if(err)console.log(err);
+        });
 
         res.status(201).json({
             success : true,
-            url: Image,
-            name : path,
+            message : "image uploaded successfully",
+            url: response.secure_url,
+            name : response.display_name,
         });
 
     }
@@ -278,23 +288,13 @@ const uploadImages = async (req, res, next) =>{
 
 const deleteImage = async (req, res, next) =>{
     try{
-        const {name, id} = req.query;
-
+        const {name} = req.query;
 
         if(!name){
             throw new ApiError("name is missing", 401, "deleteImage");
         }
 
-        const imagePath = path.join(__dirname, `../../public/blog/${req.user._id}/${name}`);
-
-        if(id){
-            const updataBlog = await Blog.findOneAndUpdata({
-                _id : new mongoose.Types.ObjectId(`${id}`),
-                coverImage :  null,
-            })
-        }
-
-        fs.unlinkSync(imagePath);
+        const response = await deleteImageFromCloudinary(name);
 
         res.status(200).json({
             success: true,
@@ -389,23 +389,52 @@ const deleteBlog = asyncHandler(async (req, res, next)=>{
         return new ApiError("blogId is missing", 401, "deleteBlog");
     }
 
-    const blog=  new Blogs({
-        blogId :  new mongoose.Types.ObjectId(`${blogId}`)
+    const blog=  await Blogs.findOne({
+        _id :  new mongoose.Types.ObjectId(`${blogId}`)
     })
 
     if(!blog){
         return new ApiError("blog not found", 401, "deleteBlog");
     }
 
-    const root = await parse(blog.content);
-    console.log(root);
+    // deleting cover Image from cloudinary
+
+    if(blog.coverImage){
+        const imageName = blog.coverImage.split("/");
+        const displayName = imageName[imageName.length-1].split(".")[0];
+        await deleteImageFromCloudinary(displayName);
+    }
+
+    //deleting images from content  
+    const root = parse(blog.content);
+    const imgTags = root.getElementsByTagName("img");
+
+    if(imgTags){
+        for(const img of imgTags){
+          try {
+              let display_name = img.getAttribute("id");
+              await deleteImageFromCloudinary(display_name);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+    }
+
+    //deleting all comments 
+    
+    //deleting all likes
+
+    // deleting all saves
+
 
     
-    
-    // const deleteBlog = await Blogs.deleteOne({_id : blog._id});
+    const deleteBlog = await Blogs.deleteOne({_id : blog._id});
 
-    // return getAllBlogOfUser(req, res, next);
-
+    return res.status(200).json({
+        success : true,
+        message : "blog deleted successfully",
+        data : deleteBlog
+    })
 });
 
 const editBlog = asyncHandler(async (req, res, next) => {

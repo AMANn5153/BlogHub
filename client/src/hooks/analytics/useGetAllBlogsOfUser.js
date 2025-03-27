@@ -3,12 +3,11 @@ import useAuthContext from "../../context/authContext/useAuthContext";
 import useAuthFetch from "../../utils/authFetch";   
 import useBlogStore from "../../store/useBlogStore";
 const useGetAllBlogsOfUser = (_id = null) => {
-    const {auth} = useAuthContext();
     const {authFetch} = useAuthFetch();
     const {setAllBlogs} = useBlogStore();
     const [isLoading, setLoading] = useState(false);
-
     useEffect(()=>{
+        if(!_id)return;
         const getAllBlogsOfUser = async()=>{
             try{
                 setLoading(true);
