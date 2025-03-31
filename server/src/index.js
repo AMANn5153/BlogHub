@@ -2,7 +2,7 @@ require('dotenv').config();
 const connectToDB = require('./db/db');
 const {PORT} = require('./constant');
 const {app, server} = require('./socket/socket');
-const {connectToRedis,getRedisClient} = require('./redis/cached.middleware');
+const {connectToRedis,getRedisClient} = require('./redis/redis.connection.js');
 
 const express = require("express");
 const cors = require('cors');

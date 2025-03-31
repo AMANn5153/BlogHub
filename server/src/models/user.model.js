@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
         trim:true
     },
 
+    displayName:{
+        type:String,
+        trim:true
+    },
+
     bio:{
         type:String,
         trim:true,
@@ -90,6 +95,18 @@ userSchema.pre("save", async function(next){
 userSchema.methods.isPassword =async function(password){
     return await bcrypt.compare(password, this.password);
 }
+
+userSchema.post("save", async function(doc){
+    const index = indices.users;
+    const records = {
+        _id : doc._id,
+        name : doc.name,
+        username: doc.username,
+        email : doc.email,
+        profilePic : doc.profilePic,
+    }
+    index.saveObject(records);
+})
 
 userSchema.methods.generateAccessToken = function(){
     return jwt.sign({

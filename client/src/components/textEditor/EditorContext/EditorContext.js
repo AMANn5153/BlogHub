@@ -1,23 +1,15 @@
-import { useState } from "react";
 import { useContext, createContext, useMemo } from "react";
-import useAuthContext from "../../../context/authContext/useAuthContext";
 import extensions from "../EditorExtension/EditorExtension";
 import {useEditor} from "@tiptap/react";
 import {useEditorStateContext} from "../../../context/editorStateContext/EditorStateContext";
 
-
-
-
 const context = createContext();
 
-
 export const EditorContextProvider = ({children, purpose}) => {
-    const { auth } = useAuthContext();
-
     const {editorState} = useEditorStateContext();
 
-
     const content = useMemo(()=>{
+
         if(purpose === "blog"){
           return editorState?.html || JSON.parse(localStorage.getItem(`user-Blog-1`))?.html;
         }
@@ -31,7 +23,7 @@ export const EditorContextProvider = ({children, purpose}) => {
         }
 
         else if(purpose === "commentEdit"){
-            return editorState|| "";
+            return editorState;
         }
 
     }, [purpose])

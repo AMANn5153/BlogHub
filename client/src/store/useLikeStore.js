@@ -12,11 +12,14 @@ const useLikeStore = create((set) => ({
         set((state)=>({CommentLike : [...state.CommentLike,...likes]}))
     },
     setLike:(like)=>{
-        set((state)=>({likes : [...like, ...state.likes]}))
+        set((state)=>{
+            return {likes : [...like, ...state.likes]}
+        })
     },
     unSetLike:({blogId, userId})=>{
         set((state)=>{
-            return { likes : state.likes.filter((like)=>like.blogId !== blogId && like.userId !== userId) };
+            const index = state.likes.findIndex((like)=>like.blogId === blogId && like.userId === userId);
+            return {likes : [...state.likes.slice(0, index), ...state.likes.slice(index + 1)]}
         })
     },
 
@@ -25,7 +28,8 @@ const useLikeStore = create((set) => ({
     },
     unSetCommentLike:({commentId, userId})=>{
         set((state)=>{
-           return {CommentLike : state.CommentLike.filter((like)=>like.commentId !== commentId || like.userId !== userId)}
+            const index = state.CommentLike.findIndex((like)=>like.commentId === commentId && like.userId === userId);
+            return {CommentLike : [...state.CommentLike.slice(0, index), ...state.CommentLike.slice(index + 1)]}
         })
     },
 

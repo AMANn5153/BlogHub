@@ -121,16 +121,21 @@ const getBlog = asyncHandler(async (req, res, next) => {
         throw new ApiError("blog is missing", 401, "getBlog");
     }
 
-    const cachedBlog = await req.redisClient.get(slug);
+    // const redisKey = `Blog:${slug}`;
+    // const cached = await req.redisClient.get(redisKey);
 
-    if(cachedBlog){
-        return res.status(200).json({
-            success : true,
-            status : 200,
-            message : "blog fetched successfully",
-            data : JSON.parse(cachedBlog)
-        })
-    }
+    // const blogData = JSON.parse(cached) ;
+
+    // if(blogData){
+    //     return res.status(200).json({
+    //         success : true,
+    //         status : 200,
+    //         message : "blog fetched successfully",
+    //         data : blogData.cachedBlog,
+    //         saves : blogData.saves,
+    //         likes: blogData.likes
+    //     })
+    // }
     
 
     const blogExists = await Blogs.findOne({slug });
@@ -168,8 +173,8 @@ const getBlog = asyncHandler(async (req, res, next) => {
         }
     ]);
 
-    await req.redisClient.set(slug, JSON.stringify(blog[0]), 'EX', 300);
-
+    // await req.redisClient.set(redisKey, JSON.stringify({cachedBlog : blog[0], saves : savesOnBlog, likes : likeOnBlog}));
+    // await req.redisClient.expire(redisKey, 15);//5 minutes
     res.status(200).json({
         success : true,
         status : 200,

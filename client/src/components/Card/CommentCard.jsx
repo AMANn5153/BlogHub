@@ -18,7 +18,7 @@ import {useEditorStateContext} from "../../context/editorStateContext/EditorStat
 import { CiEdit } from "react-icons/ci";
 import timeDuration from "../../utils/time";
 import { SlOptions } from "react-icons/sl";
-import { MdOutlineDelete } from "react-icons/md";
+import { MdOutlineDelete, MdOutlineReportProblem  } from "react-icons/md";
 import useDeleteComment from "../../hooks/Comment/useDeleteComment";
 
 const CommentCard = ({comment , blog}) => {
@@ -30,7 +30,6 @@ const CommentCard = ({comment , blog}) => {
   const {deleteCommentLoading, deleteComment} = useDeleteComment();
   const navigate = useNavigate();
   const {blogSlug, heading} = blog;
-  console.log(blog)
 
   const changeLike = async () =>{
     await likePostComment(comment._id);
@@ -49,6 +48,10 @@ const CommentCard = ({comment , blog}) => {
 
   const handleDelete = async () => {
     await deleteComment(comment._id);
+  }
+
+  const handleReports = async () => {
+
   }
 
   const{ dateString} = timeDuration(comment?.createdAt);
@@ -72,13 +75,14 @@ const CommentCard = ({comment , blog}) => {
               </div>
             </Link>
             
-            {comment?.author?._id === auth?._id ?
+            { auth?.role === "admin" || comment?.author?._id === auth?._id ?
             <div className="dropdown dropdown-bottom ">
               <button tabIndex={0} className=" m-2 btn btn-circle btn-sm btn-ghost">
                 <SlOptions />
               </button>
               <ul tabIndex={0} className=" bg-gradient-to-br from-white to-stone-200 flex flex-col dropdown-content menu-sm bg-slate-100 rounded-box z-[1] w-52 p-2 shadow">
                 <li className="btn btn-ghost" onClick={handleEdit} >Edit <CiEdit /></li>
+                { (comment.author?._id !== auth?._id || auth?.role === "admin") ? <li className="btn btn-ghost text-center555" onClick={handleReports}>Report<MdOutlineReportProblem /></li> : null}
                 <li className="btn btn-ghost hover:bg-red-600"
                  onClick={handleDelete} >{deleteCommentLoading ? 
                  <span className="loading loading-ring"></span> : ("Delete")} <MdOutlineDelete /></li>

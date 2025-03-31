@@ -16,9 +16,9 @@ const uploadImageToCloudinary = async (file, userId) => {
     if (!file) {
       throw new Error("File is required for upload");
     }
-    if (!userId) {
-      throw new Error("userId must be a non-empty string");
-    }
+    // if (!userId) {
+    //   throw new Error("userId must be a non-empty string");
+    // }
 
     const response = await cloudinary.uploader.upload(file, {
       folder: `Blogs images`, // Store images in a user-specific subfolder

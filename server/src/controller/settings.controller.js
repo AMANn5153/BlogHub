@@ -4,6 +4,9 @@ const User = require("../models/user.model.js");
 const ApiError = require("../utils/ApiErrors");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
+const path = require("path")
+const {uploadImageToCloudinary, deleteImageFromCloudinary } = require("../utils/Cloudinary.util.js");
+
 
 const updateUserInfo = asyncHandler(async(req, res, next)=>{
     const {
@@ -16,29 +19,29 @@ const updateUserInfo = asyncHandler(async(req, res, next)=>{
         location,
         education} = req.body;
 
-        const user = await User.findOne({
+        let user = await User.findOne({
             _id : req.user._id
         }).select("-password -createdAt -updatedAt");
 
         if(username){
             const usernameExists = await User.findOne({username});
-            if(usernameExists){
+            if(usernameExists && usernameExists.username !== user.username){
                 throw new ApiError("username already exists", 409, "updateUserInfo");
             }
         }
 
         let profilePicPath = req.file?.path;
-
+        let response = ""
+       
         if(profilePicPath){
-          
-
-            if(user.profilePic.includes("http://localhost:3001/")){
-                const oldProfilePic = user.profilePic.replace("http://localhost:3001/", "");
-                await fs.unlink(oldProfilePic);
-            }
-
-            profilePicPath = "http://localhost:3001/" + profilePicPath;
+            response = await uploadImageToCloudinary(req.file.path);
+            await fs.unlink(path.join(__dirname, `../../public/profile/${req.file.filename}`), (err)=>{
+                if(err)console.log(err);
+            });
+            if(user.display_name)
+             await deleteImageFromCloudinary(user.display_name);
         }
+
 
 
         const updateUser = await User.findOneAndUpdate(
@@ -55,9 +58,16 @@ const updateUserInfo = asyncHandler(async(req, res, next)=>{
                 workingAt,
                 location,
                 education,
-                profilePic: profilePicPath
+                profilePic: response.secure_url,
+                displayName: response.display_name
             }
-        });
+        },
+);
+
+        user = await User.findOne({_id : req.user._id}).select("-password -createdAt -updatedAt");
+        const redisKey = `Profile:${req.user._id}`;
+        await req.redisClient.set(redisKey, JSON.stringify({user}), );
+        await req.redisClient.expire(redisKey, 60);
 
         return res.status(200).json({
             success : true,

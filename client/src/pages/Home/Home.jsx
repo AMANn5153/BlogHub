@@ -2,6 +2,8 @@ import {useState} from "react";
 import Card from "../../components/Card/Card";
 import useGetAllBlog from "../../hooks/Blog/useGetAllBlog";
 import { VscListFilter } from "react-icons/vsc";
+import BlogSearch from "../../components/Search/BlogSearch";
+
 const Home = () => {
   const [filter, setFilter] = useState("mostLiked");
   const [page, setPage] = useState(1);
@@ -34,11 +36,7 @@ const Home = () => {
         </div>
         <div className="flex w-full h-full flex-row items-center justify-around p-5 flex-wrap">
           <div className="w-full bg-gradient-to-br from-white to-stone-100 rounded-lg h-20 flex flex-row items-center justify-around">
-            <input
-              type="search"
-              placeholder="what are you looking for?"
-              className="input text-black bg-white placeholder:text-black input-bordered w-full max-w-xs"
-            />
+            <BlogSearch/>
             <div className="tooltip tooltip-left dropdown dropdown-bottom btn btn-circle btn-md hover:bg-stone-400 flex items-center justify-center hover:cursor-pointer" data-tip="Filter">
               <div tabIndex={0} className="text-black"><VscListFilter size={30} color="darkblue"/></div>
               <div tabIndex={0} className="dropdown-content menu w-58  z-[100] rounded-box p-2  shadow-lg">

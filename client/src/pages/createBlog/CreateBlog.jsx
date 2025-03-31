@@ -15,12 +15,10 @@ const CreateBlog = () => {
   const {blogId} = useParams();
   const { editor } = useEditorContext();
   const { editorState } = useEditorStateContext();
- // blog already exists in the local storage
-  const {title , html, cover, id, edit} = editorState ?editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth?._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-Blog-1`)) || {};
 
-  const [convertedContent, setConvertedContent] = useState(
-   html 
-  );
+ // blog already exists in the local storage
+  const {title , html, cover, id, edit} = editorState ? editorState : blogId ? JSON.parse(localStorage.getItem(`user-${auth?._id}-${blogId}-edit`)) :  JSON.parse(localStorage.getItem(`user-Blog-1`)) || {};
+  const [convertedContent, setConvertedContent] = useState(html);
 
   const [heading, setHeading] = useState(title);
 
@@ -60,6 +58,8 @@ const CreateBlog = () => {
     setCoverImage("");
     editor.commands.clearContent(true);
   };
+
+
 
   const handleSave = async () => {
     await createBlog({

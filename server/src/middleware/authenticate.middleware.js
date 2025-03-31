@@ -24,7 +24,15 @@ const authenticate = async (req, res, next) =>{
         });
     }
 
+    
+
     const user = await User.findOne({_id : decoded._id});
+    if(user.role === "user" && user._id.toString() !== decoded._id){ // if user is not the owner or the admin 
+        return res.status(401).json({
+            success : false,
+            message : "connot access this resource"
+        });
+    }
 
     if(!user){
         res.status(409).json({

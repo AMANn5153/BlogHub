@@ -27,6 +27,7 @@ import Dropdown from "../../components/Dropdown/Dropdown";
 import ProfileCard from "../../components/Card/ProfileCard";
 import FollowButton from "../../components/Button/FollowButton";
 import ButtonGroup from "../../components/Button/ButtonGroup";
+import useGetSubscribed from "../../hooks/subscribe/useGetSubscribed.";
 
 const Blogs = () => {
   const commentRef = useRef();
@@ -41,6 +42,9 @@ const Blogs = () => {
   const { postSaveBlog } = useSave();
   const { views } = useViewsBlogs();
   const { blog } = useBlogStore();
+
+  useGetSubscribed(auth?._id);
+
 
   useEffect(() => {
     if (!blog) return;
@@ -70,7 +74,7 @@ const Blogs = () => {
         )
       : false;
 
-  if (!blog) {
+  if (!blog || loading) {
     return (
       <div className="flex w-full h-full items-center justify-center">
         <span className="loading loading-infinity loading-lg"></span>
@@ -174,7 +178,7 @@ const Blogs = () => {
                 </h1>
               </div>
             </div>
-            {auth?._id === author?._id ? <div className="flex m-2 flex-col justify-center items-start">
+            {auth?.role === "admin" || auth?._id === author?._id ? <div className="flex m-2 flex-col justify-center items-start">
               <ButtonGroup blog={blog} />
             </div> : null} 
           </div>
@@ -186,7 +190,7 @@ const Blogs = () => {
             <hr className=" w-1/3" />
           </div>
           <br />
-          <div className="tiptap m-6 max-w-screen flex flex-col flex-wrap justify-center items-start">
+          <div className="tiptap text-xs sm:text-sm md:text-lg truncate m-6 max-w-screen flex flex-col flex-wrap justify-center items-start">
             {parse(content)}
           </div>
           <hr />

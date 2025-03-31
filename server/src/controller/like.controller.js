@@ -50,7 +50,6 @@ const toggleBlogLike = asyncHandler(async (req, res, next) => {
 
 const toggleCommentLike = asyncHandler(async (req, res, next)=>{
     const {commentId} = req.query;
-    console.log(req.user);
 
     if(!commentId){
         throw new ApiError("commentId is required", 400, "toggleCommentLike");

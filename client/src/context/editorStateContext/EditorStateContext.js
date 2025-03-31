@@ -1,6 +1,5 @@
 import { useContext, createContext, useState } from "react";
 
-
 const context = createContext();
 
 export const useEditorStateContext = () =>{

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import useDeleteBlog from "../../hooks/Blog/useDeleteBlog";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const CheckModal = ({name, _id}) => {
+const CheckModal = ({name, _id, blogPage}) => {
     const [text, setText] = useState("");
     const {deleteBlog, isDeleteBlogLoading} = useDeleteBlog();
+    const navigate = useNavigate();
 
     const changeText = (e)=>{
         const value = e.target.value;
@@ -26,13 +28,16 @@ const CheckModal = ({name, _id}) => {
         }
         await deleteBlog(_id);
         setText("");
+        if(blogPage){
+            navigate("/");
+        }
     }
 
   return (
-    <dialog id={_id} className="modal  modal-bottom sm:modal-middle">
-      <div className="modal-box">
+    <dialog id={_id} className="modal w-full">
+      <div className="w-full max-w-5xl modal-box">
         <h3 className="font-bold text-4xl">Delete Blog!</h3>
-        <p className="py-4">Type <span className="text-red-500 text-lg">{name}</span> to confirm</p>
+        <p className="py-4 text-xl">Type <span className="text-red-500 text-lg">{name}</span> to confirm</p>
         <div className="">
           <form method="dialog">
             <div className="flex flex-col justify-center items-center w-full gap-4">

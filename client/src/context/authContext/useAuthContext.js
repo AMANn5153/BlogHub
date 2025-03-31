@@ -1,12 +1,13 @@
 import { createContext, useContext, useState} from 'react';
+import useGetSubscribed from "../../hooks/subscribe/useGetSubscribed.";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
     const [auth, setAuth] = useState(null);
     const [userLoading, setUserLoading] = useState(false);
     const [token, setToken] = useState(JSON.parse(sessionStorage.getItem("token"))? JSON.parse(sessionStorage.getItem("token")) : null);
-    
-    console.log(auth);
+
     return <AuthContext.Provider value=
     {
         {

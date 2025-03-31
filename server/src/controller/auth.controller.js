@@ -9,6 +9,12 @@ const template = require("../views/email_forget_templateEngine");
 const passport = require('passport');
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
+const {increaseLoginAttempts, 
+    AttemptsRemaining, 
+    resetLoginAttempts, 
+    MAX_ATTEMPTS, 
+    TTL} = require("../redis/loginRateLimit");
+const { uploadImageToCloudinary } = require("../utils/Cloudinary.util.js");
 
 const COOKIE_OPTIONS = {
     httpOnly: true,
@@ -39,13 +45,13 @@ const createUser = async (req, res, next) => {
            throw new ApiError( "User already exists", 401,"createUser");
        }
    
-       const path = req.file?.path;
-
-       let localPath = "";
+       let response = "";
 
        if(path){
-           const replaceSlash = path.replace(/\\/g, "/");
-           localPath = `http://localhost:3001/${replaceSlash}`
+            response = await uploadImageToCloudinary(req.file.path);
+            await fs.unlink(path.join(__dirname, `../../public/blog/${req.file.filename}`), (err)=>{
+                       if(err)console.log(err);
+            });
        }
    
        const user = await User.create({
@@ -53,7 +59,8 @@ const createUser = async (req, res, next) => {
            username,
            password,
            email,
-           profilePic : localPath || `https://api.dicebear.com/9.x/initials/svg?seed=${fullname}`
+           profilePic : response.secure_url || `https://api.dicebear.com/9.x/initials/svg?seed=${fullname}`,
+           displayName : response.display_name
        });
        
 
@@ -80,10 +87,8 @@ const createUser = async (req, res, next) => {
 }
 
 const loginUser = asyncHandler(async(req, res, next) => {    
-
         const {usernameOrEmail, password} = req.body;
 
-        const cachedBlogs = await req.redisClient.get(_id);
         
         if(!usernameOrEmail || !password){
             throw new ApiError("Invalid credentials or some field is missing", 401, "loginUser");
@@ -93,10 +98,10 @@ const loginUser = asyncHandler(async(req, res, next) => {
         const regexEmail = /\S+@\S+\.\S+/;
         
 
-        if(regexEmail.test(usernameOrEmail)){
+        if(regexEmail.test(usernameOrEmail)){// checking if email
             userExists = await User.findOne({email : usernameOrEmail});
         }
-        else{
+        else{// if not email then username
             userExists = await User.findOne({username : usernameOrEmail});
         }
 
@@ -105,17 +110,41 @@ const loginUser = asyncHandler(async(req, res, next) => {
             throw new ApiError("User dosen't exists", 401, "loginUser");
         }
 
+        const key = userExists._id.toString();
+
+        const {attemptCount, attemptsRemaining, isBlocked, ttl, resetTime} = await AttemptsRemaining(req, key);
+        
+        const inMinutes = Math.ceil(resetTime/60);
+        if(isBlocked){
+            return res.status(429).json({
+                success : false,
+                message :  `too many attempts resets in ${inMinutes} minutes`,
+                resetIn : inMinutes,
+            });
+        }
+
         const checkPassword = await bcrypt.compare(password, userExists.password);
         
         if(!checkPassword){
-            throw new ApiError("Invalid credentials", 401, "loginUser");
+            const attempts = await increaseLoginAttempts(req, key);
+            const remain = MAX_ATTEMPTS - attempts;
+
+            return res.status(401).json({
+                success : false,
+                message : `Invalid credentials, ${remain} attempts remaining`,
+                attemptsRemaining : remain
+            });
+
         }
-    
+        
+
         const user = await User.findOne({_id : userExists._id}).select("-password -createdAt -updatedAt");
         
         generateTokenAndSetCookie(userExists, res);
 
         const token = jwt.sign({_id : userExists._id}, process.env.AUTH_TOKEN_SECRET, {expiresIn : process.env.AUTH_TOKEN_EXPIRY});
+
+        await resetLoginAttempts(req, key);
         
         return res.status(200).json(
                 {
@@ -128,39 +157,39 @@ const loginUser = asyncHandler(async(req, res, next) => {
 
 });
 
-const refreshToken = asyncHandler(async (req, res, next)=>{
-    const refreshToken = req.cookies?.refreshToken;
+// const refreshToken = asyncHandler(async (req, res, next)=>{
+//     const refreshToken = req.cookies?.refreshToken;
 
-    if(!refreshToken){
-        return res.status(401).json({
-            status :  401,
-            message : "refresh token not found",
-            data : null
-        })
-    }
+//     if(!refreshToken){
+//         return res.status(401).json({
+//             status :  401,
+//             message : "refresh token not found",
+//             data : null
+//         })
+//     }
 
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err, decoded)=>{
-        if(err)return null;
-        else return decoded;
-    });
+//     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err, decoded)=>{
+//         if(err)return null;
+//         else return decoded;
+//     });
 
-    if(!decoded){
-        res.clearCookie("refreshToken").clearCookie("accessToken");       
-         return res.status(401).json({
-            status :  401,
-            message : "login again",
-        })
-    }
+//     if(!decoded){
+//         res.clearCookie("refreshToken").clearCookie("accessToken");       
+//          return res.status(401).json({
+//             status :  401,
+//             message : "login again",
+//         })
+//     }
 
-    const user = await User.findOne({_id : decoded._id});
+//     const user = await User.findOne({_id : decoded._id});
 
-    generateTokenAndSetCookie(user, res);
+//     generateTokenAndSetCookie(user, res);
 
-    return res.status(200).json({
-        status : 200,
-        message : "token refreshed"
-    })
-});
+//     return res.status(200).json({
+//         status : 200,
+//         message : "token refreshed"
+//     })
+// });
 
 const logout = async (req, res) =>{
     

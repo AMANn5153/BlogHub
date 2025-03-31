@@ -42,6 +42,8 @@ const getPdf = async (req, res) => {
 
     const pdf = await page.pdf();
 
+
+
     fs.writeFileSync(`./public/pdf/blog.pdf`,pdf);
 
     res.download(`./public/pdf/blog.pdf`,(err)=>{

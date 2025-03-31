@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   const handleClick = async () => {
-    const blog = JSON.parse(localStorage.getItem(`user-${auth._id}-Blog-1`)) || {
+    const blog = JSON.parse(localStorage.getItem(`user-Blog-1`)) || {
       title: "",
       content: "",
       coverImage: "",

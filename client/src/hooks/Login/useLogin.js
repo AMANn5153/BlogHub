@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAuthContext from "../../context/authContext/useAuthContext";
-import {toast} from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import {toast} from "react-toastify";
 
 const useLogin = () => {
     const[loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const useLogin = () => {
             
             if(!response.ok){
 
-                throw new Error(res.message);
+                throw new Error(`${res.message} `);
             }
             setAuth(res.user);
             sessionStorage.setItem("token", JSON.stringify({token : res.token}));
@@ -38,15 +38,13 @@ const useLogin = () => {
             navigate("/");
             
         }catch(error){
-            console.log("Error in login", error.message);
+            console.error("Error in login", error.message);
             toast.error(error.message,{
                 position:"top-right",
-                autoClose:2000,
+                autoClose:3000,
                 hideProgressBar:false,
                 closeOnClick:true,
                 pauseOnHover:true,
-                theme:"dark",
-                style:{zIndex:200000},
             });
         }finally{
             setLoading(false);
@@ -61,7 +59,7 @@ const checkFields = (usernameOrEmail, password) => {
 
     if(!usernameOrEmail || !password){
         toast.error("Please fill all credentials",{
-            position:"top-center",
+            position:"top-right",
             autoClose:2000,
             hideProgressBar:false,
             closeOnClick:true,

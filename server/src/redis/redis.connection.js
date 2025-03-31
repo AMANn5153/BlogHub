@@ -21,7 +21,11 @@ const connectToRedis = async(req, res, next) => {
 }
 
 const getRedisClient = () => {
+    if(!redisClient){
+        throw new Error("redis client is not connected");
+    }
     return redisClient;
+
 }
 
 
