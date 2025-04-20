@@ -34,18 +34,26 @@ const blogSchema = new mongoose.Schema({
 
 
 blogSchema.post("save", async  function(doc){
-    const index = indices.blogs;
-    const records = {
-        _id : doc._id,
-        heading : doc.heading,
-        content : doc.content.slice(0,100),
-    }
-    index.saveObject(records);
+  try {
+      const index = indices.blogs;
+      const records = {
+          _id : doc._id.toString(),
+          heading : doc.heading,
+          content : doc.content.slice(0,100),
+      }
+      await index.saveObject(records,{autoGenerateObjectIDIfNotExist : true});
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 blogSchema.post("deleteOne", async function(doc){
-    const index = indices.blogs;
-    index.deleteObject({_id : doc._id});
+  try {
+      const index = indices.blogs;
+      await index.deleteObject(doc._id.toString());
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const Blogs = mongoose.model("Blogs", blogSchema);

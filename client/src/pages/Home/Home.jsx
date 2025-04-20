@@ -35,7 +35,7 @@ const Home = () => {
           <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-800">Blogs</h1>
         </div>
         <div className="flex w-full h-full flex-row items-center justify-around p-5 flex-wrap">
-          <div className="w-full bg-gradient-to-br from-white to-stone-100 rounded-lg h-20 flex flex-row items-center justify-around">
+          <div className="w-full bg-gradient-to-br from-white to-stone-100 rounded-lg  flex flex-row items-center justify-around">
             <BlogSearch/>
             <div className="tooltip tooltip-left dropdown dropdown-bottom btn btn-circle btn-md hover:bg-stone-400 flex items-center justify-center hover:cursor-pointer" data-tip="Filter">
               <div tabIndex={0} className="text-black"><VscListFilter size={30} color="darkblue"/></div>

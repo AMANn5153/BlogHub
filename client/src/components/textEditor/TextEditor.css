@@ -166,3 +166,17 @@ Inspect
   width:50%;
   margin : auto;
 }
+
+.editor-wrapper {
+  resize: vertical;
+  overflow: auto;
+  min-height: 150px;
+  max-height: 500px;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.editor-content {
+  height: 100%;
+  outline: none;
+}

@@ -10,8 +10,7 @@ const FollowButton = ({authorID, type="follow"}) => {
   const {subscribeLoading ,subscribe} = useSubscribe()
   const {subscribers} = useSubscriberStore();
 
-
-  const handleSubscribe = async (e) => {
+   async function handleSubscribe (e){
     await subscribe(authorID)
   }
 
