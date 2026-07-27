@@ -12,7 +12,7 @@ const useDeleteComment = () => {
     const deleteComment = async (commentId) =>{
         setDeleteCommentLoading(true);
         try{
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/deleteComment?commentId=${commentId}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/comment/deleteComment?commentId=${commentId}`, {
                 method : "DELETE",
                 credentials : "include",
                 headers : {

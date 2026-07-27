@@ -15,7 +15,7 @@ const useSubscribedProfile = (_id) => {
        const getSubscribedProfile = async () => {
            try {
                 setSubscribedProfileLoading(true);
-               const response = await authFetch(`http://localhost:3001/api/v1/subscribe/getSubscribedProfile?_id=${_id}`, {
+               const response = await authFetch(`${process.env.REACT_APP_API_URL}/subscribe/getSubscribedProfile?_id=${_id}`, {
                    method: "GET",
                });
 

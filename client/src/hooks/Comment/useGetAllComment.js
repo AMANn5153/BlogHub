@@ -14,7 +14,7 @@ const useGetAllComment = (slug) =>{
         const getComments = async () => {
             try{
                 setCommentLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/comment/getComments?slug=${slug}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/comment/getComments?slug=${slug}`, {
                     method: "GET",
                 });
                 

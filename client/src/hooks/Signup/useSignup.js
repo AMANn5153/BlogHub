@@ -32,7 +32,7 @@ const useSignup = () => {
             if(image)
                 formData.append("image", image);
 
-            const response = await fetch("http://localhost:3001/api/v1/auth/createUser",{
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/createUser`,{
                 credentials:"include",
                 method:"POST",
                 body:formData

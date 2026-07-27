@@ -11,7 +11,7 @@ const useEditComment = () => {
     const updateComment = async (commentSlug, commentInText, comment) => {
         try{
             setEditCommentLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/editComment?commentSlug=${commentSlug}`,{
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/comment/editComment?commentSlug=${commentSlug}`,{
                 method : "PUT",
                 credentials : "include",
                 headers : {

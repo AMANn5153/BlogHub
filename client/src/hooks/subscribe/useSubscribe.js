@@ -11,7 +11,7 @@ const useSubscribe = () => {
     const subscribe =async (authorID) => {
        try {
          setSubscribeLoading(true);     
-         const response = await authFetch(`http://localhost:3001/api/v1/subscribe/addSubscriber?authorID=${authorID}`, {
+         const response = await authFetch(`${process.env.REACT_APP_API_URL}/subscribe/addSubscriber?authorID=${authorID}`, {
              method: "POST",
              credentials:"include",
              headers: {

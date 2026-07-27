@@ -218,7 +218,7 @@ const forgetPassword = asyncHandler(async (req, res, next) =>{
 
     const token = jwt.sign({email}, process.env.ACCESS_TOKEN_SECRET, {expiresIn : "10m"});
 
-    const url = `http://localhost:3000/changePassword/${token}`;
+    const url = `${(process.env.CLIENT_URL || "http://localhost:3000")}/changePassword/${token}`;
 
     const emailForgetData = template({name: userExists.name, url});
 

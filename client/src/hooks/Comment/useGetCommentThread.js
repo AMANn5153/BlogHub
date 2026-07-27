@@ -13,7 +13,7 @@ const useGetCommentThread = ({commentSlug}) => {
         const getComments = async ()=>{
             try{
                 setCommentThreadLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/comment/getCommentThread?commentSlug=${commentSlug}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/comment/getCommentThread?commentSlug=${commentSlug}`, {
                     method: "GET",
                 });
                 

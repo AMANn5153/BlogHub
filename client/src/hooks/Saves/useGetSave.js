@@ -12,7 +12,7 @@ const useGetSave = (_id) => {
         const getSave = async () => {
             try{
                 setSaveLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/save/getSaveBlog?id=${_id}`, {
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/save/getSaveBlog?id=${_id}`, {
                     method : "GET",
                     headers : {
                         "Content-Type" : "application/json"

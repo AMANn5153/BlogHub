@@ -13,7 +13,7 @@ const useLikePost = () => {
     const likePost = async (blogId, authorID)=>{
         try{
             setLikePostLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/like/toggleBlogLike?blogId=${blogId}&&authorID=${authorID}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/like/toggleBlogLike?blogId=${blogId}&&authorID=${authorID}`, {
                 method: "POST",
                 credentials: "include",
                 headers: {

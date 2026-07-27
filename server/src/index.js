@@ -23,14 +23,14 @@ const profileRouter = require('./routes/profile.routes.js');
 const settingRouter = require('./routes/setting.routes.js');
 
 const corsOptions = {
-    origin: "http://localhost:3000", 
+    origin: (process.env.CLIENT_URL || "http://localhost:3000"),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
     allowedHeaders: 'Content-Type,Authorization', 
     AccessControlAllowCredentials: true,
     credentials: true, 
 
     headers: {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": (process.env.CLIENT_URL || "http://localhost:3000"),
         "Access-Control-Allow-Credentials": true
     }
 };

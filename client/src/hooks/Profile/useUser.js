@@ -11,7 +11,7 @@ const useUser = (_id) => {
         const getUser = async () => {
             try {
                 setIsLoading(true);
-                const response = await authFetch(`http://localhost:3001/api/v1/profile/getProfile?_id=${_id}`,{
+                const response = await authFetch(`${process.env.REACT_APP_API_URL}/profile/getProfile?_id=${_id}`,{
                     method: "GET",
                 });
                 const {user, subscriber, message} = await response.json();

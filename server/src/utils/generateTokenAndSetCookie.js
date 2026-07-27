@@ -21,7 +21,7 @@ const generateTokenAndSetCookie = (userExists, res)=>{
     const refreshToken = userExists.generateRefreshToken();
 
 
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");  
+    res.setHeader("Access-Control-Allow-Origin", (process.env.CLIENT_URL || "http://localhost:3000"));
     res.setHeader("Access-Control-Allow-Credentials", "true");              
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
 

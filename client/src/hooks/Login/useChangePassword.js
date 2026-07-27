@@ -21,7 +21,7 @@ const useChangePassword = () =>{
                 throw new Error("Passwords do not match");
             }
 
-            const response = await fetch("http://localhost:3001/api/v1/auth/changePassword",{
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/changePassword`,{
                 method : "PUT",
                 credentials: "include",
                 headers : {

@@ -16,7 +16,7 @@ const useLogout = ()=>{
             setLoading(true);
        
 
-            const response = await fetch("http://localhost:3001/api/v1/auth/logout",
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/logout`,
                 {
                     method: "delete",
                     credentials: "include",

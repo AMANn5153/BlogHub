@@ -22,7 +22,7 @@ export const SocketProvider = ({children}) =>{
     useEffect(()=>{
         if(auth){
 
-        const newSocket = io("http://localhost:3001",{
+        const newSocket = io(`${process.env.REACT_APP_SERVER_URL}`,{
             query : {
                 user : auth._id
             }
