@@ -17,7 +17,7 @@ const useLogin = () => {
             return false;
         }
         try{
-            const response = await fetch("http://localhost:3001/api/v1/auth/loginUser",{
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/loginUser`,{
                 method:"POST",
                 credentials:"include",
                 headers:{

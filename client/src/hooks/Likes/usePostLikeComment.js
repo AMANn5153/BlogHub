@@ -13,7 +13,7 @@ const useLikePostComment = () => {
     const likePostComment = async (commentId)=>{
         try{
             setLikePostLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/like/toggleCommentLike?commentId=${commentId}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/like/toggleCommentLike?commentId=${commentId}`, {
                 method: "POST",
                 credentials: "include",
                 headers: {

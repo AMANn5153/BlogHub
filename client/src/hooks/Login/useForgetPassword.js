@@ -12,7 +12,7 @@ const useForgetPassword = () =>{
             if(!email){
                 throw new Error("email is required");
             }
-            const response = await fetch(`http://localhost:3001/api/v1/auth/forgetPassword`,{
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/forgetPassword`,{
                 method : "POST",
                 headers : {
                     "Content-Type" : "application/json"

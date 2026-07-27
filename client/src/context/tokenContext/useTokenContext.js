@@ -14,7 +14,7 @@ export const TokenContextProvider = ({ children }) => {
     setIsFetching(true);
     
     try {
-      const response = await fetch(`http://localhost:3001/api/v1/auth/newToken`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/newToken`, {
         method: "GET",
         credentials: "include",
       });
@@ -50,7 +50,7 @@ export const TokenContextProvider = ({ children }) => {
       if(auth)return;
       setUserLoading(true)
       try {
-        const response = await authFetch(`http://localhost:3001/api/v1/auth/getUserInfo`, {
+        const response = await authFetch(`${process.env.REACT_APP_API_URL}/auth/getUserInfo`, {
           method: "GET",
           credentials: "include",
           headers: {

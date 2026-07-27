@@ -22,7 +22,7 @@ const usePostComment = () => {
 
             commentPostSetLoading(true);
 
-            const response = await authFetch(`http://localhost:3001/api/v1/comment/newComment?slug=${slug}&authorId=${authorId}`, 
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/comment/newComment?slug=${slug}&authorId=${authorId}`,
             {
                 method: "POST", 
                 credentials: "include",

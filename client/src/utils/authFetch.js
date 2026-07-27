@@ -5,7 +5,7 @@ const useAuthFetch = () => {
 
     const authFetch = async(apiUrl, options={}) =>{
         
-        let accessTokenResponse = await fetch(`http://localhost:3001/api/v1/auth/checkAccessToken`,{
+        let accessTokenResponse = await fetch(`${process.env.REACT_APP_API_URL}/auth/checkAccessToken`,{
             method : "GET",
             credentials : "include",
         });

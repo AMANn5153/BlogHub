@@ -13,7 +13,7 @@ const useSave = () => {
     const postSaveBlog = async (blogId) => {
         try {
             setSaveLoading(true);
-            const response = await authFetch(`http://localhost:3001/api/v1/save/toggleSaveBlog?blogId=${blogId}`, {
+            const response = await authFetch(`${process.env.REACT_APP_API_URL}/save/toggleSaveBlog?blogId=${blogId}`, {
                 method: "POST",
                 credentials:"include",
                 headers: {
